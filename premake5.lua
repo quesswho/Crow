@@ -10,8 +10,8 @@ workspace "Crow"
 	outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 
+	include "Crow/lib/glfw"
 
-	include "Crow/lib/GLFW"
 
 	project "Crow"
 		kind "SharedLib"
@@ -30,7 +30,7 @@ workspace "Crow"
 		includedirs { 
 			"%{prj.name}/src",
 			"%{prj.name}/lib/spdlog/include",
-			"%{prj.name}/lib/GLFW/include"
+			"%{prj.name}/lib/glfw/include"
 		}
 
 		links {

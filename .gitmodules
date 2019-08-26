@@ -3,4 +3,4 @@
 	url = https://github.com/gabime/spdlog.git
 [submodule "Crow/lib/glfw"]
 	path = Crow/lib/glfw
-	url = https://github.com/glfw/glfw.git
+	url = https://github.com/quesswho/glfw.git

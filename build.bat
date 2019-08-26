@@ -1,2 +1,2 @@
-call lib\premake5\premake5.exe vs2017
+call lib\premake5\premake5.exe vs2019
 PAUSE

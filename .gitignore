@@ -907,6 +907,7 @@ _deps
 *.exe
 *.out
 *.app
+!lib/premake5/premake5.exe
 
 # Codelite
 .codelite/
