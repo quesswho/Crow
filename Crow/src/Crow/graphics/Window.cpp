@@ -1,5 +1,5 @@
 #include "Window.h"
-#include "Event/Callbacks.h"
+#include "Crow/Event/Callbacks.h"
 namespace Crow {
 
 	Window::Window(WindowProperties properties)
@@ -11,15 +11,20 @@ namespace Crow {
 
 	Window::~Window()
 	{
+		//delete m_Window;
 		glfwTerminate();
 	}
 
 	void Window::Init()
 	{
-		CR_CORE_ASSERT(glfwInit(), "Failed to initialize glfw!");
+		if(!glfwInit()) CR_CORE_ERROR("Failed to initialize glfw!");
 
 		m_Window = glfwCreateWindow(m_Properties.m_Width, m_Properties.m_Height, m_Properties.m_Title, NULL, NULL);
-		CR_CORE_ASSERT(m_Window, "Failed to create Window");
+		if (!m_Window) {
+			CR_CORE_ERROR("Failed to create Window!");
+			glfwTerminate();
+			return;
+		}
 
 		glfwMakeContextCurrent(m_Window);
 

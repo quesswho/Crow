@@ -95,29 +95,35 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>..\bin\Release-windows-x86_64\Crow\Crow.lib</ImportLibrary>
+      <Profile>true</Profile>
     </Link>
     <PostBuildEvent>
       <Command>IF EXIST ..\bin\Release-windows-x86_64\Crow\Crow.dll\ (xcopy /Q /E /Y /I ..\bin\Release-windows-x86_64\Crow\Crow.dll ..\bin\Release-windows-x86_64\GameProject &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-windows-x86_64\Crow\Crow.dll ..\bin\Release-windows-x86_64\GameProject &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Crow\FileUtils.h" />
+    <ClInclude Include="src\Crow\graphics\Layer.h" />
     <ClInclude Include="src\Crow.h" />
     <ClInclude Include="src\Crow\Application.h" />
     <ClInclude Include="src\Crow\Common.h" />
     <ClInclude Include="src\Crow\Event\Callbacks.h" />
     <ClInclude Include="src\Crow\Event\Events.h" />
     <ClInclude Include="src\Crow\Event\Input.h" />
+    <ClInclude Include="src\Crow\graphics\LayerManager.h" />
     <ClInclude Include="src\Crow\Log.h" />
     <ClInclude Include="src\Crow\Macros.h" />
-    <ClInclude Include="src\Crow\Renderer\RenderAPI.h" />
-    <ClInclude Include="src\Crow\Window.h" />
+    <ClInclude Include="src\Crow\graphics\Renderer\RenderAPI.h" />
+    <ClInclude Include="src\Crow\graphics\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Crow\graphics\Layer.cpp" />
     <ClCompile Include="src\Crow\Application.cpp" />
     <ClCompile Include="src\Crow\Event\Callbacks.cpp" />
     <ClCompile Include="src\Crow\Event\Input.cpp" />
+    <ClCompile Include="src\Crow\graphics\LayerManager.cpp" />
     <ClCompile Include="src\Crow\Log.cpp" />
-    <ClCompile Include="src\Crow\Window.cpp" />
+    <ClCompile Include="src\Crow\graphics\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="lib\glfw\GLFW.vcxproj">

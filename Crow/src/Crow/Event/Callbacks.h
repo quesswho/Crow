@@ -4,7 +4,7 @@
 
 namespace Crow {
 
-	class Callbacks
+	class CROW_API Callbacks
 	{
 	public:
 		void static error_callback(int error, const char* description);

@@ -1,10 +1,11 @@
 #pragma once
 #include <spdlog/spdlog.h>
 #include <memory>
+#include "Common.h"
 
 namespace Crow {
 
-	class Log {
+	class CROW_API Log {
 	public:
 		static void Init();
 

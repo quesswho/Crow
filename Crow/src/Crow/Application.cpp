@@ -5,6 +5,7 @@
 namespace Crow {
 
 	bool Application::m_Closed;
+	std::unique_ptr<LayerManager> Application::m_LayerManager;
 
 	Application::Application()
 	{
@@ -17,6 +18,8 @@ namespace Crow {
 
 		Input::Init();
 		CR_CORE_INFO("Input class has been Initialized!");
+
+		m_LayerManager = std::make_unique<LayerManager>();
 	}
 
 
@@ -24,6 +27,11 @@ namespace Crow {
 	{
 		m_Closed = true;
 		m_Window->~Window();
+	}
+
+	void Application::Shutdown()
+	{
+		m_Closed = true;
 	}
 
 	void Application::Run()
@@ -36,34 +44,34 @@ namespace Crow {
 			glVertex3f(0.0f, 1.0f, 0.0f);
 			glVertex3f(1.0f, -1.0f, 0.0f);
 			glEnd();
-			Update();
+			OnUpdate();
 		}
 		Application::~Application();
 	}
 
-	void Application::Update()
+	void Application::OnUpdate()
 	{
 		m_Window->Update();
+
+		for (auto it = m_LayerManager->begin(); it != m_LayerManager->end(); it++)
+			(*it)->OnUpdate();
 	}
 
 	void Application::OnEvent(Event& appEvent)
 	{
 		//Process the events
-		auto[key, action] = appEvent.getKeyValue();
-		switch (appEvent.m_Type) 
-		{
-			case KEY:
-				CR_CORE_INFO("Keyboard: {}", key);
-				if (key == CROW_KEY_ESCAPE && action == CROW_KEY_PRESS)
-					m_Closed = true;
-				break;
-			case MOUSE:
-				CR_CORE_INFO("Mouse Button: {}", key);
-				break;
-			case MOUSEPOS: // key = x, action = y
-			//	CR_CORE_INFO("Mouse Pos: {}, {}", key, action);
-				break;
-		}
+		for (auto it = m_LayerManager->end(); it != m_LayerManager->begin();)
+			(*--it)->OnEvent(appEvent);
 
+	}
+
+	void Application::PushLayer(Layer* layer)
+	{
+		m_LayerManager->PushLayer(layer);
+	}
+
+	void Application::PopLayer(Layer* layer)
+	{
+		m_LayerManager->PopLayer(layer);
 	}
 }

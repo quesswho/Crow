@@ -10,15 +10,6 @@ namespace Crow {
 		MOUSEPOS
 	};
 
-	struct vec2 {
-		int m_X;
-		int m_Y;
-		vec2(int x, int y)
-			: m_X(x), m_Y(y)
-		{}
-	};
-
-
 	// 3 virtual return functions to avoid std::dynamic_cast
 	struct Event {
 		EventType m_Type;

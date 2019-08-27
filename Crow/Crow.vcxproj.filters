@@ -7,7 +7,10 @@
     <Filter Include="Crow\Event">
       <UniqueIdentifier>{F1397FCF-DDF1-C01C-46F9-997832D05B0D}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Crow\Renderer">
+    <Filter Include="Crow\Graphics">
+      <UniqueIdentifier>{8cf2fe94-d09a-46ed-8245-3093100154bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Crow\Graphics\Renderer">
       <UniqueIdentifier>{46B8E129-B278-5D60-7BB3-A6DDE732A23C}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -34,12 +37,15 @@
     <ClInclude Include="src\Crow\Macros.h">
       <Filter>Crow</Filter>
     </ClInclude>
-    <ClInclude Include="src\Crow\Renderer\RenderAPI.h">
-      <Filter>Crow\Renderer</Filter>
+    <ClInclude Include="src\Crow\graphics\Renderer\RenderAPI.h">
+      <Filter>Crow\Graphics\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Crow\Window.h">
+    <ClInclude Include="src\Crow\graphics\Window.h">
       <Filter>Crow</Filter>
     </ClInclude>
+    <ClInclude Include="src\Crow\graphics\Layer.h" />
+    <ClInclude Include="src\Crow\graphics\LayerManager.h" />
+    <ClInclude Include="src\Crow\FileUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Crow\Application.cpp">
@@ -54,8 +60,10 @@
     <ClCompile Include="src\Crow\Log.cpp">
       <Filter>Crow</Filter>
     </ClCompile>
-    <ClCompile Include="src\Crow\Window.cpp">
+    <ClCompile Include="src\Crow\graphics\Window.cpp">
       <Filter>Crow</Filter>
     </ClCompile>
+    <ClCompile Include="src\Crow\graphics\Layer.cpp" />
+    <ClCompile Include="src\Crow\graphics\LayerManager.cpp" />
   </ItemGroup>
 </Project>
