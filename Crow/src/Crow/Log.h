@@ -5,7 +5,7 @@
 
 namespace Crow {
 
-	class CROW_API Log {
+	class Log {
 	public:
 		static void Init();
 

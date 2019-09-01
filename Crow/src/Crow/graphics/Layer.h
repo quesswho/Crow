@@ -4,12 +4,12 @@
 
 namespace Crow {
 
-	class CROW_API Layer {
+	class Layer {
 	public:
 		Layer();
 		~Layer();
 
-		virtual void OnUpdate() {}
+		virtual void OnRender() {}
 		virtual void OnEvent(Event& e) {}
 	};
 }

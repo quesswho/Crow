@@ -1,5 +1,7 @@
 #include "Application.h"
+#include "graphics/Renderer/RenderAPI.h"
 #include "Log.h"
+
 #include <stdio.h>
 
 namespace Crow {
@@ -22,11 +24,9 @@ namespace Crow {
 		m_LayerManager = std::make_unique<LayerManager>();
 	}
 
-
 	Application::~Application()
 	{
-		m_Closed = true;
-		m_Window->~Window();
+		Shutdown();
 	}
 
 	void Application::Shutdown()
@@ -38,23 +38,17 @@ namespace Crow {
 	{
 		while (!m_Closed)
 		{
-			glClear(GL_COLOR_BUFFER_BIT);
-			glBegin(GL_TRIANGLES);
-			glVertex3f(-1.0f, -1.0f, 0.0f);
-			glVertex3f(0.0f, 1.0f, 0.0f);
-			glVertex3f(1.0f, -1.0f, 0.0f);
-			glEnd();
 			OnUpdate();
 		}
-		Application::~Application();
 	}
 
 	void Application::OnUpdate()
 	{
-		m_Window->Update();
-
+		RenderAPI::Clear();
 		for (auto it = m_LayerManager->begin(); it != m_LayerManager->end(); it++)
-			(*it)->OnUpdate();
+			(*it)->OnRender();
+
+		m_Window->Update();
 	}
 
 	void Application::OnEvent(Event& appEvent)

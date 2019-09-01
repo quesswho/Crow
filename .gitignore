@@ -761,6 +761,11 @@ FakesAssemblies/
 .ntvs_analysis.dat
 node_modules/
 
+# Visual Studio Project/Solution files
+*.sln
+*.vcxproj
+*.vcxproj.filters
+
 # Visual Studio 6 build log
 *.plg
 

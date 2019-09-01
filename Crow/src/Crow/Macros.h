@@ -2,13 +2,14 @@
 
 #ifdef CR_PLATFORM_WINDOWS
 	#ifdef CR_BUILD_DLL
-		#define CROW_API __declspec(dllexport)
+		#define __declspec(dllexport)
 	#else
-		#define CROW_API __declspec(dllimport)
+		#define __declspec(dllimport)
 	#endif
 #endif
 
 typedef unsigned char uchar; // 0 - 255
+typedef unsigned short int ushort; // 0 - 65535
 typedef unsigned int uint;   // 0 - 4 294 967 295
 
 #ifdef CR_x64
@@ -18,7 +19,7 @@ typedef unsigned int uint;   // 0 - 4 294 967 295
 
 
 // CR_ASSERT is disabled because of issues
-#ifdef CR_DEBUG || CR_RELEASE
+#ifdef CR_DEBUG
 	#define CR_CORE_INFO(...) Crow::Log::getCoreLogger()->info(__VA_ARGS__)
 	#define CR_CORE_WARNING(...) Crow::Log::getCoreLogger()->warn(__VA_ARGS__)
 	#define CR_CORE_ERROR(...) Crow::Log::getCoreLogger()->error(__VA_ARGS__)

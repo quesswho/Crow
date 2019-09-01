@@ -1,5 +1,9 @@
 #include "Window.h"
+
+
 #include "Crow/Event/Callbacks.h"
+
+
 namespace Crow {
 
 	Window::Window(WindowProperties properties)
@@ -11,7 +15,7 @@ namespace Crow {
 
 	Window::~Window()
 	{
-		//delete m_Window;
+		glfwDestroyWindow(m_Window);
 		glfwTerminate();
 	}
 
@@ -27,6 +31,12 @@ namespace Crow {
 		}
 
 		glfwMakeContextCurrent(m_Window);
+
+		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+		{
+			CR_CORE_ERROR("Failed to initialize Glad!");
+			return;
+		}
 
 		setCallbacks();
 	}

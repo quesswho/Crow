@@ -1,10 +1,11 @@
 #pragma once
 #include "Crow/Common.h"
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 namespace Crow {
 
-	class CROW_API Callbacks
+	class Callbacks
 	{
 	public:
 		void static error_callback(int error, const char* description);

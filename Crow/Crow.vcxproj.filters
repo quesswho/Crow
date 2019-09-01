@@ -7,11 +7,11 @@
     <Filter Include="Crow\Event">
       <UniqueIdentifier>{F1397FCF-DDF1-C01C-46F9-997832D05B0D}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Crow\Graphics">
-      <UniqueIdentifier>{8cf2fe94-d09a-46ed-8245-3093100154bd}</UniqueIdentifier>
+    <Filter Include="Crow\graphics">
+      <UniqueIdentifier>{00D98456-6C99-008D-35D4-490AA1534569}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Crow\Graphics\Renderer">
-      <UniqueIdentifier>{46B8E129-B278-5D60-7BB3-A6DDE732A23C}</UniqueIdentifier>
+    <Filter Include="Crow\graphics\Renderer">
+      <UniqueIdentifier>{A63C9456-9236-BDA8-7BA3-53B9673C2315}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -31,21 +31,42 @@
     <ClInclude Include="src\Crow\Event\Input.h">
       <Filter>Crow\Event</Filter>
     </ClInclude>
+    <ClInclude Include="src\Crow\FileUtils.h">
+      <Filter>Crow</Filter>
+    </ClInclude>
     <ClInclude Include="src\Crow\Log.h">
       <Filter>Crow</Filter>
     </ClInclude>
     <ClInclude Include="src\Crow\Macros.h">
       <Filter>Crow</Filter>
     </ClInclude>
+    <ClInclude Include="src\Crow\graphics\Layer.h">
+      <Filter>Crow\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Crow\graphics\LayerManager.h">
+      <Filter>Crow\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Crow\graphics\Renderer\ArrayBuffer.h">
+      <Filter>Crow\graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Crow\graphics\Renderer\Buffer.h">
+      <Filter>Crow\graphics\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Crow\graphics\Renderer\RenderAPI.h">
-      <Filter>Crow\Graphics\Renderer</Filter>
+      <Filter>Crow\graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Crow\graphics\Renderer\Renderer.h">
+      <Filter>Crow\graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Crow\graphics\Renderer\Renderer2D.h">
+      <Filter>Crow\graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Crow\graphics\Shader.h">
+      <Filter>Crow\graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Crow\graphics\Window.h">
-      <Filter>Crow</Filter>
+      <Filter>Crow\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Crow\graphics\Layer.h" />
-    <ClInclude Include="src\Crow\graphics\LayerManager.h" />
-    <ClInclude Include="src\Crow\FileUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Crow\Application.cpp">
@@ -60,10 +81,26 @@
     <ClCompile Include="src\Crow\Log.cpp">
       <Filter>Crow</Filter>
     </ClCompile>
-    <ClCompile Include="src\Crow\graphics\Window.cpp">
-      <Filter>Crow</Filter>
+    <ClCompile Include="src\Crow\graphics\Layer.cpp">
+      <Filter>Crow\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Crow\graphics\Layer.cpp" />
-    <ClCompile Include="src\Crow\graphics\LayerManager.cpp" />
+    <ClCompile Include="src\Crow\graphics\LayerManager.cpp">
+      <Filter>Crow\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Crow\graphics\Renderer\ArrayBuffer.cpp">
+      <Filter>Crow\graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Crow\graphics\Renderer\Buffer.cpp">
+      <Filter>Crow\graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Crow\graphics\Renderer\Renderer2D.cpp">
+      <Filter>Crow\graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Crow\graphics\Shader.cpp">
+      <Filter>Crow\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Crow\graphics\Window.cpp">
+      <Filter>Crow\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

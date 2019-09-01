@@ -4,7 +4,7 @@
 
 namespace Crow {
 	
-	class CROW_API LayerManager {
+	class LayerManager {
 	public:
 		LayerManager();
 		~LayerManager();

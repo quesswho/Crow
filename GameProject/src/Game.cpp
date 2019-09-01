@@ -1,38 +1,71 @@
-#include "Crow.h"
+#include "Game.h"
 
-class Layer2D : public Crow::Layer {
-public:
 
-	Layer2D()
-	{}
+using namespace Crow;
 
-	~Layer2D()
-	{}
+	Layer2D::Layer2D()
+	{
+		RenderAPI::ClearColor(0.5, 0.7, 0.5);
 
-	void Layer2D::OnEvent(Crow::Event& e) override
+		m_Renderer = std::make_unique<Renderer2D>();
+
+		BufferProperties bufferprop = { 
+			{ 3, "a_Position" } 
+		};
+
+		ArrayBuffer* m_Buffer = new ArrayBuffer();
+
+		const float vertices[] = {
+			-0.5f, -0.5f, 0.0f,
+			0.5f, -0.5f, 0.0f,
+			0.0f, 0.5f, 0.0f
+		};
+
+		const uint indices[] = {
+			0,1,2
+		};
+
+		std::shared_ptr<VertexBuffer> vertexBuffer = std::make_shared<VertexBuffer>(vertices, sizeof(vertices), bufferprop);
+		std::shared_ptr<IndexBuffer> indexBuffer = std::make_shared<IndexBuffer>(indices, sizeof(indices));
+
+
+		m_Buffer->AddVertexBuffer(vertexBuffer);
+		m_Buffer->SetIndexBuffer(indexBuffer);
+
+		Shader* shader = new Shader("res/Shader/Basic.glsl");
+		shader->Bind();
+
+		m_Object = new Object2D(m_Buffer, shader);
+	}
+
+	Layer2D::~Layer2D()
+	{
+	}
+
+	void Layer2D::OnEvent(Event& e)
 	{
 		auto [key, action] = e.getKeyValue();
 		switch (e.m_Type)
 		{
-		case Crow::KEY:
+		case KEY:
 			CR_GAME_INFO("Keyboard: {}", key);
 			if (key == CROW_KEY_ESCAPE && action == CROW_KEY_PRESS)
 				Crow::Application::Shutdown();
 			break;
-		case Crow::MOUSE:
+		case MOUSE:
 			CR_GAME_INFO("Mouse Button: {}", key);
 			break;
-		case Crow::MOUSEPOS: // key = x, action = y
-			CR_GAME_INFO("Mouse Pos: {}, {}", key, action);
+		case MOUSEPOS: // key = x, action = y
+			//CR_GAME_INFO("Mouse Pos: {}, {}", key, action);
 			break;
 		}
 	}
 
-	void Layer2D::OnUpdate() override
+	void Layer2D::OnRender()
 	{
-
+		m_Renderer->Submit(m_Object);
+		m_Renderer->Flush();
 	}
-};
 
 class Game : public Crow::Application {
 	
@@ -51,4 +84,5 @@ void main()
 {
 	Game* game = new Game();
 	game->Run();
+	delete game;
 }

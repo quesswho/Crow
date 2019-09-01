@@ -1,10 +1,11 @@
 #pragma once
 #include "Crow/Common.h"
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 namespace Crow {
 
-	struct CROW_API WindowProperties // Title, width and height struct
+	struct WindowProperties // Title, width and height struct
 	{
 		const char* m_Title;
 		const uint m_Width;
@@ -14,7 +15,8 @@ namespace Crow {
 		{}
 	};
 
-	class CROW_API Window
+	
+	class Window
 	{
 	public:
 		Window(WindowProperties properties);

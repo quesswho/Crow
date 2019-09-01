@@ -7,7 +7,7 @@
 
 namespace Crow {
 
-	class CROW_API Application
+	class Application
 	{
 	public:
 		explicit Application();
@@ -21,8 +21,8 @@ namespace Crow {
 		static void Shutdown();
 
 		//Wrapper functions for Crow::LayerManager because m_LayerManager is private
-		inline void PushLayer(Layer* layer);
-		inline void PopLayer(Layer* layer);
+		void PushLayer(Layer* layer);
+		void PopLayer(Layer* layer);
 	private:
 		virtual void OnUpdate();
 	private:
