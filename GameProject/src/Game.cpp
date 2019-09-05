@@ -1,5 +1,6 @@
 #include "Game.h"
 
+#include "glm/vec3.hpp"
 
 using namespace Crow;
 
@@ -26,14 +27,16 @@ using namespace Crow;
 		};
 
 		std::shared_ptr<VertexBuffer> vertexBuffer = std::make_shared<VertexBuffer>(vertices, sizeof(vertices), bufferprop);
-		std::shared_ptr<IndexBuffer> indexBuffer = std::make_shared<IndexBuffer>(indices, sizeof(indices));
+		std::shared_ptr<IndexBuffer> indexBuffer = std::make_shared<IndexBuffer>(indices, sizeof(indices) / sizeof(uint));
 
 
 		m_Buffer->AddVertexBuffer(vertexBuffer);
 		m_Buffer->SetIndexBuffer(indexBuffer);
 
-		Shader* shader = new Shader("res/Shader/Basic.glsl");
+		Shader* shader = new Shader("Basic", "res/Shader/Basic.glsl");
 		shader->Bind();
+
+		ShaderManager::PushShader(shader);
 
 		m_Object = new Object2D(m_Buffer, shader);
 	}
@@ -47,22 +50,38 @@ using namespace Crow;
 		auto [key, action] = e.getKeyValue();
 		switch (e.m_Type)
 		{
+		case MOUSEPOS: // key = x, action = y
+			//CR_GAME_INFO("Mouse Pos: {}, {}", key, action);
+			break;
 		case KEY:
 			CR_GAME_INFO("Keyboard: {}", key);
 			if (key == CROW_KEY_ESCAPE && action == CROW_KEY_PRESS)
 				Crow::Application::Shutdown();
+
+			m_Color = glm::vec3(0.0f, 0.0f, 0.0f);
+			if (Input::IsKeyPressed(CROW_KEY_R))
+			{
+				m_Color = glm::vec3(0.9f, m_Color.y, m_Color.z);
+			}
+			if (Input::IsKeyPressed(CROW_KEY_G))
+			{
+				m_Color = glm::vec3(m_Color.x, 0.9f, m_Color.z);
+			}
+			if (Input::IsKeyPressed(CROW_KEY_B))
+			{
+				m_Color = glm::vec3(m_Color.x, m_Color.y, 0.9f);
+			}
+
 			break;
 		case MOUSE:
 			CR_GAME_INFO("Mouse Button: {}", key);
-			break;
-		case MOUSEPOS: // key = x, action = y
-			//CR_GAME_INFO("Mouse Pos: {}, {}", key, action);
 			break;
 		}
 	}
 
 	void Layer2D::OnRender()
 	{
+		ShaderManager::GetShader("Basic")->SetUniform3f("color", m_Color);
 		m_Renderer->Submit(m_Object);
 		m_Renderer->Flush();
 	}

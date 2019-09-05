@@ -11,7 +11,7 @@ namespace Crow {
 
 	void Callbacks::close_callback(GLFWwindow* window) // Calls when the user pressed the red x
 	{
-		Application::m_Closed = true;
+		Application::s_Closed = true;
 	}
 
 	void Callbacks::window_size_callback(GLFWwindow* window, int width, int height)

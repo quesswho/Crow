@@ -1,13 +1,5 @@
 #pragma once
 
-#ifdef CR_PLATFORM_WINDOWS
-	#ifdef CR_BUILD_DLL
-		#define __declspec(dllexport)
-	#else
-		#define __declspec(dllimport)
-	#endif
-#endif
-
 typedef unsigned char uchar; // 0 - 255
 typedef unsigned short int ushort; // 0 - 65535
 typedef unsigned int uint;   // 0 - 4 294 967 295

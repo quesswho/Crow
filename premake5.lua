@@ -40,7 +40,8 @@ workspace "Crow"
 			"%{prj.name}/src",
 			"%{prj.name}/lib/spdlog/include",
 			"%{prj.name}/lib/glfw/include",
-			"%{prj.name}/lib/glad/include"
+			"%{prj.name}/lib/glad/include",
+			"%{prj.name}/lib/glm"
 		}
 
 		defines
@@ -88,7 +89,8 @@ workspace "Crow"
 			"Crow/src",
 			"Crow/lib/spdlog/include",
 			"Crow/lib/glfw/include",
-			"Crow/lib/glad/include"
+			"Crow/lib/glad/include",
+			"Crow/lib/glm"
 		}
 
 		links { "Crow" }

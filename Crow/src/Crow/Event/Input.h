@@ -18,6 +18,8 @@ namespace Crow {
 		inline static short int GetKeyState(short int key) { return s_MouseKeys[key]; }
 		inline static std::tuple<int, int> GetMousePosition() { return s_MousePos; }
 
+		static bool IsKeyPressed(short int key) { return s_Keys[key] > 0; } // if key action is more than KEY_RELEASE
+
 		static void KeyCallback(std::tuple<int, int> key);
 		static void MouseCallback(std::tuple<int, int> key);
 		static void MousePosCallback(std::tuple<int, int> key);

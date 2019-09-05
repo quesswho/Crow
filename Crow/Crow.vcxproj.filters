@@ -64,6 +64,9 @@
     <ClInclude Include="src\Crow\graphics\Shader.h">
       <Filter>Crow\graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Crow\graphics\ShaderManager.h">
+      <Filter>Crow\graphics</Filter>
+    </ClInclude>
     <ClInclude Include="src\Crow\graphics\Window.h">
       <Filter>Crow\graphics</Filter>
     </ClInclude>
@@ -97,6 +100,9 @@
       <Filter>Crow\graphics\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Crow\graphics\Shader.cpp">
+      <Filter>Crow\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Crow\graphics\ShaderManager.cpp">
       <Filter>Crow\graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Crow\graphics\Window.cpp">

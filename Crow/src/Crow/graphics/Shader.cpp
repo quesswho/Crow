@@ -6,14 +6,16 @@
 
 namespace Crow {
 
-	Shader::Shader(const char* path)
+	Shader::Shader(const char* name, const char* path)
+		: m_Name(name)
 	{
 		Init(FileUtils::ReadFile(path));
 	}
 		
-	Shader::Shader(std::string shadercode)
+	Shader::Shader(const char* name, std::string& shaderCode)
+		: m_Name(name)
 	{
-		Init(shadercode);
+		Init(shaderCode);
 	}
 
 	void Shader::CompileShader(const char* vertex, const char* fragment)
@@ -27,11 +29,13 @@ namespace Crow {
 
 		int success;
 		char infoLog[512];
+		bool failed = false;
 		glGetShaderiv(vertexID, GL_COMPILE_STATUS, &success);
 		if (!success)
 		{
 			glGetShaderInfoLog(vertexID, 512, NULL, infoLog);
 			CR_GAME_ERROR(infoLog);
+			failed = true;
 		}
 
 		//FRAGMENT
@@ -46,7 +50,11 @@ namespace Crow {
 		{
 			glGetShaderInfoLog(fragmentID, 512, NULL, infoLog);
 			CR_GAME_ERROR(infoLog);
+			failed = true;
 		}
+
+
+		if (failed) return; // Get error from both shaders
 
 		//LINKING
 
@@ -59,13 +67,14 @@ namespace Crow {
 		if (!success) {
 			glGetProgramInfoLog(m_ShaderID, 512, NULL, infoLog);
 			CR_CORE_ERROR(infoLog);
+			return;
 		}
 		glDeleteShader(vertexID);
 		glDeleteShader(fragmentID);
 	}
 
 
-	void Shader::Init(std::string fileSource)
+	void Shader::Init(std::string& fileSource)
 	{
 		ShaderType type = UKNOWN;
 
@@ -100,7 +109,7 @@ namespace Crow {
 
 		if (stringFragmentSource == "" || stringVertexSource == "")
 		{
-			CR_GAME_ERROR("Source is not in a Crow Shader format! Use \"#shader fragment\" or \"#shader vertex\" to differentiate fragment and vertex code!");
+			CR_GAME_ERROR("{0}: Source is not in a Crow Shader format! Use \"#shader fragment\" or \"#shader vertex\" to differentiate fragment and vertex code!", m_Name);
 			return;
 		}
 
@@ -116,5 +125,47 @@ namespace Crow {
 	void Shader::Unbind() const
 	{
 		glUseProgram(0);
+	}
+
+
+	int Shader::GetLocation(const char* location)
+	{
+		for (int i = 0; i < m_UniformLocations.size(); i++)
+		{
+			if (std::get<0>(m_UniformLocations[i]) == location)
+				return (int) std::get<1>(m_UniformLocations[i]); // Cached location
+		}
+
+		// New location
+		const int locationi = glGetUniformLocation(m_ShaderID, location);
+		m_UniformLocations.push_back(std::tuple<const char*, int>(location, locationi));
+		return locationi;
+	}
+
+	void Shader::SetUniform1i(const char* location, int value)
+	{
+		glUniform1i(GetLocation(location), value);
+	}
+
+	void Shader::SetUniform1f(const char* location, float value)
+	{
+		glUniform1f(GetLocation(location), value);
+	}
+	void Shader::SetUniform2f(const char* location, glm::vec2& value)
+	{
+		glUniform2f(GetLocation(location), value.x, value.y);
+	}
+	void Shader::SetUniform3f(const char* location, glm::vec3& value)
+	{
+		glUniform3f(GetLocation(location), value.x, value.y, value.z);
+	}
+	void Shader::SetUniform4f(const char* location, glm::vec4& value)
+	{
+		glUniform4f(GetLocation(location), value.x, value.y, value.z, value.w);
+	}
+
+	void Shader::SetUniformMat4(const char* location, glm::mat4x4& value)
+	{
+		glUniformMatrix4fv(GetLocation(location), 1, GL_FALSE, &value[0][0]);
 	}
 }

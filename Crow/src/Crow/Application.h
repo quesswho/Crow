@@ -16,7 +16,7 @@ namespace Crow {
 		static std::unique_ptr<Input> m_Input;
 		static void OnEvent(Event& appEvent);
 		void Run();
-		static bool m_Closed;
+		static bool s_Closed;
 
 		static void Shutdown();
 
@@ -27,7 +27,7 @@ namespace Crow {
 		virtual void OnUpdate();
 	private:
 		std::unique_ptr<Window> m_Window;
-		static std::unique_ptr<LayerManager> m_LayerManager;
+		static std::unique_ptr<LayerManager> s_LayerManager;
 	};
 }
 
