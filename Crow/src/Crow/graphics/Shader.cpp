@@ -3,6 +3,7 @@
 
 #include <glad/glad.h>
 #include <sstream>
+#include <regex>
 
 namespace Crow {
 
@@ -20,7 +21,6 @@ namespace Crow {
 
 	void Shader::CompileShader(const char* vertex, const char* fragment)
 	{
-
 		//SHADER
 		uint vertexID = glCreateShader(GL_VERTEX_SHADER);
 
@@ -34,7 +34,10 @@ namespace Crow {
 		if (!success)
 		{
 			glGetShaderInfoLog(vertexID, 512, NULL, infoLog);
-			CR_GAME_ERROR(infoLog);
+			std::string stringlog = "Vertex Shader: ";
+			stringlog.append(infoLog);
+			stringlog = std::regex_replace(stringlog, std::regex("\\ERROR:"), m_Name);
+			CR_CORE_ERROR(stringlog);
 			failed = true;
 		}
 
@@ -49,7 +52,10 @@ namespace Crow {
 		if (!success)
 		{
 			glGetShaderInfoLog(fragmentID, 512, NULL, infoLog);
-			CR_GAME_ERROR(infoLog);
+			std::string stringlog = "Fragment Shader: ";
+			stringlog.append(infoLog);
+			stringlog = std::regex_replace(stringlog, std::regex("\\ERROR:"), m_Name);
+			CR_CORE_ERROR(stringlog);
 			failed = true;
 		}
 
@@ -66,7 +72,10 @@ namespace Crow {
 		glGetProgramiv(m_ShaderID, GL_LINK_STATUS, &success);
 		if (!success) {
 			glGetProgramInfoLog(m_ShaderID, 512, NULL, infoLog);
-			CR_CORE_ERROR(infoLog);
+			std::string stringlog = infoLog;
+			stringlog.append("Linking Shader: ");
+			stringlog = std::regex_replace(stringlog, std::regex("\\Error:"), m_Name);
+			CR_CORE_ERROR(stringlog);
 			return;
 		}
 		glDeleteShader(vertexID);

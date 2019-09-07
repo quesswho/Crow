@@ -16,5 +16,4 @@ public:
 	std::unique_ptr<Crow::Renderer2D> m_Renderer;
 private:
 	Crow::Object2D* m_Object;
-	glm::vec3 m_Color;
 };

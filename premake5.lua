@@ -33,7 +33,10 @@ workspace "Crow"
 
 		files { 
 			"%{prj.name}/src/**.h", 
-			"%{prj.name}/src/**.cpp" 
+			"%{prj.name}/src/**.cpp",
+			"%{prj.name}/lib/glm/glm/**.hpp",
+			"%{prj.name}/lib/glm/glm/**.inl",
+			"%{prj.name}/lib/stb_image/**.*"
 		}
 
 		includedirs { 
@@ -41,7 +44,8 @@ workspace "Crow"
 			"%{prj.name}/lib/spdlog/include",
 			"%{prj.name}/lib/glfw/include",
 			"%{prj.name}/lib/glad/include",
-			"%{prj.name}/lib/glm"
+			"%{prj.name}/lib/glm",
+			"%{prj.name}/lib/stb_image/"
 		}
 
 		defines
@@ -90,7 +94,8 @@ workspace "Crow"
 			"Crow/lib/spdlog/include",
 			"Crow/lib/glfw/include",
 			"Crow/lib/glad/include",
-			"Crow/lib/glm"
+			"Crow/lib/glm",
+			"Crow/lib/stb_image/"
 		}
 
 		links { "Crow" }

@@ -41,13 +41,13 @@ namespace Crow {
 		setCallbacks();
 	}
 
-	void Window::Update()
+	void Window::Update() const
 	{
 		glfwSwapBuffers(m_Window);
 		glfwPollEvents();
 	}
 
-	void Window::setCallbacks()
+	void Window::setCallbacks() const
 	{
 		glfwSetErrorCallback(&Callbacks::error_callback);
 		glfwSetKeyCallback(m_Window, &Callbacks::key_callback);

@@ -22,10 +22,11 @@ namespace Crow {
 		Window(WindowProperties properties);
 		~Window();
 
-		void Update();
+		void Update() const;
 	private:
-		void setCallbacks();
+		void setCallbacks() const;
 		void Init();
+
 		WindowProperties m_Properties;
 		GLFWwindow* m_Window;
 	};

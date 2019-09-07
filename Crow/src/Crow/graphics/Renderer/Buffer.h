@@ -8,8 +8,8 @@ namespace Crow {
 
 	struct BufferElement {
 
-		BufferElement(const uint typeSize, const char* name)
-			: m_TypeSize(typeSize), m_Name(name), m_Offset(0), m_Index(0)
+		BufferElement(const uint typeSize)
+			: m_TypeSize(typeSize), m_Offset(0), m_Index(0)
 		{}
 
 		inline const uint getTypeSize() const { return m_TypeSize; }
@@ -22,8 +22,7 @@ namespace Crow {
 		inline const uint getIndex() const { return m_Index; }
 
 	private:
-		const char* m_Name;
-		uint m_TypeSize;
+		const uint m_TypeSize;
 		uint m_Index;
 		ushort m_Offset;
 		
@@ -38,13 +37,11 @@ namespace Crow {
 		BufferProperties(std::initializer_list<BufferElement> elements)
 			: m_Elements(elements), m_Stride(0)
 		{
-			int i = 0;
-			for (BufferElement& el : m_Elements)
+			for (int i = 0; i < m_Elements.size(); i++)
 			{
-				el.setIndex(i);
-				el.setOffset(m_Stride);
-				m_Stride += el.getTypeSize();
-				i++;
+				m_Elements[i].setIndex(i);
+				m_Elements[i].setOffset(m_Stride);
+				m_Stride += m_Elements[i].getTypeSize();
 			}
 		}
 

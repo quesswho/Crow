@@ -24,9 +24,9 @@ namespace Crow {
 			for (const auto& element : prop)
 			{
 				glEnableVertexAttribArray(element.getIndex());
-				glVertexAttribPointer(element.getIndex(), element.getTypeSize(), GL_FLOAT, GL_FALSE, prop.m_Stride * sizeof(GL_FLOAT), (const void*)element.getOffset());
-				m_VertexBuffers.push_back(vertexBuffer);
+				glVertexAttribPointer(element.getIndex(), element.getTypeSize(), GL_FLOAT, GL_FALSE, prop.m_Stride * sizeof(GL_FLOAT), (const void*)(element.getOffset() * sizeof(GL_FLOAT)));
 			}
+			m_VertexBuffers.push_back(vertexBuffer);
 
 		}
 		else {
