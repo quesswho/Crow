@@ -1191,9 +1191,6 @@
     <ClInclude Include="src\Crow\graphics\Renderer\RenderAPI.h">
       <Filter>src\Crow\graphics\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Crow\graphics\Renderer\Renderer.h">
-      <Filter>src\Crow\graphics\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\Crow\graphics\Renderer\Renderer2D.h">
       <Filter>src\Crow\graphics\Renderer</Filter>
     </ClInclude>
@@ -1209,6 +1206,7 @@
     <ClInclude Include="src\Crow\graphics\Window.h">
       <Filter>src\Crow\graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Crow\Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lib\stb_image\stb_image.cpp">

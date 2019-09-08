@@ -43,7 +43,7 @@ using namespace Crow;
 
 
 		ShaderManager::PushShader(shader);
-		CR_GAME_INFO(texture->GetWidth());
+
 		m_Object = new Object2D(m_Buffer, shader, { texture });
 	}
 

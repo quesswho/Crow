@@ -24,7 +24,7 @@ namespace Crow {
 		void Bind() const;
 		void Unbind() const;
 
-		const char* GetName() noexcept { return m_Name; }
+		const char* GetName() const { return m_Name; }
 
 		void SetUniform1i(const char* location, int value);
 		void SetUniform1f(const char* location, float value);
@@ -35,7 +35,6 @@ namespace Crow {
 	private:
 		void Init(std::string& fileSource);
 		void CompileShader(const char* vertex, const char* fragment);
-
 
 		int GetLocation(const char* location);
 	};

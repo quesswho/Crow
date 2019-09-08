@@ -24,10 +24,10 @@ typedef unsigned int uint;   // 0 - 4 294 967 295
 	#define CR_CORE_INFO(...)
 	#define CR_CORE_WARNING(...)
 	#define CR_CORE_ERROR(...)
-	//#define CR_CORE_ASSERT(x, ...) ;
+	#define CR_CORE_FATAL(...)
 
 	#define CR_GAME_INFO(...)
 	#define CR_GAME_WARNING(...)
 	#define CR_GAME_ERROR(...)
-	//#define CR_GAME_ASSERT(x, ...) ;
+	#define CR_GAME_FATAL(...)
 #endif

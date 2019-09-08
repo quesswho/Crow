@@ -3,11 +3,15 @@
 #include "Log.h"
 #include "graphics/ShaderManager.h"
 #include <stdio.h>
+#include <string>
 
 namespace Crow {
 
 	bool Application::s_Closed;
 	std::unique_ptr<LayerManager> Application::s_LayerManager;
+	std::unique_ptr<Timer> Application::m_Timer;
+	int Application::m_FramesPerSecond;
+
 
 	Application::Application()
 	{
@@ -16,12 +20,13 @@ namespace Crow {
 
 		m_Window = std::make_unique<Window>(WindowProperties("Crow Engine", 800, 600));
 		s_Closed = false;
-		CR_CORE_INFO("Window has been created!");
 
 		Input::Init();
 		CR_CORE_INFO("Input class has been Initialized!");
 
 		s_LayerManager = std::make_unique<LayerManager>();
+
+		m_Timer = std::make_unique<Timer>();
 	}
 
 	Application::~Application()
@@ -36,9 +41,24 @@ namespace Crow {
 
 	void Application::Run()
 	{
+		int frames = 0;
+		double elapsed = 0;
 		while (!s_Closed)
 		{
+			m_Timer->Start();
+			////////////
 			OnUpdate();
+			///////////
+			m_Timer->End();
+			elapsed += m_Timer->GetElapsedTimeInSeconds();
+			if (elapsed > 1.0) // If it has been 1 second
+			{
+				m_FramesPerSecond = frames;
+				m_Window->SetTitle(std::string("Crow Engine : ").append(std::to_string(m_FramesPerSecond)).append(" FPS").c_str());
+				frames = 0;
+				elapsed = 0;
+			}
+			frames++;
 		}
 	}
 

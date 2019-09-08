@@ -4,6 +4,7 @@
 #include "Event/Input.h"
 #include "Event/Events.h"
 #include "graphics/LayerManager.h"
+#include "Timer.h"
 
 namespace Crow {
 
@@ -23,11 +24,15 @@ namespace Crow {
 		//Wrapper functions for Crow::LayerManager because m_LayerManager is private
 		void PushLayer(Layer* layer);
 		void PopLayer(Layer* layer);
+
+		static int m_FramesPerSecond;
 	private:
 		virtual void OnUpdate();
 	private:
 		std::unique_ptr<Window> m_Window;
 		static std::unique_ptr<LayerManager> s_LayerManager;
+
+		static std::unique_ptr<Timer> m_Timer;
 	};
 }
 

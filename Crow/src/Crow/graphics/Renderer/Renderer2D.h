@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Renderer.h"
 #include "ArrayBuffer.h"
 #include "../Shader.h"
 #include <initializer_list>

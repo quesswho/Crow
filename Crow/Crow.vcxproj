@@ -481,12 +481,12 @@
     <ClInclude Include="src\Crow\graphics\Renderer\ArrayBuffer.h" />
     <ClInclude Include="src\Crow\graphics\Renderer\Buffer.h" />
     <ClInclude Include="src\Crow\graphics\Renderer\RenderAPI.h" />
-    <ClInclude Include="src\Crow\graphics\Renderer\Renderer.h" />
     <ClInclude Include="src\Crow\graphics\Renderer\Renderer2D.h" />
     <ClInclude Include="src\Crow\graphics\Shader.h" />
     <ClInclude Include="src\Crow\graphics\ShaderManager.h" />
     <ClInclude Include="src\Crow\graphics\Texture.h" />
     <ClInclude Include="src\Crow\graphics\Window.h" />
+    <ClInclude Include="src\Crow\Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lib\stb_image\stb_image.cpp" />
