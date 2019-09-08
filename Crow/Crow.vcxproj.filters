@@ -1207,6 +1207,7 @@
       <Filter>src\Crow\graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Crow\Timer.h" />
+    <ClInclude Include="src\Crow\graphics\Camera\OrthographicCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lib\stb_image\stb_image.cpp">
@@ -1251,5 +1252,6 @@
     <ClCompile Include="src\Crow\graphics\Window.cpp">
       <Filter>src\Crow\graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Crow\graphics\Camera\OrthographicCamera.cpp" />
   </ItemGroup>
 </Project>

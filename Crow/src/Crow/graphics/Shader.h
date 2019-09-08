@@ -14,7 +14,7 @@ namespace Crow {
 	class Shader {
 		uint m_ShaderID;
 		const char* m_Name;
-		std::vector<std::tuple<const char*, int>> m_UniformLocations;
+		std::unordered_map<const char*, int> m_UniformLocations;
 	public:
 		explicit Shader(const char* name, const char* path); // File path
 		explicit Shader(const char* name, std::string& shadercode); // Shader code
@@ -31,7 +31,7 @@ namespace Crow {
 		void SetUniform2f(const char* location, glm::vec2& value);
 		void SetUniform3f(const char* location, glm::vec3& value);
 		void SetUniform4f(const char* location, glm::vec4& value);
-		void SetUniformMat4(const char* location, glm::mat4x4& value);
+		void SetUniformMat4(const char* location, const glm::mat4x4& value);
 	private:
 		void Init(std::string& fileSource);
 		void CompileShader(const char* vertex, const char* fragment);

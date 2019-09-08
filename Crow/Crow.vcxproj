@@ -474,6 +474,7 @@
     <ClInclude Include="src\Crow\Event\Events.h" />
     <ClInclude Include="src\Crow\Event\Input.h" />
     <ClInclude Include="src\Crow\FileUtils.h" />
+    <ClInclude Include="src\Crow\graphics\Camera\OrthographicCamera.h" />
     <ClInclude Include="src\Crow\Log.h" />
     <ClInclude Include="src\Crow\Macros.h" />
     <ClInclude Include="src\Crow\graphics\Layer.h" />
@@ -493,6 +494,7 @@
     <ClCompile Include="src\Crow\Application.cpp" />
     <ClCompile Include="src\Crow\Event\Callbacks.cpp" />
     <ClCompile Include="src\Crow\Event\Input.cpp" />
+    <ClCompile Include="src\Crow\graphics\Camera\OrthographicCamera.cpp" />
     <ClCompile Include="src\Crow\Log.cpp" />
     <ClCompile Include="src\Crow\graphics\Layer.cpp" />
     <ClCompile Include="src\Crow\graphics\LayerManager.cpp" />

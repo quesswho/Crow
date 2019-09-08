@@ -139,15 +139,14 @@ namespace Crow {
 
 	int Shader::GetLocation(const char* location)
 	{
-		for (int i = 0; i < m_UniformLocations.size(); i++)
+		if (m_UniformLocations[location] != std::string::npos)
 		{
-			if (std::get<0>(m_UniformLocations[i]) == location)
-				return (int) std::get<1>(m_UniformLocations[i]); // Cached location
+			return m_UniformLocations[location];
 		}
 
 		// New location
 		const int locationi = glGetUniformLocation(m_ShaderID, location);
-		m_UniformLocations.push_back(std::tuple<const char*, int>(location, locationi));
+		m_UniformLocations[location] = locationi;
 		return locationi;
 	}
 
@@ -173,7 +172,7 @@ namespace Crow {
 		glUniform4f(GetLocation(location), value.x, value.y, value.z, value.w);
 	}
 
-	void Shader::SetUniformMat4(const char* location, glm::mat4x4& value)
+	void Shader::SetUniformMat4(const char* location, const glm::mat4x4& value)
 	{
 		glUniformMatrix4fv(GetLocation(location), 1, GL_FALSE, &value[0][0]);
 	}

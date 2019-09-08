@@ -47,7 +47,7 @@ namespace Crow {
 		{
 			m_Timer->Start();
 			////////////
-			OnUpdate();
+			OnUpdate(m_Timer->GetLastElapsed());
 			///////////
 			m_Timer->End();
 			elapsed += m_Timer->GetElapsedTimeInSeconds();
@@ -58,15 +58,21 @@ namespace Crow {
 				frames = 0;
 				elapsed = 0;
 			}
-			frames++;
+			else {
+				frames++;
+				continue;
+			}
 		}
 	}
 
-	void Application::OnUpdate()
+	void Application::OnUpdate(double elapsed)
 	{
 		RenderAPI::Clear();
 		for (auto it = s_LayerManager->begin(); it != s_LayerManager->end(); it++)
+		{
 			(*it)->OnRender();
+			(*it)->OnUpdate(elapsed);
+		}
 
 		m_Window->Update();
 	}

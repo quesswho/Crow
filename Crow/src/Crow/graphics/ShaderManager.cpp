@@ -2,38 +2,49 @@
 
 namespace Crow {
 
-	std::vector<Shader*> ShaderManager::s_Shaders;
+	std::unordered_map<const char*, Shader*> ShaderManager::s_Shaders;
 
 
 	ShaderManager::~ShaderManager()
 	{
-		for (const auto shader : s_Shaders)
-			delete shader;
+		//delete Shader*
+		std::for_each(s_Shaders.begin(), s_Shaders.end(), [](auto& shader) {
+			delete shader.second;
+			}
+		);
+
+
+		s_Shaders.clear();
 	}
 	void ShaderManager::PushShader(Shader* shader)
 	{
-		s_Shaders.push_back(shader);
+		s_Shaders[shader->GetName()] = shader;
 	}
 
 	Shader* ShaderManager::GetShader(const char* name)
 	{
-		for (const auto shader : s_Shaders)
+		if (s_Shaders.find(name) != s_Shaders.end()) // if name exists
 		{
-			if (shader->GetName() == name)
-				return shader;
+			return s_Shaders[name];
+		}
+		else
+		{
+			CR_GAME_ERROR("Shader not found in ShaderManager: {}", name);
+			return nullptr;
 		}
 	}
 
-	void ShaderManager::PopShader(Shader* shader)
+	void ShaderManager::PopShader(const char* name)
 	{
-		for (int i = 0; i < s_Shaders.size(); i++) // int variable because of index when erasing
+		if (s_Shaders.find(name) != s_Shaders.end()) // if name exists
 		{
-			if (s_Shaders[i]->GetName() == shader->GetName())
-			{
-				s_Shaders.erase(s_Shaders.begin() + i);
-				break;
-			}
+			s_Shaders.erase(name);
 		}
+		else
+		{
+			CR_GAME_WARNING("Trying to remove a shader that does not exist! {}", name);
+		}
+		
 
 	}
 

@@ -21,8 +21,10 @@ layout (location = 1) in vec2 a_TexCoord;
 
 out vec2 f_TexCoord;
 
+uniform mat4 u_MVP = mat4(1.0f);
+
 void main()
 {
 	f_TexCoord = a_TexCoord;
-    gl_Position = vec4(a_Position.x, a_Position.y, a_Position.z, 1.0);
+    gl_Position = u_MVP * vec4(a_Position.x, a_Position.y, a_Position.z, 1.0);
 }
