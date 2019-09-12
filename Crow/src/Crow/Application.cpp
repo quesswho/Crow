@@ -4,22 +4,31 @@
 #include "graphics/ShaderManager.h"
 #include <stdio.h>
 #include <string>
-
+#include "Platform/PlatformAPI.h"
 namespace Crow {
 
 	bool Application::s_Closed;
 	std::unique_ptr<LayerManager> Application::s_LayerManager;
 	std::unique_ptr<Timer> Application::m_Timer;
 	int Application::m_FramesPerSecond;
+	AbstractRenderAPI* Application::s_RenderAPI;
 
-
-	Application::Application()
+	Application::Application(const char* title, Platform::RenderAPI api)
+		: m_ShortTitle(title)
 	{
 		Log::Init();
 		CR_CORE_INFO("Initialized Log!");
 
-		m_Window = std::make_unique<Window>(WindowProperties("Crow Engine", 800, 600));
-		s_Closed = false;
+		m_Window = std::make_unique<Window>(WindowProperties(m_ShortTitle, 1280, 1280));
+		s_Closed = false; // Application::s_Closed
+
+		Platform::PlatformAPI::Init(api);
+		s_RenderAPI = Platform::PlatformAPI::CreateRenderAPI();
+
+		if (!s_RenderAPI->InitAPI())
+		{
+			CR_CORE_FATAL("Failed to Initialize Graphics API: {}", s_RenderAPI->GetAPIName());
+		}
 
 		Input::Init();
 		CR_CORE_INFO("Input class has been Initialized!");
@@ -54,7 +63,7 @@ namespace Crow {
 			if (elapsed > 1.0) // If it has been 1 second
 			{
 				m_FramesPerSecond = frames;
-				m_Window->SetTitle(std::string("Crow Engine : ").append(std::to_string(m_FramesPerSecond)).append(" FPS").c_str());
+				m_Window->SetTitle(std::string(m_ShortTitle).append(" : ").append(std::to_string(m_FramesPerSecond)).append(" FPS").c_str());
 				frames = 0;
 				elapsed = 0;
 			}
@@ -67,7 +76,7 @@ namespace Crow {
 
 	void Application::OnUpdate(double elapsed)
 	{
-		RenderAPI::Clear();
+		Application::GetAPI()->Clear();
 		for (auto it = s_LayerManager->begin(); it != s_LayerManager->end(); it++)
 		{
 			(*it)->OnRender();
@@ -93,5 +102,10 @@ namespace Crow {
 	void Application::PopLayer(Layer* layer)
 	{
 		s_LayerManager->PopLayer(layer);
+	}
+
+	AbstractRenderAPI* Application::GetAPI()
+	{ 
+		return s_RenderAPI; 
 	}
 }

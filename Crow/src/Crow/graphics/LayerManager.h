@@ -12,8 +12,8 @@ namespace Crow {
 		void PushLayer(Layer* layer);
 		void PopLayer(Layer* layer);
 
-		inline std::vector<Layer*>::iterator& begin() noexcept { return itBegin; }
-		inline std::vector<Layer*>::iterator& end() noexcept { return itEnd; }
+		inline const std::vector<Layer*>::iterator& begin() noexcept { return itBegin; }
+		inline const std::vector<Layer*>::iterator& end() noexcept { return itEnd; }
 	private:
 		std::vector<Layer*> m_Layers;
 

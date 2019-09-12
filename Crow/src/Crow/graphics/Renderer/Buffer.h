@@ -56,34 +56,29 @@ namespace Crow {
 	};
 
 	class VertexBuffer {
-	private:
-		uint m_BufferID;
 	public:
-		VertexBuffer(const float* vertices, const uint size, const BufferProperties& prop);
-		~VertexBuffer();
 
-		const BufferProperties& GetBufferProperties() const { return m_BufferProperties; }
 
-		void Bind() const;
-		void Unbind() const;
-	private:
-		const BufferProperties m_BufferProperties;
+		virtual ~VertexBuffer() = default;
+
+		static std::shared_ptr<VertexBuffer> Create(const float* vertices, const uint size, const BufferProperties& prop);
+
+		virtual const BufferProperties& GetBufferProperties() const = 0;
+
+		virtual void Bind() const = 0;
+		virtual void Unbind() const = 0;
 	};
 
 	class IndexBuffer {
-	private:
-		uint m_BufferID;
-
 	public:
-		IndexBuffer(const uint* indices, const uint count);
-		~IndexBuffer();
+		virtual ~IndexBuffer() = default;
 
-		void Bind() const;
-		void Unbind() const;
+		static std::shared_ptr<IndexBuffer> Create(const uint* indices, const uint count);
 
-		inline const uint GetCount() { return m_Count; }
-	private:
-		const uint m_Count;
+		virtual inline const uint GetCount() const = 0;
+
+		virtual void Bind() const = 0;
+		virtual void Unbind() const = 0;
 
 	};
 

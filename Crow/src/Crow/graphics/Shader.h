@@ -11,31 +11,23 @@ namespace Crow {
 
 	enum ShaderType { UKNOWN = -1, VERTEX = 0, FRAGMENT = 1 };
 
-	class Shader {
-		uint m_ShaderID;
-		const char* m_Name;
-		std::unordered_map<const char*, int> m_UniformLocations;
-	public:
-		explicit Shader(const char* name, const char* path); // File path
-		explicit Shader(const char* name, std::string& shadercode); // Shader code
+	struct Shader {
 
-		~Shader() {}
+		virtual ~Shader() = default;
 
-		void Bind() const;
-		void Unbind() const;
+		static Shader* CreateFromPath(const char* name, const char* path);
+		static Shader* CreateFromSource(const char* name, std::string& source);
 
-		const char* GetName() const { return m_Name; }
+		virtual void Bind() const = 0;
+		virtual void Unbind() const = 0;
 
-		void SetUniform1i(const char* location, int value);
-		void SetUniform1f(const char* location, float value);
-		void SetUniform2f(const char* location, glm::vec2& value);
-		void SetUniform3f(const char* location, glm::vec3& value);
-		void SetUniform4f(const char* location, glm::vec4& value);
-		void SetUniformMat4(const char* location, const glm::mat4x4& value);
-	private:
-		void Init(std::string& fileSource);
-		void CompileShader(const char* vertex, const char* fragment);
+		virtual const char* GetName() const = 0;
 
-		int GetLocation(const char* location);
+		virtual void SetUniform1i(const char* location, int value) = 0;
+		virtual void SetUniform1f(const char* location, float value) = 0;
+		virtual void SetUniform2f(const char* location, glm::vec2& value) = 0;
+		virtual void SetUniform3f(const char* location, glm::vec3& value) = 0;
+		virtual void SetUniform4f(const char* location, glm::vec4& value) = 0;
+		virtual void SetUniformMat4(const char* location, const glm::mat4x4& value) = 0;
 	};
 }

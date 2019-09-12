@@ -29,7 +29,7 @@ namespace Crow {
 		}
 		else
 		{
-			CR_GAME_ERROR("Shader not found in ShaderManager: {}", name);
+			CR_CORE_ERROR("Shader not found in ShaderManager: {}", name);
 			return nullptr;
 		}
 	}
@@ -42,7 +42,7 @@ namespace Crow {
 		}
 		else
 		{
-			CR_GAME_WARNING("Trying to remove a shader that does not exist! {}", name);
+			CR_CORE_WARNING("Trying to remove a shader that does not exist! {}", name);
 		}
 		
 

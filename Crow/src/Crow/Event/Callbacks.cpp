@@ -16,7 +16,7 @@ namespace Crow {
 
 	void Callbacks::window_size_callback(GLFWwindow* window, int width, int height)
 	{
-		RenderAPI::SetViewPort(width, height);
+		Application::GetAPI()->SetViewPort(width, height);
 	}
 
 	void Callbacks::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) // Calls when the user pressed a key on their keyboard

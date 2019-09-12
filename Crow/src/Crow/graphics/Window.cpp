@@ -33,14 +33,6 @@ namespace Crow {
 
 		glfwMakeContextCurrent(m_Window);
 
-		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-		{
-			CR_CORE_ERROR("Failed to initialize Glad!");
-			return;
-		}
-		CR_CORE_INFO(GetGraphicsInfo());
-
-
 		setCallbacks();
 	}
 
@@ -64,12 +56,4 @@ namespace Crow {
 		m_Properties.m_Title = title;
 		glfwSetWindowTitle(m_Window, title);
 	}
-
-	const std::string Window::GetGraphicsInfo()
-	{
-		std::string result((const char*)glGetString(GL_RENDERER));
-		result.append(" : Opengl Version: ").append((const char*)glGetString(GL_VERSION));
-		return result;
-	}
-
 }

@@ -11,6 +11,7 @@ namespace Crow {
 	void Input::Init()
 	{
 		memset(s_Keys, 0, sizeof(s_Keys)); // Set all keys to CROW_RELEASE
+		memset(s_MouseKeys, 0, sizeof(s_MouseKeys));
 	}
 	
 	void Input::KeyCallback(std::tuple<int, int> key)

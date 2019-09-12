@@ -34,11 +34,23 @@
     <Filter Include="src\Crow\Event">
       <UniqueIdentifier>{A8D68506-94A4-790C-7D38-EA3269A55571}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Crow\graphics">
-      <UniqueIdentifier>{574EBACD-C364-B863-0CDC-4385783189EB}</UniqueIdentifier>
+    <Filter Include="src\Crow\Graphics">
+      <UniqueIdentifier>{37B27F45-A3C8-7DDB-EC3F-09FD58954E63}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Crow\graphics\Renderer">
-      <UniqueIdentifier>{DDA354ED-C9B3-00BE-326D-65DC1E9CEF56}</UniqueIdentifier>
+    <Filter Include="src\Crow\Graphics\Camera">
+      <UniqueIdentifier>{CFC21B8E-BBE7-6A0E-E432-509ED0B6692C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Crow\Graphics\Renderer">
+      <UniqueIdentifier>{BD631892-A973-C462-122D-2981FE5BB3FB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Crow\Graphics\Renderer\2D">
+      <UniqueIdentifier>{42F5C9B1-AE0D-B1DB-77BA-4075E3914575}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Platform">
+      <UniqueIdentifier>{21CA02E5-0D2D-9289-B6B2-CA3FA2F45D0C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Platform\OpenGL">
+      <UniqueIdentifier>{35A49437-A105-7245-2A73-B8F796D3A804}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1170,44 +1182,66 @@
     <ClInclude Include="src\Crow\FileUtils.h">
       <Filter>src\Crow</Filter>
     </ClInclude>
+    <ClInclude Include="src\Crow\Graphics\Camera\OrthographicCamera.h">
+      <Filter>src\Crow\Graphics\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Crow\Graphics\Layer.h">
+      <Filter>src\Crow\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Crow\Graphics\LayerManager.h">
+      <Filter>src\Crow\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Crow\Graphics\Renderer\2D\Renderer2D.h">
+      <Filter>src\Crow\Graphics\Renderer\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Crow\Graphics\Renderer\ArrayBuffer.h">
+      <Filter>src\Crow\Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Crow\Graphics\Renderer\Buffer.h">
+      <Filter>src\Crow\Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Crow\Graphics\Renderer\RenderAPI.h">
+      <Filter>src\Crow\Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Crow\Graphics\Shader.h">
+      <Filter>src\Crow\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Crow\Graphics\ShaderManager.h">
+      <Filter>src\Crow\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Crow\Graphics\Texture.h">
+      <Filter>src\Crow\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Crow\Graphics\Window.h">
+      <Filter>src\Crow\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="src\Crow\Log.h">
       <Filter>src\Crow</Filter>
     </ClInclude>
     <ClInclude Include="src\Crow\Macros.h">
       <Filter>src\Crow</Filter>
     </ClInclude>
-    <ClInclude Include="src\Crow\graphics\Layer.h">
-      <Filter>src\Crow\graphics</Filter>
+    <ClInclude Include="src\Crow\Timer.h">
+      <Filter>src\Crow</Filter>
     </ClInclude>
-    <ClInclude Include="src\Crow\graphics\LayerManager.h">
-      <Filter>src\Crow\graphics</Filter>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLArrayBuffer.h">
+      <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="src\Crow\graphics\Renderer\ArrayBuffer.h">
-      <Filter>src\Crow\graphics\Renderer</Filter>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
+      <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="src\Crow\graphics\Renderer\Buffer.h">
-      <Filter>src\Crow\graphics\Renderer</Filter>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLRenderAPI.h">
+      <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="src\Crow\graphics\Renderer\RenderAPI.h">
-      <Filter>src\Crow\graphics\Renderer</Filter>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h">
+      <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="src\Crow\graphics\Renderer\Renderer2D.h">
-      <Filter>src\Crow\graphics\Renderer</Filter>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h">
+      <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="src\Crow\graphics\Shader.h">
-      <Filter>src\Crow\graphics</Filter>
+    <ClInclude Include="src\Platform\PlatformAPI.h">
+      <Filter>src\Platform</Filter>
     </ClInclude>
-    <ClInclude Include="src\Crow\graphics\ShaderManager.h">
-      <Filter>src\Crow\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Crow\graphics\Texture.h">
-      <Filter>src\Crow\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Crow\graphics\Window.h">
-      <Filter>src\Crow\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Crow\Timer.h" />
-    <ClInclude Include="src\Crow\graphics\Camera\OrthographicCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lib\stb_image\stb_image.cpp">
@@ -1222,36 +1256,56 @@
     <ClCompile Include="src\Crow\Event\Input.cpp">
       <Filter>src\Crow\Event</Filter>
     </ClCompile>
+    <ClCompile Include="src\Crow\Graphics\Camera\OrthographicCamera.cpp">
+      <Filter>src\Crow\Graphics\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Crow\Graphics\Layer.cpp">
+      <Filter>src\Crow\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Crow\Graphics\LayerManager.cpp">
+      <Filter>src\Crow\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Crow\Graphics\Renderer\2D\Renderer2D.cpp">
+      <Filter>src\Crow\Graphics\Renderer\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Crow\Graphics\Renderer\ArrayBuffer.cpp">
+      <Filter>src\Crow\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Crow\Graphics\Renderer\Buffer.cpp">
+      <Filter>src\Crow\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Crow\Graphics\Renderer\RenderAPI.cpp">
+      <Filter>src\Crow\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Crow\Graphics\Shader.cpp">
+      <Filter>src\Crow\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Crow\Graphics\ShaderManager.cpp">
+      <Filter>src\Crow\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Crow\Graphics\Texture.cpp">
+      <Filter>src\Crow\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Crow\Graphics\Window.cpp">
+      <Filter>src\Crow\Graphics</Filter>
+    </ClCompile>
     <ClCompile Include="src\Crow\Log.cpp">
       <Filter>src\Crow</Filter>
     </ClCompile>
-    <ClCompile Include="src\Crow\graphics\Layer.cpp">
-      <Filter>src\Crow\graphics</Filter>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLArrayBuffer.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
-    <ClCompile Include="src\Crow\graphics\LayerManager.cpp">
-      <Filter>src\Crow\graphics</Filter>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
-    <ClCompile Include="src\Crow\graphics\Renderer\ArrayBuffer.cpp">
-      <Filter>src\Crow\graphics\Renderer</Filter>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
-    <ClCompile Include="src\Crow\graphics\Renderer\Buffer.cpp">
-      <Filter>src\Crow\graphics\Renderer</Filter>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
-    <ClCompile Include="src\Crow\graphics\Renderer\Renderer2D.cpp">
-      <Filter>src\Crow\graphics\Renderer</Filter>
+    <ClCompile Include="src\Platform\PlatformAPI.cpp">
+      <Filter>src\Platform</Filter>
     </ClCompile>
-    <ClCompile Include="src\Crow\graphics\Shader.cpp">
-      <Filter>src\Crow\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Crow\graphics\ShaderManager.cpp">
-      <Filter>src\Crow\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Crow\graphics\Texture.cpp">
-      <Filter>src\Crow\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Crow\graphics\Window.cpp">
-      <Filter>src\Crow\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Crow\graphics\Camera\OrthographicCamera.cpp" />
   </ItemGroup>
 </Project>

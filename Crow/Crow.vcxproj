@@ -474,37 +474,49 @@
     <ClInclude Include="src\Crow\Event\Events.h" />
     <ClInclude Include="src\Crow\Event\Input.h" />
     <ClInclude Include="src\Crow\FileUtils.h" />
-    <ClInclude Include="src\Crow\graphics\Camera\OrthographicCamera.h" />
+    <ClInclude Include="src\Crow\Graphics\Camera\OrthographicCamera.h" />
+    <ClInclude Include="src\Crow\Graphics\Layer.h" />
+    <ClInclude Include="src\Crow\Graphics\LayerManager.h" />
+    <ClInclude Include="src\Crow\Graphics\Renderer\2D\Renderer2D.h" />
+    <ClInclude Include="src\Crow\Graphics\Renderer\ArrayBuffer.h" />
+    <ClInclude Include="src\Crow\Graphics\Renderer\Buffer.h" />
+    <ClInclude Include="src\Crow\Graphics\Renderer\RenderAPI.h" />
+    <ClInclude Include="src\Crow\Graphics\Shader.h" />
+    <ClInclude Include="src\Crow\Graphics\ShaderManager.h" />
+    <ClInclude Include="src\Crow\Graphics\Texture.h" />
+    <ClInclude Include="src\Crow\Graphics\Window.h" />
     <ClInclude Include="src\Crow\Log.h" />
     <ClInclude Include="src\Crow\Macros.h" />
-    <ClInclude Include="src\Crow\graphics\Layer.h" />
-    <ClInclude Include="src\Crow\graphics\LayerManager.h" />
-    <ClInclude Include="src\Crow\graphics\Renderer\ArrayBuffer.h" />
-    <ClInclude Include="src\Crow\graphics\Renderer\Buffer.h" />
-    <ClInclude Include="src\Crow\graphics\Renderer\RenderAPI.h" />
-    <ClInclude Include="src\Crow\graphics\Renderer\Renderer2D.h" />
-    <ClInclude Include="src\Crow\graphics\Shader.h" />
-    <ClInclude Include="src\Crow\graphics\ShaderManager.h" />
-    <ClInclude Include="src\Crow\graphics\Texture.h" />
-    <ClInclude Include="src\Crow\graphics\Window.h" />
     <ClInclude Include="src\Crow\Timer.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLArrayBuffer.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLRenderAPI.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h" />
+    <ClInclude Include="src\Platform\PlatformAPI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lib\stb_image\stb_image.cpp" />
     <ClCompile Include="src\Crow\Application.cpp" />
     <ClCompile Include="src\Crow\Event\Callbacks.cpp" />
     <ClCompile Include="src\Crow\Event\Input.cpp" />
-    <ClCompile Include="src\Crow\graphics\Camera\OrthographicCamera.cpp" />
+    <ClCompile Include="src\Crow\Graphics\Camera\OrthographicCamera.cpp" />
+    <ClCompile Include="src\Crow\Graphics\Layer.cpp" />
+    <ClCompile Include="src\Crow\Graphics\LayerManager.cpp" />
+    <ClCompile Include="src\Crow\Graphics\Renderer\2D\Renderer2D.cpp" />
+    <ClCompile Include="src\Crow\Graphics\Renderer\ArrayBuffer.cpp" />
+    <ClCompile Include="src\Crow\Graphics\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\Crow\Graphics\Renderer\RenderAPI.cpp" />
+    <ClCompile Include="src\Crow\Graphics\Shader.cpp" />
+    <ClCompile Include="src\Crow\Graphics\ShaderManager.cpp" />
+    <ClCompile Include="src\Crow\Graphics\Texture.cpp" />
+    <ClCompile Include="src\Crow\Graphics\Window.cpp" />
     <ClCompile Include="src\Crow\Log.cpp" />
-    <ClCompile Include="src\Crow\graphics\Layer.cpp" />
-    <ClCompile Include="src\Crow\graphics\LayerManager.cpp" />
-    <ClCompile Include="src\Crow\graphics\Renderer\ArrayBuffer.cpp" />
-    <ClCompile Include="src\Crow\graphics\Renderer\Buffer.cpp" />
-    <ClCompile Include="src\Crow\graphics\Renderer\Renderer2D.cpp" />
-    <ClCompile Include="src\Crow\graphics\Shader.cpp" />
-    <ClCompile Include="src\Crow\graphics\ShaderManager.cpp" />
-    <ClCompile Include="src\Crow\graphics\Texture.cpp" />
-    <ClCompile Include="src\Crow\graphics\Window.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLArrayBuffer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp" />
+    <ClCompile Include="src\Platform\PlatformAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="lib\glfw\GLFW.vcxproj">
@@ -517,4 +529,4 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-</Project>
+</Project> 

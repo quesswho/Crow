@@ -1,9 +1,10 @@
 #pragma once
 
-#include "ArrayBuffer.h"
-#include "../Shader.h"
+#include "Crow/Graphics/Renderer/ArrayBuffer.h"
+#include "Crow/Graphics/Shader.h"
+#include "Crow/Graphics/Texture.h"
+
 #include <initializer_list>
-#include "../Texture.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Crow {
@@ -34,7 +35,7 @@ namespace Crow {
 					m_Textures[i]->SetIndex(i);
 				else
 				{
-					CR_GAME_ERROR("Cannot have more than 32 textures inside one object!"); 
+					CR_CORE_ERROR("Cannot have more than 32 textures inside one object!"); 
 					return;
 				}
 			}
@@ -54,12 +55,12 @@ namespace Crow {
 		{
 			if (m_Textures.size() < 32)
 			{
-				texture->SetIndex(m_Textures.size());
+				texture->SetIndex((const int) m_Textures.size());
 				m_Textures.push_back(texture);
 			}
 			else
 			{
-				CR_GAME_ERROR("Cannot have more than 32 textures inside one object!");
+				CR_CORE_ERROR("Cannot have more than 32 textures inside one object!");
 				return;
 			}
 		}
@@ -98,10 +99,10 @@ namespace Crow {
 	private:
 		void CalculateModelMatrix()
 		{
-			m_ModelMatrix = 
-			  glm::translate(glm::mat4(1.0f), m_Position)
-			* glm::rotate(glm::mat4(1.0f), m_Rotation, glm::vec3(0.0f, 0.0f, 1.0f))
-			* glm::scale(glm::mat4(1.0f), m_Scale);
+			m_ModelMatrix =
+				glm::translate(glm::mat4(1.0f), m_Position)
+				* glm::rotate(glm::mat4(1.0f), m_Rotation, glm::vec3(0.0f, 0.0f, 1.0f))
+				* glm::scale(glm::mat4(1.0f), m_Scale);
 		}
 	};
 

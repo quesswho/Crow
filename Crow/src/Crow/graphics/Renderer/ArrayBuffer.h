@@ -6,22 +6,17 @@
 namespace Crow {
 
 	class ArrayBuffer {
-	private:
-		uint m_VertexArrayID;
 	public:
-		ArrayBuffer();
-		~ArrayBuffer();
+		virtual ~ArrayBuffer() = default;
 
-		void Bind() const;
-		void Unbind() const;
+		static ArrayBuffer* Create();
 
-		void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer);
-		void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer);
+		virtual void Bind() const = 0;
+		virtual void Unbind() const = 0;
 
-		const inline uint GetCount() const { return m_IndexBuffer->GetCount(); }
+		virtual void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) = 0;
+		virtual void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer) = 0;
 
-	private:
-		std::vector<std::shared_ptr<VertexBuffer>> m_VertexBuffers;
-		std::shared_ptr<IndexBuffer> m_IndexBuffer;
+		virtual const inline uint GetCount() const = 0;
 	};
 }

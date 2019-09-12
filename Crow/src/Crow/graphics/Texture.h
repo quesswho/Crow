@@ -11,7 +11,6 @@
 #define CROW_MIRRORED_REPEAT 0x8370
 #define CROW_CLAMP_TO_EDGE 0x812F
 
-
 #include "Crow/Common.h"
 
 namespace Crow {
@@ -29,25 +28,18 @@ namespace Crow {
 	};
 	
 	class Texture {
-		private:
-			uint m_TextureID;
 		public:
-			Texture(const char* path, const TextureProperties& props = TextureProperties());
-			~Texture();
+			virtual ~Texture() = default;
 			
-			void Init(const TextureProperties& props);
+			static Texture* Create(const char* path, const TextureProperties& props = TextureProperties());
+
+			virtual void Bind() const = 0;
+			virtual void Unbind() const = 0;
 			
-			void Bind() const;
-			void Unbind() const;
+			virtual const inline int GetWidth() const = 0;
+			virtual const inline int GetHeight() const = 0;
+			virtual const inline int GetIndex() const = 0;
 			
-			const inline int GetWidth() const { return m_Width; }
-			const inline int GetHeight() const { return m_Height; }
-			const inline int GetIndex() const { return m_Index; }
-			
-			inline void SetIndex(const int index) { m_Index = index; }
-			
-		private:
-			int m_Index, m_Width, m_Height;
-			const char* m_Path;
+			virtual inline void SetIndex(const int index) = 0;
 	};
 }

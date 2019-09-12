@@ -4,10 +4,12 @@
 
 using namespace Crow;
 
+
+
 	Layer2D::Layer2D()
 		: m_Camera(new OrthographicCamera(glm::vec2(0.0f, 0.0f), 2.0f, 2.0f, 1.0f))
 	{
-		RenderAPI::ClearColor(0.5, 0.7, 0.5);
+		Application::GetAPI()->ClearColor(0.5, 0.7, 0.5);
 
 		m_Renderer = std::make_unique<Renderer2D>();
 
@@ -16,7 +18,7 @@ using namespace Crow;
 			{ 2 }  //uvs
 		};
 
-		ArrayBuffer* m_Buffer = new ArrayBuffer();
+		ArrayBuffer* m_Buffer = ArrayBuffer::Create();
 
 		const float vertices[4*5] = {
 			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
@@ -29,21 +31,21 @@ using namespace Crow;
 			0,1,2, 3,2,1
 		};
 
-		std::shared_ptr<VertexBuffer> vertexBuffer = std::make_shared<VertexBuffer>(vertices, sizeof(vertices), bufferprop);
-		std::shared_ptr<IndexBuffer> indexBuffer = std::make_shared<IndexBuffer>(indices, sizeof(indices) / sizeof(uint));
+		std::shared_ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices), bufferprop);
+		std::shared_ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint));
 
 
 		m_Buffer->AddVertexBuffer(vertexBuffer);
 		m_Buffer->SetIndexBuffer(indexBuffer);
 
-		Texture* texture = new Texture("res/Texture/crow.png", TextureProperties(CROW_NEAREST_MIPMAP_NEAREST, CROW_NEAREST, CROW_CLAMP_TO_EDGE, CROW_CLAMP_TO_EDGE));
-		Texture* texture2 = new Texture("res/Texture/crow2.png", TextureProperties(CROW_NEAREST_MIPMAP_NEAREST, CROW_NEAREST, CROW_CLAMP_TO_EDGE, CROW_CLAMP_TO_EDGE));
+		Texture* texture = Texture::Create("res/Texture/crow.png", TextureProperties(CROW_NEAREST_MIPMAP_NEAREST, CROW_NEAREST, CROW_CLAMP_TO_EDGE, CROW_CLAMP_TO_EDGE));
+		Texture* texture2 = Texture::Create("res/Texture/crow2.png", TextureProperties(CROW_NEAREST_MIPMAP_NEAREST, CROW_NEAREST, CROW_CLAMP_TO_EDGE, CROW_CLAMP_TO_EDGE));
 
-		Shader* shader = new Shader("Basic", "res/Shader/Basic.glsl");
+		Shader* shader = Shader::CreateFromPath("Basic", "res/Shader/Basic.glsl");
 		shader->Bind();
 		shader->SetUniform1i("u_BasicTexture", texture->GetIndex());
 
-		Shader* shader2 = new Shader("Basic2", "res/Shader/Basic.glsl");
+		Shader* shader2 = Shader::CreateFromPath("Basic2", "res/Shader/Basic.glsl");
 
 		glm::mat4 translation = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 		translation *= glm::translate(translation, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -92,7 +94,7 @@ using namespace Crow;
 			object->m_Shader->Bind();
 			object->m_Shader->SetUniformMat4("u_MVP", m_Camera->GetProjectionViewMatrix() * object->GetModelMatrix());
 		}
-		m_Objects[1]->SetRotation(m_Objects[1]->GetRotation() + 0.5f * elapsed);
+		//m_Objects[1]->SetRotation(m_Objects[1]->GetRotation() + 0.5f * elapsed);
 	}
 
 	void Layer2D::OnRender()
@@ -105,6 +107,7 @@ class Game : public Crow::Application {
 	
 public:
 	Game()
+		: Application("The Crows 2D", Crow::Platform::RenderAPI::OPENGL)
 	{
 		PushLayer(new Layer2D());
 	}

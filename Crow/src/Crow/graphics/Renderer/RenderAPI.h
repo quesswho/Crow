@@ -1,16 +1,23 @@
 #pragma once
 #include "Crow/Common.h"
 
-#include <glad/glad.h>
-
 namespace Crow {
 
-	class RenderAPI {
 
+	class AbstractRenderAPI {
 	public:
-		static inline void Clear() { glClear(GL_COLOR_BUFFER_BIT); }
-		static inline void ClearColor(float r, float g, float b) { glClearColor(r, g, b, 0.0f); }
-		static inline void SetViewPort(uint width, uint height) { glViewport(0, 0, width, height); }
-		static inline void DrawIndices(uint count) { glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0); }
+		virtual ~AbstractRenderAPI() = default;
+
+		static AbstractRenderAPI* Create();
+
+		virtual bool InitAPI() const = 0;
+
+		virtual inline void Clear() const = 0;
+		virtual inline void ClearColor(float r, float g, float b) const = 0;
+		virtual inline void SetViewPort(uint width, uint height) const = 0;
+		virtual inline void DrawIndices(uint count) const = 0;
+
+		virtual inline const char* GetAPIName() const = 0;
+		virtual inline std::string& GetGraphicsInfo() const = 0;
 	};
 }

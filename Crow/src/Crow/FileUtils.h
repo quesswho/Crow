@@ -13,7 +13,7 @@ namespace Crow {
 			std::ifstream file(path);
 			if (file.fail())
 			{
-				CR_GAME_ERROR("Failed to read {0}", path, "!");
+				CR_CORE_ERROR("Failed to read {0}", path, "!");
 				return std::string("-->ERROR<--");
 			}
 			const auto size = std::filesystem::file_size(path);

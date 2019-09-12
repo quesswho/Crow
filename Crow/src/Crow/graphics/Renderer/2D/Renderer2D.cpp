@@ -1,10 +1,10 @@
 #include "Renderer2D.h"
-#include "RenderAPI.h"
+#include "Crow/Graphics/Renderer/RenderAPI.h"
+#include "Crow/Application.h"
 
 namespace Crow {
 
-	Renderer2D::Renderer2D()
-	{}
+	Renderer2D::Renderer2D() {}
 
 	Renderer2D::~Renderer2D()
 	{
@@ -19,7 +19,7 @@ namespace Crow {
 		for (auto renderable = m_Renderables.begin(); renderable != m_Renderables.end(); ++renderable)
 		{
 			(*renderable)->Bind();
-			RenderAPI::DrawIndices((*renderable)->GetCount());
+			Application::GetAPI()->DrawIndices((*renderable)->GetCount());
 		}
 		m_Renderables.clear();
 	}

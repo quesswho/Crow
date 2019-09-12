@@ -25,8 +25,6 @@ namespace Crow {
 		void Update() const;
 
 		void SetTitle(const char* title);
-
-		const std::string GetGraphicsInfo();
 	private:
 		void setCallbacks() const;
 		void Init();
