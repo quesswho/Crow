@@ -1,6 +1,7 @@
 #include "Game.h"
 
 #include "glm/vec3.hpp"
+#include "Crow/Graphics/ShaderFactory.h"
 
 using namespace Crow;
 
@@ -41,22 +42,20 @@ using namespace Crow;
 		Texture* texture = Texture::Create("res/Texture/crow.png", TextureProperties(CROW_NEAREST_MIPMAP_NEAREST, CROW_NEAREST, CROW_CLAMP_TO_EDGE, CROW_CLAMP_TO_EDGE));
 		Texture* texture2 = Texture::Create("res/Texture/crow2.png", TextureProperties(CROW_NEAREST_MIPMAP_NEAREST, CROW_NEAREST, CROW_CLAMP_TO_EDGE, CROW_CLAMP_TO_EDGE));
 
-		Shader* shader = Shader::CreateFromPath("Basic", "res/Shader/Basic.glsl");
-		shader->Bind();
-		shader->SetUniform1i("u_BasicTexture", texture->GetIndex());
-
 		Shader* shader2 = Shader::CreateFromPath("Basic2", "res/Shader/Basic.glsl");
 
 		glm::mat4 translation = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 		translation *= glm::translate(translation, glm::vec3(1.0f, 0.0f, 0.0f));
 
-		ShaderManager::PushShader(shader);
+		ShaderManager::PushShader(shader2);
 
-		m_Objects.push_back(new Object2D(m_Buffer, shader));
-		m_Objects[0]->AddTexture(texture);
 		m_Objects.push_back(new Object2D(m_Buffer, shader2, { texture2 }));
-		m_Objects[1]->SetPosition(glm::vec3(1, 0, 0));
-		m_Objects[1]->SetScale(glm::vec3(1.0f, 2.0f, 1.0f));
+		m_Objects[0]->SetPosition(glm::vec3(1, 0, 0));
+		m_Objects[0]->SetScale(glm::vec3(1.0f, 2.0f, 1.0f));
+
+		m_Objects.push_back(new Object2D(m_Buffer));
+		m_Objects[1]->AddTexture(texture);
+		m_Objects[1]->AddTexture(texture2);
 		
 	}
 

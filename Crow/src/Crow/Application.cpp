@@ -17,7 +17,6 @@ namespace Crow {
 		: m_ShortTitle(title)
 	{
 		Log::Init();
-		CR_CORE_INFO("Initialized Log!");
 
 		m_Window = std::make_unique<Window>(WindowProperties(m_ShortTitle, 1280, 1280));
 		s_Closed = false; // Application::s_Closed
@@ -30,12 +29,15 @@ namespace Crow {
 			CR_CORE_FATAL("Failed to Initialize Graphics API: {}", s_RenderAPI->GetAPIName());
 		}
 
+		CR_CORE_INFO(s_RenderAPI->GetGraphicsInfo());
+		CR_CORE_INFO("Using Graphics API: {}", s_RenderAPI->GetAPIName());
+
 		Input::Init();
-		CR_CORE_INFO("Input class has been Initialized!");
 
 		s_LayerManager = std::make_unique<LayerManager>();
 
 		m_Timer = std::make_unique<Timer>();
+		CR_CORE_INFO("Application has initialized successfully!");
 	}
 
 	Application::~Application()
@@ -76,7 +78,7 @@ namespace Crow {
 
 	void Application::OnUpdate(double elapsed)
 	{
-		Application::GetAPI()->Clear();
+		s_RenderAPI->Clear();
 		for (auto it = s_LayerManager->begin(); it != s_LayerManager->end(); it++)
 		{
 			(*it)->OnRender();
@@ -106,6 +108,6 @@ namespace Crow {
 
 	AbstractRenderAPI* Application::GetAPI()
 	{ 
-		return s_RenderAPI; 
+		return s_RenderAPI;
 	}
 }

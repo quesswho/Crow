@@ -22,6 +22,9 @@ namespace Crow {
 			virtual void Bind() const;
 			virtual void Unbind() const;
 
+			virtual void ReloadFromPath(const char* path) override;
+			virtual void ReloadFromSource(std::string& source) override;
+
 			virtual const char* GetName() const { return m_Name; }
 
 			virtual void SetUniform1i(const char* location, int value);

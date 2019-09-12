@@ -18,6 +18,6 @@ namespace Crow {
 		virtual inline void DrawIndices(uint count) const = 0;
 
 		virtual inline const char* GetAPIName() const = 0;
-		virtual inline std::string& GetGraphicsInfo() const = 0;
+		virtual inline std::string GetGraphicsInfo() const = 0;
 	};
 }

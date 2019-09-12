@@ -477,11 +477,13 @@
     <ClInclude Include="src\Crow\Graphics\Camera\OrthographicCamera.h" />
     <ClInclude Include="src\Crow\Graphics\Layer.h" />
     <ClInclude Include="src\Crow\Graphics\LayerManager.h" />
+    <ClInclude Include="src\Crow\Graphics\Renderer\2D\Object2D.h" />
     <ClInclude Include="src\Crow\Graphics\Renderer\2D\Renderer2D.h" />
     <ClInclude Include="src\Crow\Graphics\Renderer\ArrayBuffer.h" />
     <ClInclude Include="src\Crow\Graphics\Renderer\Buffer.h" />
     <ClInclude Include="src\Crow\Graphics\Renderer\RenderAPI.h" />
     <ClInclude Include="src\Crow\Graphics\Shader.h" />
+    <ClInclude Include="src\Crow\Graphics\ShaderFactory.h" />
     <ClInclude Include="src\Crow\Graphics\ShaderManager.h" />
     <ClInclude Include="src\Crow\Graphics\Texture.h" />
     <ClInclude Include="src\Crow\Graphics\Window.h" />
@@ -503,11 +505,13 @@
     <ClCompile Include="src\Crow\Graphics\Camera\OrthographicCamera.cpp" />
     <ClCompile Include="src\Crow\Graphics\Layer.cpp" />
     <ClCompile Include="src\Crow\Graphics\LayerManager.cpp" />
+    <ClCompile Include="src\Crow\Graphics\Renderer\2D\Object2D.cpp" />
     <ClCompile Include="src\Crow\Graphics\Renderer\2D\Renderer2D.cpp" />
     <ClCompile Include="src\Crow\Graphics\Renderer\ArrayBuffer.cpp" />
     <ClCompile Include="src\Crow\Graphics\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Crow\Graphics\Renderer\RenderAPI.cpp" />
     <ClCompile Include="src\Crow\Graphics\Shader.cpp" />
+    <ClCompile Include="src\Crow\Graphics\ShaderFactory.cpp" />
     <ClCompile Include="src\Crow\Graphics\ShaderManager.cpp" />
     <ClCompile Include="src\Crow\Graphics\Texture.cpp" />
     <ClCompile Include="src\Crow\Graphics\Window.cpp" />
@@ -517,6 +521,10 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp" />
     <ClCompile Include="src\Platform\PlatformAPI.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Crow\Graphics\Shaders\Color.glsl" />
+    <None Include="src\Crow\Graphics\Shaders\Texture.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="lib\glfw\GLFW.vcxproj">

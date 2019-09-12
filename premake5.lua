@@ -34,6 +34,7 @@ workspace "Crow"
 		files { 
 			"%{prj.name}/src/**.h", 
 			"%{prj.name}/src/**.cpp",
+			"%{prj.name}/src/**.glsl",
 			"%{prj.name}/lib/glm/glm/**.hpp",
 			"%{prj.name}/lib/glm/glm/**.inl",
 			"%{prj.name}/lib/stb_image/**.*"

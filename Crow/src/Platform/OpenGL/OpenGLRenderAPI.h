@@ -24,7 +24,7 @@ namespace Crow {
 
 			virtual inline const char* GetAPIName() const override { return "OpenGL"; }
 
-			virtual inline std::string& GetGraphicsInfo() const override
+			virtual inline std::string GetGraphicsInfo() const override
 			{
 				std::string result((const char*)glGetString(GL_RENDERER));
 				result.append(" : Opengl Version: ").append((const char*)glGetString(GL_VERSION));

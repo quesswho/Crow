@@ -1,3 +1,4 @@
+R"(
 #shader fragment
 
 #version 330 core
@@ -28,3 +29,4 @@ void main()
 	f_TexCoord = a_TexCoord;
     gl_Position = u_MVP * vec4(a_Position.x, a_Position.y, a_Position.z, 1.0);
 }
+)"

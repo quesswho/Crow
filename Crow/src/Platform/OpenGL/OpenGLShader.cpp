@@ -132,6 +132,16 @@ namespace Crow {
 		}
 
 
+		void OpenGLShader::ReloadFromPath(const char* path)
+		{
+			Init(FileUtils::ReadFile(path));
+		}
+
+		void OpenGLShader::ReloadFromSource(std::string& source)
+		{
+			Init(source);
+		}
+
 		void OpenGLShader::Bind() const
 		{
 			glUseProgram(m_ShaderID);

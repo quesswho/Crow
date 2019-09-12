@@ -46,6 +46,9 @@
     <Filter Include="src\Crow\Graphics\Renderer\2D">
       <UniqueIdentifier>{42F5C9B1-AE0D-B1DB-77BA-4075E3914575}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Crow\Graphics\Shaders">
+      <UniqueIdentifier>{101EB230-7CE0-E5BA-C590-74473192BE98}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Platform">
       <UniqueIdentifier>{21CA02E5-0D2D-9289-B6B2-CA3FA2F45D0C}</UniqueIdentifier>
     </Filter>
@@ -1191,6 +1194,9 @@
     <ClInclude Include="src\Crow\Graphics\LayerManager.h">
       <Filter>src\Crow\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Crow\Graphics\Renderer\2D\Object2D.h">
+      <Filter>src\Crow\Graphics\Renderer\2D</Filter>
+    </ClInclude>
     <ClInclude Include="src\Crow\Graphics\Renderer\2D\Renderer2D.h">
       <Filter>src\Crow\Graphics\Renderer\2D</Filter>
     </ClInclude>
@@ -1204,6 +1210,9 @@
       <Filter>src\Crow\Graphics\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Crow\Graphics\Shader.h">
+      <Filter>src\Crow\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Crow\Graphics\ShaderFactory.h">
       <Filter>src\Crow\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Crow\Graphics\ShaderManager.h">
@@ -1265,6 +1274,9 @@
     <ClCompile Include="src\Crow\Graphics\LayerManager.cpp">
       <Filter>src\Crow\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Crow\Graphics\Renderer\2D\Object2D.cpp">
+      <Filter>src\Crow\Graphics\Renderer\2D</Filter>
+    </ClCompile>
     <ClCompile Include="src\Crow\Graphics\Renderer\2D\Renderer2D.cpp">
       <Filter>src\Crow\Graphics\Renderer\2D</Filter>
     </ClCompile>
@@ -1278,6 +1290,9 @@
       <Filter>src\Crow\Graphics\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Crow\Graphics\Shader.cpp">
+      <Filter>src\Crow\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Crow\Graphics\ShaderFactory.cpp">
       <Filter>src\Crow\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Crow\Graphics\ShaderManager.cpp">
@@ -1307,5 +1322,13 @@
     <ClCompile Include="src\Platform\PlatformAPI.cpp">
       <Filter>src\Platform</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Crow\Graphics\Shaders\Color.glsl">
+      <Filter>src\Crow\Graphics\Shaders</Filter>
+    </None>
+    <None Include="src\Crow\Graphics\Shaders\Texture.glsl">
+      <Filter>src\Crow\Graphics\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
