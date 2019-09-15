@@ -16,15 +16,24 @@ namespace Crow {
 		glm::vec2   m_Zoom;
 
 		float m_Speed;
+		float m_ZoomSpeed;
 	public:
-		OrthographicCamera(glm::vec3& pos, float x, float y, float speed = 1.0f);
+		OrthographicCamera(glm::vec3& pos, float x, float y, float speed, float zoomSpeed);
 		OrthographicCamera(glm::vec2& pos, float x, float y, float speed = 1.0f)
-			: OrthographicCamera(glm::vec3(pos, 0.0f), x, y, speed)
+			: OrthographicCamera(glm::vec3(pos, 0.0f), x, y, speed, 0.6f)
 		{}
+
+		OrthographicCamera(glm::vec3& pos, float x, float y, float speed = 1.0f)
+			: OrthographicCamera(pos, x, y, speed, 0.6f)
+		{}
+		OrthographicCamera(glm::vec2& pos, float x, float y, float speed, float zoomSpeed)
+			: OrthographicCamera(glm::vec3(pos, 0.0f), x, y, speed, zoomSpeed)
+		{}
+
 
 		~OrthographicCamera();
 
-		void Update(double elapsed);
+		void Update(float elapsed);
 
 		const glm::mat4x4& GetViewMatrix() const { return m_ViewMatrix; }
 		void SetViewMatrix(const glm::mat4x4& view) noexcept { m_ViewMatrix = view; CalculateMatrices(); }

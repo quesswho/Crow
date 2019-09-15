@@ -36,7 +36,7 @@ namespace Crow {
 
 		static int m_FramesPerSecond;
 	private:
-		virtual void OnUpdate(double elapsed);
+		virtual void OnUpdate(float elapsed);
 	private:
 		std::unique_ptr<Window> m_Window;
 		static std::unique_ptr<LayerManager> s_LayerManager;

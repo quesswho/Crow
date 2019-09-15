@@ -10,7 +10,7 @@ namespace Crow {
 		~Layer();
 
 		virtual void OnRender() {}
-		virtual void OnUpdate(double elapsed) {}
+		virtual void OnUpdate(float elapsed) {}
 		virtual void OnEvent(Event& e) {}
 	};
 }

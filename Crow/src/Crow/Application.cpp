@@ -76,7 +76,7 @@ namespace Crow {
 		}
 	}
 
-	void Application::OnUpdate(double elapsed)
+	void Application::OnUpdate(float elapsed)
 	{
 		s_RenderAPI->Clear();
 		for (auto it = s_LayerManager->begin(); it != s_LayerManager->end(); it++)

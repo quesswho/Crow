@@ -3,8 +3,8 @@
 
 namespace Crow {
 
-	OrthographicCamera::OrthographicCamera(glm::vec3& pos, float x, float y, float speed)
-		: m_CameraPos(pos), m_ProjectionMatrix(glm::ortho(-x, x, -y, y, 0.0f, 100.0f)), m_Speed(speed), m_Zoom(x, y)
+	OrthographicCamera::OrthographicCamera(glm::vec3& pos, float x, float y, float speed, float zoomSpeed)
+		: m_CameraPos(pos), m_ProjectionMatrix(glm::ortho(-x, x, -y, y, 0.0f, 100.0f)), m_Speed(speed), m_Zoom(x, y), m_ZoomSpeed(zoomSpeed)
 	{
 		CalculateMatrices();
 	}
@@ -18,7 +18,7 @@ namespace Crow {
 		m_ProjectionViewMatrix = m_ProjectionMatrix * m_ViewMatrix;
 	}
 
-	void OrthographicCamera::Update(double elapsed)
+	void OrthographicCamera::Update(float elapsed)
 	{
 		if (Input::IsKeyPressed(CROW_KEY_W))
 			m_CameraPos += glm::vec3(0.0f,	-m_Speed * elapsed, 0.0f);
@@ -31,12 +31,12 @@ namespace Crow {
 		
 		if (Input::IsKeyPressed(CROW_KEY_Z))
 		{
-			m_Zoom -= glm::vec2(0.5f * elapsed, 0.5f * elapsed);
+			m_Zoom -= glm::vec2(m_ZoomSpeed * elapsed, m_ZoomSpeed * elapsed);
 			m_ProjectionMatrix = glm::ortho(-m_Zoom.x, m_Zoom.x, -m_Zoom.y, m_Zoom.y, 0.0f, 100.0f);
 		}
 		if (Input::IsKeyPressed(CROW_KEY_X))
 		{
-			m_Zoom += glm::vec2(0.5f * elapsed, 0.5f * elapsed);
+			m_Zoom += glm::vec2(m_ZoomSpeed * elapsed, m_ZoomSpeed * elapsed);
 			m_ProjectionMatrix = glm::ortho(-m_Zoom.x, m_Zoom.x, -m_Zoom.y, m_Zoom.y, 0.0f, 100.0f);
 		}
 

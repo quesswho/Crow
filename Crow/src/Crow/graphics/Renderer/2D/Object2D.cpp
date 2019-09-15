@@ -2,8 +2,8 @@
 
 namespace Crow {
 
-	Object2D::Object2D(const ArrayBuffer* buffer, Shader* shader, std::initializer_list<Texture*> textures, glm::mat4x4 model)
-		: m_Buffer(buffer), m_Shader(shader), m_Textures(textures), m_ModelMatrix(model), m_Position(0.0f), m_Scale(1.0f), m_Rotation(0.0f), m_IsShaderSpecified(true)
+	Object2D::Object2D(const ArrayBuffer* buffer, Shader* shader, std::initializer_list<Texture*> textures, glm::vec3 position)
+		: m_Buffer(buffer), m_Shader(shader), m_Textures(textures), m_Position(position), m_Scale(1.0f), m_Rotation(0.0f), m_IsShaderSpecified(true), m_ModelMatrix(glm::mat4(1.0f))
 	{
 		for (int i = 0; i < m_Textures.size(); i++)
 		{
@@ -15,16 +15,12 @@ namespace Crow {
 				return;
 			}
 		}
+		CalculateModelMatrix();
 	}
 
 	Object2D::~Object2D()
 	{
-		for (int i = 0; i < m_Textures.size(); i++)
-		{
-			delete m_Textures[i];
-		}
 		delete m_Buffer;
-		delete m_Shader;
 	}
 
 	void Object2D::AddTexture(Texture* texture)

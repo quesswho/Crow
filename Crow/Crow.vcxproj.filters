@@ -1206,6 +1206,9 @@
     <ClInclude Include="src\Crow\Graphics\Renderer\Buffer.h">
       <Filter>src\Crow\Graphics\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Crow\Graphics\Renderer\BufferPropertiesFactory.h">
+      <Filter>src\Crow\Graphics\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Crow\Graphics\Renderer\RenderAPI.h">
       <Filter>src\Crow\Graphics\Renderer</Filter>
     </ClInclude>
@@ -1284,6 +1287,9 @@
       <Filter>src\Crow\Graphics\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Crow\Graphics\Renderer\Buffer.cpp">
+      <Filter>src\Crow\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Crow\Graphics\Renderer\BufferPropertiesFactory.cpp">
       <Filter>src\Crow\Graphics\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Crow\Graphics\Renderer\RenderAPI.cpp">

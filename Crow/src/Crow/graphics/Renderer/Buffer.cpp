@@ -4,7 +4,6 @@
 
 namespace Crow {
 
-
 	std::shared_ptr<VertexBuffer> VertexBuffer::Create(const float* vertices, const uint size, const BufferProperties& prop)
 	{ 
 		return Platform::PlatformAPI::CreateVertexBuffer(vertices, size, prop);

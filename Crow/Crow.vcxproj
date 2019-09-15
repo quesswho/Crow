@@ -481,6 +481,7 @@
     <ClInclude Include="src\Crow\Graphics\Renderer\2D\Renderer2D.h" />
     <ClInclude Include="src\Crow\Graphics\Renderer\ArrayBuffer.h" />
     <ClInclude Include="src\Crow\Graphics\Renderer\Buffer.h" />
+    <ClInclude Include="src\Crow\Graphics\Renderer\BufferPropertiesFactory.h" />
     <ClInclude Include="src\Crow\Graphics\Renderer\RenderAPI.h" />
     <ClInclude Include="src\Crow\Graphics\Shader.h" />
     <ClInclude Include="src\Crow\Graphics\ShaderFactory.h" />
@@ -509,6 +510,7 @@
     <ClCompile Include="src\Crow\Graphics\Renderer\2D\Renderer2D.cpp" />
     <ClCompile Include="src\Crow\Graphics\Renderer\ArrayBuffer.cpp" />
     <ClCompile Include="src\Crow\Graphics\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\Crow\Graphics\Renderer\BufferPropertiesFactory.cpp" />
     <ClCompile Include="src\Crow\Graphics\Renderer\RenderAPI.cpp" />
     <ClCompile Include="src\Crow\Graphics\Shader.cpp" />
     <ClCompile Include="src\Crow\Graphics\ShaderFactory.cpp" />

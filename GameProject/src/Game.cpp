@@ -8,7 +8,7 @@ using namespace Crow;
 
 
 	Layer2D::Layer2D()
-		: m_Camera(new OrthographicCamera(glm::vec2(0.0f, 0.0f), 2.0f, 2.0f, 1.0f))
+		: m_Camera(new OrthographicCamera(glm::vec2(0.0f, 0.0f), 2.0f, 2.0f, 3.0f, 3.0f))
 	{
 		Application::GetAPI()->ClearColor(0.5, 0.7, 0.5);
 
@@ -42,27 +42,35 @@ using namespace Crow;
 		Texture* texture = Texture::Create("res/Texture/crow.png", TextureProperties(CROW_NEAREST_MIPMAP_NEAREST, CROW_NEAREST, CROW_CLAMP_TO_EDGE, CROW_CLAMP_TO_EDGE));
 		Texture* texture2 = Texture::Create("res/Texture/crow2.png", TextureProperties(CROW_NEAREST_MIPMAP_NEAREST, CROW_NEAREST, CROW_CLAMP_TO_EDGE, CROW_CLAMP_TO_EDGE));
 
-		Shader* shader2 = Shader::CreateFromPath("Basic2", "res/Shader/Basic.glsl");
+		Shader* shader = Shader::CreateFromPath("Basic2", "res/Shader/Basic.glsl");
 
 		glm::mat4 translation = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 		translation *= glm::translate(translation, glm::vec3(1.0f, 0.0f, 0.0f));
 
-		ShaderManager::PushShader(shader2);
+		ShaderManager::PushShader(shader);
 
-		m_Objects.push_back(new Object2D(m_Buffer, shader2, { texture2 }));
-		m_Objects[0]->SetPosition(glm::vec3(1, 0, 0));
-		m_Objects[0]->SetScale(glm::vec3(1.0f, 2.0f, 1.0f));
+		m_Objects.push_back(new Object2D(m_Buffer, shader, { texture }));
+		m_Objects[0]->SetPosition(glm::vec3(-1, 0, 0));
+		//m_Objects[0]->SetScale(glm::vec3(1.0f, 2.0f, 1.0f));
 
-		m_Objects.push_back(new Object2D(m_Buffer));
-		m_Objects[1]->AddTexture(texture);
-		m_Objects[1]->AddTexture(texture2);
+
 		
+		for (int x = 0; x < 50; x++)
+		{
+			for (int y = 0; y < 50; y++)
+			{
+				m_BatchingObjects.push_back(new Batchable2D(vertices, sizeof(vertices), indices, sizeof(indices) / sizeof(uint), shader, texture2, glm::vec3(x+1.0f, y, 0.0f)));
+			}
+		}
+
 	}
 
 	Layer2D::~Layer2D()
 	{
 		for(const auto object : m_Objects)
 			delete object;
+		for (const auto batch : m_BatchingObjects)
+			delete batch;
 	}
 
 	void Layer2D::OnEvent(Event& e)
@@ -85,20 +93,34 @@ using namespace Crow;
 		}
 	}
 
-	void Layer2D::OnUpdate(double elapsed)
+	void Layer2D::OnUpdate(float elapsed)
 	{
 		m_Camera->Update(elapsed);
 		for (auto object : m_Objects)
 		{
-			object->m_Shader->Bind();
-			object->m_Shader->SetUniformMat4("u_MVP", m_Camera->GetProjectionViewMatrix() * object->GetModelMatrix());
+			ShaderManager::GetShader("Basic2")->Bind();
+			ShaderManager::GetShader("Basic2")->SetUniformMat4("u_MVP", m_Camera->GetProjectionViewMatrix() * object->GetModelMatrix());
 		}
+
+		for (auto object : m_BatchingObjects)
+		{
+			object->m_Shader->Bind();
+			object->m_Shader->SetUniformMat4("u_MVP", m_Camera->GetProjectionViewMatrix());
+		}
+		//m_Renderer->GetBatchShader()->SetUniformMat4("u_MVP", m_Camera->GetProjectionViewMatrix());
+		
 		//m_Objects[1]->SetRotation(m_Objects[1]->GetRotation() + 0.5f * elapsed);
 	}
 
 	void Layer2D::OnRender()
 	{
+		m_Renderer->Begin();
+		for (auto batching : m_BatchingObjects)
+		{
+			m_Renderer->BatchSubmit(batching);
+		}
 		m_Renderer->Submit(m_Objects);
+		m_Renderer->End();
 		m_Renderer->Flush();
 	}
 
