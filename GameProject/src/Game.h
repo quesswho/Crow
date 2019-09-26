@@ -22,5 +22,6 @@ private:
 	std::vector<Crow::Batchable2D*> m_BatchingObjects;
 	Crow::OrthographicCamera* m_Camera;
 
-	Crow::PipelineStateObject* m_PSO;
+	Crow::ArrayBuffer* m_ArrayBuffer;
+	Crow::Shader* m_Shader;
 };

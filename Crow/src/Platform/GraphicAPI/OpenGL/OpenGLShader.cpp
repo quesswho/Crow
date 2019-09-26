@@ -9,13 +9,13 @@
 namespace Crow {
 	namespace Platform {
 
-		OpenGLShader::OpenGLShader(const char* name, const char* path)
+		OpenGLShader::OpenGLShader(const char* name, const char* path, const BufferProperties& shaderInput)
 			: m_Name(name)
 		{
 			Init(FileUtils::ReadFile(path));
 		}
 
-		OpenGLShader::OpenGLShader(const char* name, std::string& source)
+		OpenGLShader::OpenGLShader(const char* name, std::string& source, const BufferProperties& shaderInput)
 			: m_Name(name)
 		{
 			Init(source);

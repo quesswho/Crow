@@ -7,6 +7,8 @@ namespace Crow {
 		DirectXVertexBuffer::DirectXVertexBuffer(float* vertices, const uint size, const BufferProperties& prop)
 			: m_BufferProperties(prop), m_Size(size)
 		{
+			m_VertexBufferView = {};
+
 			DirectXRenderAPI::GetDevice()->CreateCommittedResource(
 				&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 				D3D12_HEAP_FLAG_NONE,
@@ -65,6 +67,8 @@ namespace Crow {
 		DirectXIndexBuffer::DirectXIndexBuffer(ulong* indices, const uint count)
 			: m_Count(count), m_Size(count * sizeof(uint))
 		{
+			m_IndexBufferView = {};
+
 			DirectXRenderAPI::GetDevice()->CreateCommittedResource(
 				&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 				D3D12_HEAP_FLAG_NONE,

@@ -5,8 +5,8 @@
 namespace Crow {
 	namespace Platform {
 
-		DirectXPipelineStateObject::DirectXPipelineStateObject(const std::shared_ptr<VertexBuffer> vBuffer, const std::shared_ptr<IndexBuffer> iBuffer, Shader* shader)
-			: m_Shader((DirectXShader*)shader), m_VertexBuffer(vBuffer), m_IndexBuffer(iBuffer), m_RootSignature(0), m_PSO(0)
+		DirectXArrayBuffer::DirectXArrayBuffer(const std::shared_ptr<VertexBuffer> vBuffer, const std::shared_ptr<IndexBuffer> iBuffer, Shader* shader)
+			: m_Shader((DirectXShader*)shader), m_VertexBuffer(vBuffer), m_IndexBuffer(iBuffer), m_RootSignature(0), m_ArrayBuffer(0)
 		{
 			HRESULT hr;
 
@@ -52,25 +52,25 @@ namespace Crow {
 				psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 				psoDesc.NumRenderTargets = 1;
 
-				hr = DirectXRenderAPI::GetDevice()->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_PSO));
+				hr = DirectXRenderAPI::GetDevice()->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_ArrayBuffer));
 				if (hr < 0)
 				{
 					CR_CORE_ERROR("Failed to create graphics pipeline state!");
 				}
-				DirectXRenderAPI::SetPipe(m_PSO);
+				DirectXRenderAPI::SetPipe(m_ArrayBuffer);
 			}
 			else {
 				CR_CORE_ERROR("Vertex buffer is missing Properties!");
 			}
 		}
 
-		DirectXPipelineStateObject::~DirectXPipelineStateObject()
+		DirectXArrayBuffer::~DirectXArrayBuffer()
 		{
-			m_PSO->Release();
+			m_ArrayBuffer->Release();
 			m_RootSignature->Release();
 		}
 
-		void DirectXPipelineStateObject::Bind() const
+		void DirectXArrayBuffer::Bind() const
 		{
 			DirectXRenderAPI::GetCommandList()->SetGraphicsRootSignature(m_RootSignature);
 			DirectXRenderAPI::GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -78,10 +78,10 @@ namespace Crow {
 			m_IndexBuffer->Bind();
 		}
 
-		void DirectXPipelineStateObject::Unbind() const
+		void DirectXArrayBuffer::Unbind() const
 		{}
 
-		DXGI_FORMAT DirectXPipelineStateObject::ConvertToDXGIFormat(int componentCount)
+		DXGI_FORMAT DirectXArrayBuffer::ConvertToDXGIFormat(int componentCount)
 		{
 			switch (componentCount) // Not in sequential order because they are sorted in a way that should return the most common one first
 			{

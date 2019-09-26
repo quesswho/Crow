@@ -55,7 +55,7 @@ namespace Crow {
 			CreateVertexBuffer = &OpenGLVertexBuffer::CreateOpenGLVertexBuffer;
 			CreateIndexBuffer = &OpenGLIndexBuffer::CreateOpenGLIndexBuffer;
 
-			CreatePipelineStateObject = &OpenGLPipelineStateObject::CreateOpenGLPipelineStateObject;
+			CreateArrayBuffer = &OpenGLArrayBuffer::CreateOpenGLArrayBuffer;
 
 			CreateShaderFromPath = &OpenGLShader::CreateOpenGLShaderFromPath;
 			CreateShaderFromSource = &OpenGLShader::CreateOpenGLShaderFromSource;
@@ -70,7 +70,7 @@ namespace Crow {
 			CreateVertexBuffer = &DirectXVertexBuffer::CreateDirectXVertexBuffer;
 			CreateIndexBuffer = &DirectXIndexBuffer::CreateDirectXIndexBuffer;
 
-			CreatePipelineStateObject = &DirectXPipelineStateObject::CreateDirectXPipelineStateObject;
+			CreateArrayBuffer = &DirectXArrayBuffer::CreateDirectXArrayBuffer;
 
 			CreateShaderFromPath = &DirectXShader::CreateDirectXShaderFromPath;
 			CreateShaderFromSource = &DirectXShader::CreateDirectXShaderFromSource;

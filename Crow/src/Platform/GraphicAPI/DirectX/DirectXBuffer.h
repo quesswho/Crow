@@ -9,8 +9,6 @@
 namespace Crow {
 	namespace Platform {
 
-
-
 		class DirectXVertexBuffer : public VertexBuffer {
 		private:
 			ID3D12Resource* m_VertexBuffer;

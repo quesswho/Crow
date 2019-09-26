@@ -47,14 +47,14 @@ namespace Crow {
 			static inline D3D12_VIEWPORT GetViewPort() { return s_ViewPort; }
 			static inline D3D12_RECT GetScissorRect() { return s_ScissorRect; }
 
-			static void SetPipe(ID3D12PipelineState* pipe) { m_Pipe = pipe; }
+			static void AddPipeline(ID3D12PipelineState* pipe) { m_PSOs.push_back(pipe); }
 
 			static void Upload(VertexBuffer* vBuffer) { m_VertexBuffers.push_back(vBuffer); }
 			static void Upload(IndexBuffer* iBuffer) { m_IndexBuffers.push_back(iBuffer); }
 		private:
 			static void WaitForLastFrame();
 		private:
-			static ID3D12PipelineState* m_Pipe;
+			static std::vector<ID3D12PipelineState*> m_PSOs;
 
 			DirectXShaderFactory* m_ShaderFactory;
 

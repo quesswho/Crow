@@ -9,14 +9,14 @@
 #include "Application/Windows/WindowsAPIWindow.h"
 
 // OPENGL
-#include "GraphicAPI/OpenGL/OpenGLPipelineStateObject.h"
+#include "GraphicAPI/OpenGL/OpenGLArrayBuffer.h"
 #include "GraphicAPI/OpenGL/OpenGLBuffer.h"
 #include "GraphicAPI/OpenGL/OpenGLShader.h"
 #include "GraphicAPI/OpenGL/OpenGLTexture.h"
 
 // DIRECTX
 #include "GraphicAPI/DirectX/DirectXRenderAPI.h"
-#include "GraphicAPI/DirectX/DirectXPipelineStateObject.h"
+#include "GraphicAPI/DirectX/DirectXArrayBuffer.h"
 #include "GraphicAPI/DirectX/DirectXBuffer.h"
 #include "GraphicAPI/DirectX/DirectXShader.h"
 
@@ -47,10 +47,10 @@ namespace Crow {
 			static inline std::shared_ptr<IndexBuffer> (*CreateIndexBuffer)(ulong* indices, const uint count);
 
 
-			static inline PipelineStateObject* (*CreatePipelineStateObject)(const std::shared_ptr<VertexBuffer> vBuffer, const std::shared_ptr<IndexBuffer> iBuffer, Shader* shader);
+			static inline ArrayBuffer* (*CreateArrayBuffer)(const std::shared_ptr<VertexBuffer> vBuffer, const std::shared_ptr<IndexBuffer> iBuffer);
 
-			static inline Shader* (*CreateShaderFromPath)(const char* name, const char* path);
-			static inline Shader* (*CreateShaderFromSource)(const char* name, std::string& source);
+			static inline Shader* (*CreateShaderFromPath)(const char* name, const char* path, const BufferProperties& shaderInput);
+			static inline Shader* (*CreateShaderFromSource)(const char* name, std::string& source, const BufferProperties& shaderInput);
 
 			static inline Texture* (*CreateTexture)(const char* path, const TextureProperties& props);
 

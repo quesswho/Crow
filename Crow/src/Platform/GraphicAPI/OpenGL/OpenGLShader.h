@@ -11,13 +11,13 @@ namespace Crow {
 			const char* m_Name;
 			std::unordered_map<const char*, int> m_UniformLocations;
 		public:
-			explicit OpenGLShader(const char* name, const char* path); // File path
-			explicit OpenGLShader(const char* name, std::string& source); // Shader code
+			explicit OpenGLShader(const char* name, const char* path, const BufferProperties& shaderInput); // File path
+			explicit OpenGLShader(const char* name, std::string& source, const BufferProperties& shaderInput); // Shader code
 
 			~OpenGLShader() override;
 
-			static Shader* CreateOpenGLShaderFromPath(const char* name, const char* path) { return new OpenGLShader(name, path); }
-			static Shader* CreateOpenGLShaderFromSource(const char* name, std::string& source) { return new OpenGLShader(name, source); }
+			static Shader* CreateOpenGLShaderFromPath(const char* name, const char* path, const BufferProperties& shaderInput) { return new OpenGLShader(name, path, shaderInput); }
+			static Shader* CreateOpenGLShaderFromSource(const char* name, std::string& source, const BufferProperties& shaderInput) { return new OpenGLShader(name, source, shaderInput); }
 
 			virtual void Bind() const;
 			virtual void Unbind() const;

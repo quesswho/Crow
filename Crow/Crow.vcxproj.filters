@@ -1297,11 +1297,11 @@
     <ClInclude Include="src\Platform\GraphicAPI\OpenGL\OpenGLShaderFactory.h" />
     <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXShaderFactory.h" />
     <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXShader.h" />
-    <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXPipelineStateObject.h" />
-    <ClInclude Include="src\Crow\Graphics\PipelineStateObject.h" />
-    <ClInclude Include="src\Platform\GraphicAPI\OpenGL\OpenGLPipelineStateObject.h">
+    <ClInclude Include="src\Platform\GraphicAPI\OpenGL\OpenGLArrayBuffer.h">
       <Filter>src\Platform\GraphicAPI\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXArrayBuffer.h" />
+    <ClInclude Include="src\Crow\Graphics\Renderer\ArrayBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lib\stb_image\stb_image.cpp">
@@ -1389,11 +1389,11 @@
     <ClCompile Include="src\Platform\GraphicAPI\OpenGL\OpenGLShaderFactory.cpp" />
     <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXShaderFactory.cpp" />
     <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXShader.cpp" />
-    <ClCompile Include="src\Crow\Graphics\PipelineStateObject.cpp" />
-    <ClCompile Include="src\Platform\GraphicAPI\OpenGL\OpenGLPipelineStateObject.cpp">
+    <ClCompile Include="src\Platform\GraphicAPI\OpenGL\OpenGLArrayBuffer.cpp">
       <Filter>src\Platform\GraphicAPI\OpenGL</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXPipelineStateObject.cpp" />
+    <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXArrayBuffer.cpp" />
+    <ClCompile Include="src\Crow\Graphics\Renderer\ArrayBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Platform\GraphicAPI\OpenGL\Shaders\Color.glsl" />

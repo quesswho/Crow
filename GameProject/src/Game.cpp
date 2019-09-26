@@ -40,13 +40,13 @@ using namespace Crow;
 			4,5,6, 4,7,5
 		};
 
-		Shader* shader = Shader::CreateFromSource("ColorShader", Application::GetAPI()->GetShaderFactory()->ColorShader());
+		m_Shader = Shader::CreateFromSource("ColorShader", Application::GetAPI()->GetShaderFactory()->ColorShader(), bufferprop);
 
 		std::shared_ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices), bufferprop);
 		std::shared_ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(ulong));
 
 
-		m_PSO = PipelineStateObject::Create(vertexBuffer, indexBuffer, shader);
+		m_ArrayBuffer = ArrayBuffer::Create(vertexBuffer, indexBuffer);
 
 	//	shader->Bind();
 		//shader->SetUniform3f("u_Color", glm::vec3(1.0f, 0.1f, 0.3f));
@@ -146,10 +146,10 @@ using namespace Crow;
 
 	void Layer2D::OnRender()
 	{
+		m_Shader->Bind();
+		m_ArrayBuffer->Bind();
 
-		m_PSO->Bind();
-
-		Application::GetAPI()->DrawIndices(m_PSO->GetCount());
+		Application::GetAPI()->DrawIndices(m_ArrayBuffer->GetCount());
 
 		/*m_Renderer->Begin();
 		for (auto batching : m_BatchingObjects)

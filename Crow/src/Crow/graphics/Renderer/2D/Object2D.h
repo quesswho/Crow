@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Crow/Graphics/ShaderFactory.h"
-#include "Crow/Graphics/PipelineStateObject.h"
+#include "Crow/Graphics/Renderer/ArrayBuffer.h"
+#include "Crow/Graphics/Renderer/BufferPropertiesFactory.h"
 #include "Crow/Graphics/Shader.h"
 #include "Crow/Graphics/Texture.h"
 
@@ -15,7 +16,8 @@ namespace Crow {
 
 	class Object2D {
 	public:
-		const PipelineStateObject* m_PSO;
+		const ArrayBuffer* m_ArrayBuffer;
+		Shader* m_Shader;
 		std::vector<Texture*> m_Textures;
 
 	private:
@@ -30,41 +32,41 @@ namespace Crow {
 		bool m_IsShaderSpecified;
 	public:
 		Object2D(const std::shared_ptr<VertexBuffer> vBuffer, const std::shared_ptr<IndexBuffer> iBuffer, glm::vec3 position = glm::vec3(0.0f))
-			: m_PSO(PipelineStateObject::Create(vBuffer, iBuffer, Shader::CreateFromSource("Object2DShader", Application::GetAPI()->GetShaderFactory()->ColorShader()))), 
+			: m_ArrayBuffer(ArrayBuffer::Create(vBuffer, iBuffer)), m_Shader(Shader::CreateFromSource("Object2DShader", Application::GetAPI()->GetShaderFactory()->ColorShader(), vBuffer->GetBufferProperties())),
 			m_ModelMatrix(glm::mat4(1.0f)), m_Position(position), m_Scale(1.0f), m_Rotation(0.0f), m_IsShaderSpecified(false), m_Collider(0)
 		{
 			CalculateModelMatrix();
 		}
 
 		Object2D(const std::shared_ptr<VertexBuffer> vBuffer, const std::shared_ptr<IndexBuffer> iBuffer, Texture* texture, glm::vec3 position = glm::vec3(0.0f)) // Only one texture for object without a specified shader!
-			: m_PSO(PipelineStateObject::Create(vBuffer, iBuffer, Shader::CreateFromSource("Object2DShader", Application::GetAPI()->GetShaderFactory()->TextureShader()))), 
+			: m_ArrayBuffer(ArrayBuffer::Create(vBuffer, iBuffer)), m_Shader(Shader::CreateFromSource("Object2DShader", Application::GetAPI()->GetShaderFactory()->TextureShader(), vBuffer->GetBufferProperties())),
 			m_ModelMatrix(glm::mat4(1.0f)), m_Position(position), m_Scale(1.0f), m_Rotation(0.0f), m_IsShaderSpecified(false), m_Collider(0)
 		{
 			m_Textures.push_back(texture);
 			CalculateModelMatrix();
 		}
 
-		Object2D(const PipelineStateObject* pipelineStateObject, glm::vec3 position = glm::vec3(0.0f))
-			: m_PSO(pipelineStateObject), m_ModelMatrix(glm::mat4(1.0f)), m_Position(position), m_Scale(1.0f), m_Rotation(0.0f), m_IsShaderSpecified(true), m_Collider(0)
+		Object2D(const ArrayBuffer* arrayBuffer, Shader* shader, glm::vec3 position = glm::vec3(0.0f))
+			: m_ArrayBuffer(arrayBuffer), m_Shader(shader), m_ModelMatrix(glm::mat4(1.0f)), m_Position(position), m_Scale(1.0f), m_Rotation(0.0f), m_IsShaderSpecified(true), m_Collider(0)
 		{
 			CalculateModelMatrix();
 		}
 
-		Object2D(const PipelineStateObject* pipelineStateObject, Texture* texture, glm::vec3 position = glm::vec3(0.0f))
-			: m_PSO(pipelineStateObject), m_ModelMatrix(glm::mat4(1.0f)), m_Position(position), m_Scale(1.0f), m_Rotation(0.0f), m_IsShaderSpecified(true), m_Collider(0)
+		Object2D(const ArrayBuffer* arrayBuffer, Shader* shader, Texture* texture, glm::vec3 position = glm::vec3(0.0f))
+			: m_ArrayBuffer(arrayBuffer), m_Shader(shader), m_ModelMatrix(glm::mat4(1.0f)), m_Position(position), m_Scale(1.0f), m_Rotation(0.0f), m_IsShaderSpecified(true), m_Collider(0)
 		{
 			if(texture != NULL)
 				m_Textures.push_back(texture);
 			CalculateModelMatrix();
 		}
 
-		Object2D(const PipelineStateObject* pipelineStateObject, std::vector<Texture*> textures, glm::vec3 position = glm::vec3(0.0f))
-			: m_PSO(pipelineStateObject), m_Textures(textures), m_ModelMatrix(glm::mat4(1.0f)), m_Position(position), m_Scale(1.0f), m_Rotation(0.0f), m_IsShaderSpecified(true), m_Collider(0)
+		Object2D(const ArrayBuffer* arrayBuffer, Shader* shader, std::vector<Texture*> textures, glm::vec3 position = glm::vec3(0.0f))
+			: m_ArrayBuffer(arrayBuffer), m_Shader(shader), m_Textures(textures), m_ModelMatrix(glm::mat4(1.0f)), m_Position(position), m_Scale(1.0f), m_Rotation(0.0f), m_IsShaderSpecified(true), m_Collider(0)
 		{
 			CalculateModelMatrix();
 		}
 
-		Object2D(const PipelineStateObject* pipelineStateObject, std::initializer_list<Texture*> textures, glm::vec3 position = glm::vec3(0.0f));
+		Object2D(const ArrayBuffer* arrayBuffer, Shader* shader, std::initializer_list<Texture*> textures, glm::vec3 position = glm::vec3(0.0f));
 
 		~Object2D();
 
@@ -97,7 +99,7 @@ namespace Crow {
 		void AddTexture(Texture* texture);
 
 
-		const inline uint GetCount() const { return m_PSO->GetCount(); }
+		const inline uint GetCount() const { return m_ArrayBuffer->GetCount(); }
 
 		void Bind() const;
 		void Unbind() const;
@@ -127,7 +129,7 @@ namespace Crow {
 		glm::vec3 m_Position;
 
 		Batchable2D(const float* vertices, const uint size, const uint* indices, const uint count, glm::vec3 position = glm::vec3(0.0f))
-			: m_Size(size), m_Count(count), m_Position(position), m_Shader(Shader::CreateFromSource("Object2DShader", Application::GetAPI()->GetShaderFactory()->ColorShader())), m_Texture(NULL)
+			: m_Size(size), m_Count(count), m_Position(position), m_Shader(Shader::CreateFromSource("Object2DShader", Application::GetAPI()->GetShaderFactory()->ColorShader(), BufferPropertiesFactory::Vertex())), m_Texture(NULL)
 		{
 			m_Vertices = { vertices, vertices + size / sizeof(float) };
 			m_Indices = { indices, indices + count };
@@ -141,7 +143,7 @@ namespace Crow {
 		}
 
 		Batchable2D(const float* vertices, const uint size, const uint* indices, const uint count, Texture* texture, glm::vec3 position = glm::vec3(0.0f))
-			: m_Size(size), m_Count(count), m_Texture(texture), m_Position(position), m_Shader(Shader::CreateFromSource("Object2DShader", Application::GetAPI()->GetShaderFactory()->TextureShader()))
+			: m_Size(size), m_Count(count), m_Texture(texture), m_Position(position), m_Shader(Shader::CreateFromSource("Object2DShader", Application::GetAPI()->GetShaderFactory()->TextureShader(), BufferPropertiesFactory::VertexUv()))
 		{
 			m_Vertices = { vertices, vertices + size / sizeof(float) };
 			m_Indices = { indices, indices + count };

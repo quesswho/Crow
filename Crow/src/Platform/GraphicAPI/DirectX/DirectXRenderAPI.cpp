@@ -18,7 +18,7 @@ namespace Crow {
 		int DirectXRenderAPI::s_Frame;
 		int DirectXRenderAPI::s_rtvDescriptorSize;
 
-		ID3D12PipelineState* DirectXRenderAPI::m_Pipe;
+		std::vector<ID3D12PipelineState*> DirectXRenderAPI::m_PSOs;
 
 		float* DirectXRenderAPI::m_ClearColor;
 		D3D12_VIEWPORT DirectXRenderAPI::s_ViewPort;
@@ -255,7 +255,9 @@ namespace Crow {
 			WaitForLastFrame();
 
 			s_CommandAllocator[s_Frame]->Reset();
-			s_CommandList->Reset(s_CommandAllocator[s_Frame], m_Pipe);
+
+			for(auto pipe : m_PSOs)
+				s_CommandList->Reset(s_CommandAllocator[s_Frame], pipe);
 
 			s_CommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(s_RenderTargets[s_Frame], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 			CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(s_rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), s_Frame, s_rtvDescriptorSize);

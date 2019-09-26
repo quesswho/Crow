@@ -2,8 +2,8 @@
 
 namespace Crow {
 
-	Object2D::Object2D(const PipelineStateObject* pipelineStateObject, std::initializer_list<Texture*> textures, glm::vec3 position)
-		: m_PSO(pipelineStateObject), m_Textures(textures), m_Position(position), m_Scale(1.0f), m_Rotation(0.0f), m_IsShaderSpecified(true), m_ModelMatrix(glm::mat4(1.0f)), m_Collider(0)
+	Object2D::Object2D(const ArrayBuffer* pipelineStateObject, Shader* shader, std::initializer_list<Texture*> textures, glm::vec3 position)
+		: m_ArrayBuffer(pipelineStateObject), m_Shader(shader), m_Textures(textures), m_Position(position), m_Scale(1.0f), m_Rotation(0.0f), m_IsShaderSpecified(true), m_ModelMatrix(glm::mat4(1.0f)), m_Collider(0)
 	{
 		for (int i = 0; i < m_Textures.size(); i++)
 		{
@@ -21,7 +21,7 @@ namespace Crow {
 	Object2D::~Object2D()
 	{
 		delete m_Collider;
-		delete m_PSO;
+		delete m_ArrayBuffer;
 	}
 
 	void Object2D::AddTexture(Texture* texture)
@@ -43,9 +43,9 @@ namespace Crow {
 		{
 			if (m_Textures.size() < 1)
 			{
-				m_PSO->GetShader()->ReloadFromSource(Application::GetAPI()->GetShaderFactory()->TextureShader());
+				m_Shader->ReloadFromSource(Application::GetAPI()->GetShaderFactory()->TextureShader());
 				texture->SetIndex(0);
-				m_PSO->GetShader()->SetUniform1i("u_Texture", 0);
+				m_Shader->SetUniform1i("u_Texture", 0);
 				m_Textures.push_back(texture);
 			}
 			else
@@ -72,7 +72,7 @@ namespace Crow {
 		{
 			m_Textures[i]->Bind();
 		}
-		m_PSO->Bind();
+		m_ArrayBuffer->Bind();
 	}
 
 	void Object2D::Unbind() const
@@ -81,7 +81,7 @@ namespace Crow {
 		{
 			m_Textures[i]->Unbind();
 		}
-		m_PSO->Bind();
+		m_ArrayBuffer->Bind();
 	}
 
 	void Object2D::CalculateModelMatrix()

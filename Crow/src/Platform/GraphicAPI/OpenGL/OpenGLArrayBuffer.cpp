@@ -1,12 +1,12 @@
-#include "OpenGLPipelineStateObject.h"
+#include "OpenGLArrayBuffer.h"
 
 #include <glad/glad.h>
 
 namespace Crow {
 	namespace Platform {
 
-		OpenGLArrayBuffer::OpenGLArrayBuffer(const std::shared_ptr<VertexBuffer> vBuffer, const std::shared_ptr<IndexBuffer> iBuffer, Shader* shader)
-			: m_VertexBuffer(vBuffer), m_IndexBuffer(iBuffer), m_Shader(shader)
+		OpenGLArrayBuffer::OpenGLArrayBuffer(const std::shared_ptr<VertexBuffer> vBuffer, const std::shared_ptr<IndexBuffer> iBuffer)
+			: m_VertexBuffer(vBuffer), m_IndexBuffer(iBuffer)
 		{
 			glGenVertexArrays(1, &m_VertexArrayID);
 			glBindVertexArray(m_VertexArrayID);
@@ -34,7 +34,6 @@ namespace Crow {
 
 		void OpenGLArrayBuffer::Bind() const
 		{
-			m_Shader->Bind();
 			glBindVertexArray(m_VertexArrayID);
 		}
 
