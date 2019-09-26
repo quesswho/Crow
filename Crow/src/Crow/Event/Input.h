@@ -165,3 +165,17 @@ namespace Crow {
 #define CROW_KEY_MENU               348
 
 #define CROW_KEY_LAST               CROW_KEY_MENU
+
+/* Mouse Buttons */
+#define CROW_MOUSE_BUTTON_1         0
+#define CROW_MOUSE_BUTTON_2         1
+#define CROW_MOUSE_BUTTON_3         2
+#define CROW_MOUSE_BUTTON_4         3
+#define CROW_MOUSE_BUTTON_5         4
+#define CROW_MOUSE_BUTTON_6         5
+#define CROW_MOUSE_BUTTON_7         6
+#define CROW_MOUSE_BUTTON_8         7
+#define CROW_MOUSE_BUTTON_LAST      CROW_MOUSE_BUTTON_8
+#define CROW_MOUSE_BUTTON_LEFT      CROW_MOUSE_BUTTON_1
+#define CROW_MOUSE_BUTTON_RIGHT     CROW_MOUSE_BUTTON_2
+#define CROW_MOUSE_BUTTON_MIDDLE    CROW_MOUSE_BUTTON_3

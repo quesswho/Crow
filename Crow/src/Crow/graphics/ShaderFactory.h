@@ -5,7 +5,9 @@
 namespace Crow {
 
 	struct ShaderFactory {
-		static std::string ColorShader();
-		static std::string TextureShader(); 
+
+		virtual std::string BasicShader() = 0;
+		virtual std::string ColorShader() = 0;
+		virtual std::string TextureShader() = 0;
 	};
 }

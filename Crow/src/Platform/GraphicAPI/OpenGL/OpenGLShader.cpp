@@ -1,5 +1,6 @@
 #include "OpenGLShader.h"
 #include "Crow/FileUtils.h"
+#include <glm/glm.hpp>
 
 #include <glad/glad.h>
 #include <sstream>
@@ -155,7 +156,7 @@ namespace Crow {
 
 		int OpenGLShader::GetLocation(const char* location)
 		{
-			if (m_UniformLocations[location] != std::string::npos)
+			if (m_UniformLocations.find(location) != m_UniformLocations.end())
 			{
 				return m_UniformLocations[location];
 			}

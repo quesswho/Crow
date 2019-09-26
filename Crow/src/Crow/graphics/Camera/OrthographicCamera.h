@@ -33,7 +33,7 @@ namespace Crow {
 
 		~OrthographicCamera();
 
-		void Update(float elapsed);
+		glm::vec3& Update(float elapsed);
 
 		const glm::mat4x4& GetViewMatrix() const { return m_ViewMatrix; }
 		void SetViewMatrix(const glm::mat4x4& view) noexcept { m_ViewMatrix = view; CalculateMatrices(); }

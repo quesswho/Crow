@@ -4,7 +4,7 @@
 namespace Crow {
 	namespace Platform {
 
-		OpenGLVertexBuffer::OpenGLVertexBuffer(const float* vertices, const uint size, const BufferProperties& prop)
+		OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, const uint size, const BufferProperties& prop)
 			: m_BufferProperties(prop)
 		{
 			glGenBuffers(1, &m_BufferID);
@@ -29,7 +29,7 @@ namespace Crow {
 
 		/////////////
 
-		OpenGLIndexBuffer::OpenGLIndexBuffer(const uint* indices, const uint count)
+		OpenGLIndexBuffer::OpenGLIndexBuffer(ulong* indices, const uint count)
 			: m_Count(count)
 		{
 			glGenBuffers(1, &m_BufferID);

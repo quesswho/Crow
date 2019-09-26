@@ -8,21 +8,24 @@ namespace Crow {
 
 	struct BufferElement {
 
-		BufferElement(const uint typeSize)
-			: m_TypeSize(typeSize), m_Offset(0), m_Index(0)
+		BufferElement(const char* name, const uint componentCount)
+			: m_Name(name), m_ComponentCount(componentCount), m_Offset(0), m_Index(0)
 		{}
 
-		inline const uint getTypeSize() const { return m_TypeSize; }
+		inline const uint GetComponentCount() const { return m_ComponentCount; }
+		inline const char* GetName() const { return m_Name; }
 
-		inline void setOffset(const ushort offset) { m_Offset = offset; }
-		inline const ushort getOffset() const { return m_Offset; }
+		inline void SetOffset(const ushort offset) { m_Offset = offset; }
+		inline const ushort GetOffset() const { return m_Offset; }
 
 
-		inline void setIndex(const uint index) { m_Index = index; }
-		inline const uint getIndex() const { return m_Index; }
+		inline void SetIndex(const uint index) { m_Index = index; }
+		inline const uint GetIndex() const { return m_Index; }
+
 
 	private:
-		const uint m_TypeSize;
+		const char* m_Name;
+		const uint m_ComponentCount;
 		uint m_Index;
 		ushort m_Offset;
 		
@@ -39,9 +42,9 @@ namespace Crow {
 		{
 			for (int i = 0; i < m_Elements.size(); i++)
 			{
-				m_Elements[i].setIndex(i);
-				m_Elements[i].setOffset(m_Stride);
-				m_Stride += m_Elements[i].getTypeSize();
+				m_Elements[i].SetIndex(i);
+				m_Elements[i].SetOffset(m_Stride);
+				m_Stride += m_Elements[i].GetComponentCount();
 			}
 		}
 
@@ -51,17 +54,17 @@ namespace Crow {
 		std::vector<BufferElement>::const_iterator end() const { return m_Elements.end(); }
 
 		ushort m_Stride;
-	private:
 		std::vector<BufferElement> m_Elements;
+	private:
 	};
 
 	class VertexBuffer {
 	public:
-
-
 		virtual ~VertexBuffer() = default;
 
-		static std::shared_ptr<VertexBuffer> Create(const float* vertices, const uint size, const BufferProperties& prop);
+		static std::shared_ptr<VertexBuffer> Create(float* vertices, const uint size, const BufferProperties& prop);
+
+		virtual void SetBuffer() = 0;
 
 		virtual const BufferProperties& GetBufferProperties() const = 0;
 
@@ -73,7 +76,9 @@ namespace Crow {
 	public:
 		virtual ~IndexBuffer() = default;
 
-		static std::shared_ptr<IndexBuffer> Create(const uint* indices, const uint count);
+		static std::shared_ptr<IndexBuffer> Create(ulong* indices, const uint count);
+
+		virtual void SetBuffer() = 0;
 
 		virtual inline const uint GetCount() const = 0;
 

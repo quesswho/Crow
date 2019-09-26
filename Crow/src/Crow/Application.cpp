@@ -12,19 +12,23 @@ namespace Crow {
 	std::unique_ptr<Timer> Application::m_Timer;
 	int Application::m_FramesPerSecond;
 	AbstractRenderAPI* Application::s_RenderAPI;
+	Window* Application::s_Window;
 
-	Application::Application(const char* title, Platform::RenderAPI api)
+	Application::Application(const char* title, Platform::GraphicAPI graphicApi, Platform::ApplicationAPI appApi)
 		: m_ShortTitle(title)
 	{
 		Log::Init();
 
-		m_Window = std::make_unique<Window>(WindowProperties(m_ShortTitle, 1280, 1280));
+		Platform::PlatformAPI::ApplicationAPIInit(appApi);
+		Platform::PlatformAPI::GraphicAPIInit(graphicApi);
+
+		WindowProperties props = WindowProperties(m_ShortTitle, 720, 720);
+		s_Window = Platform::PlatformAPI::CreateWindowAPI(props);
+		s_RenderAPI = Platform::PlatformAPI::CreateRenderAPI();
 		s_Closed = false; // Application::s_Closed
 
-		Platform::PlatformAPI::Init(api);
-		s_RenderAPI = Platform::PlatformAPI::CreateRenderAPI();
 
-		if (!s_RenderAPI->InitAPI())
+		if (!s_RenderAPI->InitAPI(props, s_Window->GetHandle()))
 		{
 			CR_CORE_FATAL("Failed to Initialize Graphics API: {}", s_RenderAPI->GetAPIName());
 		}
@@ -42,6 +46,8 @@ namespace Crow {
 
 	Application::~Application()
 	{
+		delete s_RenderAPI;
+		delete s_Window;
 		Shutdown();
 	}
 
@@ -52,6 +58,8 @@ namespace Crow {
 
 	void Application::Run()
 	{
+		s_RenderAPI->EndInit();
+
 		int frames = 0;
 		double elapsed = 0;
 		while (!s_Closed)
@@ -65,7 +73,7 @@ namespace Crow {
 			if (elapsed > 1.0) // If it has been 1 second
 			{
 				m_FramesPerSecond = frames;
-				m_Window->SetTitle(std::string(m_ShortTitle).append(" : ").append(std::to_string(m_FramesPerSecond)).append(" FPS").c_str());
+				s_Window->SetTitle(std::string(m_ShortTitle).append(" : ").append(std::to_string(m_FramesPerSecond)).append(" FPS").c_str());
 				frames = 0;
 				elapsed = 0;
 			}
@@ -79,13 +87,14 @@ namespace Crow {
 	void Application::OnUpdate(float elapsed)
 	{
 		s_RenderAPI->Clear();
+		s_RenderAPI->Begin();
 		for (auto it = s_LayerManager->begin(); it != s_LayerManager->end(); it++)
 		{
 			(*it)->OnRender();
 			(*it)->OnUpdate(elapsed);
 		}
-
-		m_Window->Update();
+		s_RenderAPI->End();
+		s_Window->Update();
 	}
 
 	void Application::OnEvent(Event& appEvent)

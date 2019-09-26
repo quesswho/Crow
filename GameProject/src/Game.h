@@ -2,6 +2,7 @@
 
 #include "Crow.h"
 
+#include <memory>
 
 class Layer2D : public Crow::Layer {
 public:
@@ -17,6 +18,9 @@ public:
 	std::unique_ptr<Crow::Renderer2D> m_Renderer;
 private:
 	std::vector<Crow::Object2D*> m_Objects;
+	Crow::Object2D* m_Player;
 	std::vector<Crow::Batchable2D*> m_BatchingObjects;
 	Crow::OrthographicCamera* m_Camera;
+
+	Crow::PipelineStateObject* m_PSO;
 };

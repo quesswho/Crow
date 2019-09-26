@@ -8,7 +8,9 @@ namespace Crow {
 
 	Renderer2D::Renderer2D() 
 		: m_Size(0), m_Count(0), m_BatchShader(0), m_BatchTexture(0)
-	{}
+	{
+		Application::GetAPI()->EnableAlpha();
+	}
 
 	Renderer2D::~Renderer2D()
 	{
@@ -23,18 +25,19 @@ namespace Crow {
 
 	void Renderer2D::Flush()
 	{
-		for (auto renderable = m_Renderables.begin(); renderable != m_Renderables.end(); ++renderable)
-		{
-			(*renderable)->Bind();
-			Application::GetAPI()->DrawIndices((*renderable)->GetCount());
-		}
-
 		for (Object2D* batched : m_BatchedObjects)
 		{
 			batched->Bind();
 			Application::GetAPI()->DrawIndices(batched->GetCount());
 			delete batched;
 		}
+
+		for (auto renderable = m_Renderables.begin(); renderable != m_Renderables.end(); ++renderable)
+		{
+			(*renderable)->Bind();
+			Application::GetAPI()->DrawIndices((*renderable)->GetCount());
+		}
+
 
 		m_Renderables.clear();
 		m_BatchedObjects.clear();
@@ -68,11 +71,10 @@ namespace Crow {
 		m_BatchTexture = renderable->m_Texture;
 		if (m_Count > 100000) // 100000 vertices for each drawcall
 		{
-			ArrayBuffer* buffer = ArrayBuffer::Create();
-
-			buffer->AddVertexBuffer(VertexBuffer::Create((float*)&m_Batch[0], m_Size, m_BatchTexture == NULL ? BufferPropertiesFactory::VertexColor() : BufferPropertiesFactory::VertexUv()));
-			buffer->SetIndexBuffer(IndexBuffer::Create((uint*)& m_BatchIndices[0], m_Count));
-			m_BatchedObjects.push_back(new Object2D(buffer, m_BatchShader, m_BatchTexture));
+			/*m_BatchedObjects.push_back(new Object2D(PipelineStateObject::Create(
+				VertexBuffer::Create((char*) &m_Batch[0], m_Size, m_BatchTexture == NULL ? BufferPropertiesFactory::VertexColor() : BufferPropertiesFactory::VertexUv()),
+				IndexBuffer::Create((char*) &m_BatchIndices[0], m_Count),
+				m_BatchShader)));*/
 
 			m_Batch.clear();
 			m_BatchIndices.clear();
@@ -83,14 +85,10 @@ namespace Crow {
 
 	void Renderer2D::End()
 	{
-		ArrayBuffer* buffer = ArrayBuffer::Create();
-
-		buffer->AddVertexBuffer(VertexBuffer::Create((float*) &m_Batch[0], m_Size, m_BatchTexture == NULL ? BufferPropertiesFactory::VertexColor() : BufferPropertiesFactory::VertexUv()));
-		buffer->SetIndexBuffer(IndexBuffer::Create((uint*)& m_BatchIndices[0], m_Count));
-		m_BatchedObjects.push_back(new Object2D(buffer, m_BatchShader, m_BatchTexture));
-
-		//m_BatchShader = m_Renderablesm_Shader;
-		//m_BatchTexture = renderable->m_Texture;
+		/*m_BatchedObjects.push_back(new Object2D(PipelineStateObject::Create(
+			VertexBuffer::Create((char*)& m_Batch[0], m_Size, m_BatchTexture == NULL ? BufferPropertiesFactory::VertexColor() : BufferPropertiesFactory::VertexUv()),
+			IndexBuffer::Create((char*)& m_BatchIndices[0], m_Count),
+			m_BatchShader)));*/
 
 		m_Batch.clear();
 		m_BatchIndices.clear();

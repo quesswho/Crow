@@ -1,7 +1,5 @@
 #pragma once
 #include "Crow/Common.h"
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 
 namespace Crow {
 
@@ -14,23 +12,21 @@ namespace Crow {
 			: m_Title(title), m_Width(width), m_Height(height)
 		{}
 	};
-
 	
 	class Window
 	{
 	public:
-		Window(WindowProperties properties);
-		~Window();
 
-		void Update() const;
+		static Window* CreateWindowAPI(WindowProperties properties);
+		virtual ~Window() = default;
+		
+		virtual void Update() const = 0;
 
-		void SetTitle(const char* title);
-	private:
-		void setCallbacks() const;
-		void Init();
+		virtual void CreateDeviceContex() = 0;
 
-		WindowProperties m_Properties;
-		GLFWwindow* m_Window;
+		virtual void SetTitle(const char* title) = 0;
+
+		virtual void* GetHandle() const = 0;
 	};
 }
 

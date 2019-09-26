@@ -37,7 +37,8 @@ workspace "Crow"
 			"%{prj.name}/src/**.glsl",
 			"%{prj.name}/lib/glm/glm/**.hpp",
 			"%{prj.name}/lib/glm/glm/**.inl",
-			"%{prj.name}/lib/stb_image/**.*"
+			"%{prj.name}/lib/stb_image/**.*",
+			"%{prj.name}/lib/d3dx12/d3dx12.h"
 		}
 
 		includedirs { 
@@ -46,7 +47,8 @@ workspace "Crow"
 			"%{prj.name}/lib/glfw/include",
 			"%{prj.name}/lib/glad/include",
 			"%{prj.name}/lib/glm",
-			"%{prj.name}/lib/stb_image/"
+			"%{prj.name}/lib/stb_image/",
+			"%{prj.name}/lib/d3dx12/"
 		}
 
 		defines
@@ -96,7 +98,8 @@ workspace "Crow"
 			"Crow/lib/glfw/include",
 			"Crow/lib/glad/include",
 			"Crow/lib/glm",
-			"Crow/lib/stb_image/"
+			"Crow/lib/stb_image/",
+			"Crow/lib/d3dx12/"
 		}
 
 		links { "Crow" }

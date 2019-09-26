@@ -14,10 +14,10 @@ namespace Crow {
 	{
 	public:
 		Application()
-			: Application("Crow Engine", Platform::RenderAPI::OPENGL)
+			: Application("Crow Engine", Platform::GraphicAPI::OPENGL, Platform::ApplicationAPI::GLFW)
 		{}
 
-		Application(const char* title, Platform::RenderAPI api = Platform::RenderAPI::OPENGL);
+		Application(const char* title, Platform::GraphicAPI graphicApi, Platform::ApplicationAPI appApi);
 
 		virtual ~Application();
 
@@ -30,6 +30,8 @@ namespace Crow {
 
 		static AbstractRenderAPI* GetAPI();
 
+		static inline void CreateDeviceContext() { s_Window->CreateDeviceContex(); }
+
 		//Wrapper functions for Crow::LayerManager because m_LayerManager is private
 		void PushLayer(Layer* layer);
 		void PopLayer(Layer* layer);
@@ -38,11 +40,10 @@ namespace Crow {
 	private:
 		virtual void OnUpdate(float elapsed);
 	private:
-		std::unique_ptr<Window> m_Window;
+		static Window* s_Window;
 		static std::unique_ptr<LayerManager> s_LayerManager;
 		static std::unique_ptr<Timer> m_Timer;
 		static AbstractRenderAPI* s_RenderAPI;
-
 
 		const char* m_ShortTitle;
 	};

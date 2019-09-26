@@ -18,7 +18,7 @@ namespace Crow {
 		m_ProjectionViewMatrix = m_ProjectionMatrix * m_ViewMatrix;
 	}
 
-	void OrthographicCamera::Update(float elapsed)
+	glm::vec3& OrthographicCamera::Update(float elapsed)
 	{
 		if (Input::IsKeyPressed(CROW_KEY_W))
 			m_CameraPos += glm::vec3(0.0f,	-m_Speed * elapsed, 0.0f);
@@ -41,5 +41,6 @@ namespace Crow {
 		}
 
 		CalculateMatrices();
+		return m_CameraPos;
 	}
 }

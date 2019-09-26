@@ -3,17 +3,17 @@
 namespace Crow {
 
 	static const BufferProperties s_Vertex = {
-			{ 3 } // Vertex
+			{ "POSITION", 3 } // Vertex
 	};
 
 	static const BufferProperties s_VertexUv = {
-				{ 3 }, // Vertex
-				{ 2 }  // Uvs
+				{"POSITION", 3 }, // Vertex
+				{ "UV", 2 }  // Uvs
 	};
 
 	static const BufferProperties s_VertexColor = {
-				{ 3 }, // Vertex
-				{ 3 }  // Color
+				{ "POSITION", 3 }, // Vertex
+				{ "COLOR", 3 }  // Color
 	};
 
 	BufferProperties BufferPropertiesFactory::Vertex() { return s_Vertex; }

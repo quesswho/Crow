@@ -1,21 +1,51 @@
 #include "PlatformAPI.h"
 
-//#include "Crow/Graphics/Renderer/RenderAPI.h"
-
 namespace Crow {
 	namespace Platform {
 
-		RenderAPI PlatformAPI::s_RenderAPI;
+		GraphicAPI PlatformAPI::s_GraphicAPI;
+		ApplicationAPI PlatformAPI::s_ApplicationAPI;
 
-		void PlatformAPI::Init(RenderAPI api)
+		void PlatformAPI::GraphicAPIInit(GraphicAPI grahpicApi)
 		{
-			switch (api)
+			switch (grahpicApi)
 			{
 				case OPENGL:
-					s_RenderAPI = OPENGL;
+					s_GraphicAPI = OPENGL;
 					OpenGLInit();
 					break;
+				case DIRECTX:
+					s_GraphicAPI = DIRECTX;
+					CheckWindowsError();
+					DirectXInit();
+					break;
 			}
+		}
+
+		void PlatformAPI::ApplicationAPIInit(ApplicationAPI appApi)
+		{
+			switch(appApi)
+			{
+			case GLFW:
+				s_ApplicationAPI = GLFW;
+				GLFWInit();
+				break;
+			case WINDOWS:
+				CR_WINDOWSERROR();
+				s_ApplicationAPI = WINDOWS;
+				WindowsInit();
+				break;
+			}
+		}
+
+		void PlatformAPI::GLFWInit()
+		{
+			CreateWindowAPI = &GLFWAPIWindow::CreateGLFWWindow;
+		}
+
+		void PlatformAPI::WindowsInit()
+		{
+			CreateWindowAPI = &WindowsAPIWindow::CreateWindowsWindow;
 		}
 
 		void PlatformAPI::OpenGLInit()
@@ -25,12 +55,36 @@ namespace Crow {
 			CreateVertexBuffer = &OpenGLVertexBuffer::CreateOpenGLVertexBuffer;
 			CreateIndexBuffer = &OpenGLIndexBuffer::CreateOpenGLIndexBuffer;
 
-			CreateArrayBuffer = &OpenGLArrayBuffer::CreateOpenGLArrayBuffer;
+			CreatePipelineStateObject = &OpenGLPipelineStateObject::CreateOpenGLPipelineStateObject;
 
 			CreateShaderFromPath = &OpenGLShader::CreateOpenGLShaderFromPath;
 			CreateShaderFromSource = &OpenGLShader::CreateOpenGLShaderFromSource;
 
 			CreateTexture = &OpenGLTexture::CreateOpenGLTexture;
 		}
+
+		void PlatformAPI::DirectXInit()
+		{
+			CreateRenderAPI = &DirectXRenderAPI::CreateDirectXRenderAPI;
+
+			CreateVertexBuffer = &DirectXVertexBuffer::CreateDirectXVertexBuffer;
+			CreateIndexBuffer = &DirectXIndexBuffer::CreateDirectXIndexBuffer;
+
+			CreatePipelineStateObject = &DirectXPipelineStateObject::CreateDirectXPipelineStateObject;
+
+			CreateShaderFromPath = &DirectXShader::CreateDirectXShaderFromPath;
+			CreateShaderFromSource = &DirectXShader::CreateDirectXShaderFromSource;
+
+			CreateTexture = &OpenGLTexture::CreateOpenGLTexture;
+		}
+
+		void PlatformAPI::CheckWindowsError()
+		{
+			if (s_ApplicationAPI != ApplicationAPI::WINDOWS)
+			{
+				CR_CORE_WARNING("Cannot use a non Windows application for DirectX!");
+			}
+		}
+
 	}
 }
