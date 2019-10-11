@@ -130,6 +130,61 @@ namespace Crow {
 			}
 
 			CompileShader(stringVertexSource.c_str(), stringFragmentSource.c_str());
+
+		}
+
+		void OpenGLShader::FindUniformStructs(std::string& source)
+		{
+			/*bool writing = false;
+			std::string uniformStructName;
+
+			std::unordered_map<std::unordered_map<std::string&, UniformType>, const char*> structUniforms;
+
+			std::istringstream sourceStream(source);
+			std::string line;
+
+			while (std::getline(sourceStream, line))
+			{
+				if (line._Starts_with("struct"))
+				{
+					writing = true;
+					line.erase(std::remove(line.begin(), line.end(), " {"), line.end());
+					line.erase(std::remove(line.begin(), line.end(), "{"), line.end());
+					uniformStructName = line.substr(strlen("cbuffer") + 1, line.length());
+
+					std::unordered_map<std::string&, int> uniforms;
+
+					while (std::getline(sourceStream, line) && !(line._Starts_with("}")) && writing)
+					{
+						line.erase(std::remove(line.begin(), line.end(), '\t'), line.end()); // Remove tab space
+
+						while (line._Starts_with(" "))
+							line.erase(std::remove(line.begin(), line.end(), ' '), line.end()); // Remove bad tab space
+
+						line.erase(std::remove(line.begin(), line.end(), ';'), line.end());
+
+						if (line == "{")
+							continue;		// skip '{' if line is only that
+
+						if (line._Starts_with("{"))
+							line.replace(line.begin(), line.begin() + 1, "");  // Get rid of '{'
+
+						uniforms.emplace(StringToUniformType(line.substr(0, line.find(" "))), line.substr(line.find(" ") + 1));
+
+					}
+					writing = false;		// End of cbuffer
+					structUniforms.emplace(uniforms, uniformStructName);
+				}
+				for (auto& structUni : structUniforms)
+				{
+					if (line._Starts_with(structUni.second))
+					{
+						std::vector<int> locations;
+						//locations.push_back()
+					}
+				}
+			
+			}*/
 		}
 
 
@@ -167,31 +222,34 @@ namespace Crow {
 			return locationi;
 		}
 
-		void OpenGLShader::SetUniform1i(const char* location, int value)
+		void OpenGLShader::SetUniformValue(const char* location, int value)
 		{
 			glUniform1i(GetLocation(location), value);
 		}
 
-		void OpenGLShader::SetUniform1f(const char* location, float value)
+		void OpenGLShader::SetUniformValue(const char* location, float value)
 		{
 			glUniform1f(GetLocation(location), value);
 		}
-		void OpenGLShader::SetUniform2f(const char* location, glm::vec2& value)
+		void OpenGLShader::SetUniformValue(const char* location, glm::vec2& value)
 		{
 			glUniform2f(GetLocation(location), value.x, value.y);
 		}
-		void OpenGLShader::SetUniform3f(const char* location, glm::vec3& value)
+		void OpenGLShader::SetUniformValue(const char* location, glm::vec3& value)
 		{
 			glUniform3f(GetLocation(location), value.x, value.y, value.z);
 		}
-		void OpenGLShader::SetUniform4f(const char* location, glm::vec4& value)
+		void OpenGLShader::SetUniformValue(const char* location, glm::vec4& value)
 		{
 			glUniform4f(GetLocation(location), value.x, value.y, value.z, value.w);
 		}
-
-		void OpenGLShader::SetUniformMat4(const char* location, const glm::mat4x4& value)
+		void OpenGLShader::SetUniformValue(const char* location, const glm::mat3x3& value)
 		{
-			glUniformMatrix4fv(GetLocation(location), 1, GL_FALSE, &value[0][0]);
+			glUniformMatrix3fv(GetLocation(location), 1, GL_FALSE, &value[0][0]);
+		}
+		void OpenGLShader::SetUniformValue(const char* location, const glm::mat4x4& value)
+		{
+			glUniformMatrix3fv(GetLocation(location), 1, GL_FALSE, &value[0][0]);
 		}
 	}
 }

@@ -79,7 +79,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;CR_PLATFORM_WINDOWS;CR_x64;GLFW_INCLUDE_NONE;CR_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;lib\spdlog\include;lib\glfw\include;lib\glad\include;lib\glm;lib\stb_image;lib\d3dx12;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <Optimization>Full</Optimization>
+      <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
@@ -498,11 +498,12 @@
     <ClInclude Include="src\Platform\Application\GLFW\GLFWAPIWindow.h" />
     <ClInclude Include="src\Platform\Application\Windows\WindowsAPICallbacks.h" />
     <ClInclude Include="src\Platform\Application\Windows\WindowsAPIWindow.h" />
-    <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXBuffer.h" />
     <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXArrayBuffer.h" />
+    <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXBuffer.h" />
     <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXRenderAPI.h" />
     <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXShader.h" />
     <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXShaderFactory.h" />
+    <ClInclude Include="src\Platform\GraphicAPI\OpenGL\ArrayBuffer.h" />
     <ClInclude Include="src\Platform\GraphicAPI\OpenGL\OpenGLArrayBuffer.h" />
     <ClInclude Include="src\Platform\GraphicAPI\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\GraphicAPI\OpenGL\OpenGLRenderAPI.h" />
@@ -534,8 +535,8 @@
     <ClCompile Include="src\Platform\Application\GLFW\GLFWAPIWindow.cpp" />
     <ClCompile Include="src\Platform\Application\Windows\WindowsAPICallbacks.cpp" />
     <ClCompile Include="src\Platform\Application\Windows\WindowsAPIWindow.cpp" />
-    <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXBuffer.cpp" />
     <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXArrayBuffer.cpp" />
+    <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXBuffer.cpp" />
     <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXRenderAPI.cpp" />
     <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXShader.cpp" />
     <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXShaderFactory.cpp" />
@@ -548,15 +549,18 @@
     <ClCompile Include="src\Platform\PlatformAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\Platform\GraphicAPI\OpenGL\Shaders\Basic.glsl" />
+    <None Include="src\Platform\GraphicAPI\OpenGL\Shaders\Color.glsl" />
+    <None Include="src\Platform\GraphicAPI\OpenGL\Shaders\Texture.glsl" />
+    <None Include="src\Platform\GraphicAPI\OpenGL\Shaders\UColor.glsl" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="lib\glfw\GLFW.vcxproj">
       <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
     </ProjectReference>
     <ProjectReference Include="lib\glad\glad.vcxproj">
       <Project>{DD62977C-C999-980D-7286-7E105E9C140F}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\Platform\GraphicAPI\OpenGL\Shaders\Color.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

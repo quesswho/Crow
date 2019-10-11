@@ -9,40 +9,53 @@ namespace Crow {
 		DXGI_SAMPLE_DESC DirectXRenderAPI::s_SampleDescription;
 		ID3D12DescriptorHeap* DirectXRenderAPI::s_rtvDescriptorHeap;
 		ID3D12Resource* DirectXRenderAPI::s_RenderTargets[3];
-		ID3D12CommandAllocator* DirectXRenderAPI::s_CommandAllocator[3 * 1];
+		ID3D12CommandAllocator* DirectXRenderAPI::s_CommandAllocator;
 		ID3D12GraphicsCommandList* DirectXRenderAPI::s_CommandList;
-		ID3D12Fence* DirectXRenderAPI::s_Fences[3 * 1];
+		ID3D12Fence* DirectXRenderAPI::s_Fence;
 
 		HANDLE DirectXRenderAPI::s_FenceEvent;
-		UINT64 DirectXRenderAPI::s_FenceValue[3 * 1];
+		UINT64 DirectXRenderAPI::s_FenceValue;
 		int DirectXRenderAPI::s_Frame;
 		int DirectXRenderAPI::s_rtvDescriptorSize;
 
-		std::vector<ID3D12PipelineState*> DirectXRenderAPI::m_PSOs;
+		std::vector<ID3D12PipelineState*> DirectXRenderAPI::s_PSOs;
+		uint DirectXRenderAPI::s_FrameBufferCount;
 
-		float* DirectXRenderAPI::m_ClearColor;
+		float* DirectXRenderAPI::s_ClearColor;
 		D3D12_VIEWPORT DirectXRenderAPI::s_ViewPort;
 		D3D12_RECT DirectXRenderAPI::s_ScissorRect;
 
-		std::string DirectXRenderAPI::m_CardName;
+		ID3D12DescriptorHeap* DirectXRenderAPI::s_MainDescriptorHeap;
+		D3D12_DEPTH_STENCIL_DESC DirectXRenderAPI::s_DepthStencilDesc;
+		ID3D12Resource* DirectXRenderAPI::s_DepthStencilBuffer;
+		ID3D12DescriptorHeap* DirectXRenderAPI::s_DepthStencilDescriptorHeap;
 
-		std::vector<VertexBuffer*> DirectXRenderAPI::m_VertexBuffers;
-		std::vector<IndexBuffer*> DirectXRenderAPI::m_IndexBuffers;
+		std::string DirectXRenderAPI::s_CardName;
+
+		std::vector<Shader*> DirectXRenderAPI::s_MappingShader;
+		std::vector<VertexBuffer*> DirectXRenderAPI::s_VertexBuffers;
+		std::vector<IndexBuffer*> DirectXRenderAPI::s_IndexBuffers;
+
+		bool DirectXRenderAPI::s_DepthTest;
+		bool DirectXRenderAPI::s_StencilTest;
+		bool DirectXRenderAPI::s_Initializing;
+		bool DirectXRenderAPI::s_IsPopulating;
 
 		DirectXRenderAPI::DirectXRenderAPI()
 		{
-			m_ClearColor = new float[3];
+			s_FrameBufferCount = 3;
+			s_ClearColor = new float[3];
 			m_ShaderFactory = new DirectXShaderFactory();
+			s_DepthTest = false;
+			s_StencilTest = false;
+			s_Initializing = false;
+			s_IsPopulating = false;
 		}
 
 		DirectXRenderAPI::~DirectXRenderAPI() 
 		{
+			WaitForPreviousFrame();
 			CloseHandle(s_FenceEvent);
-			for (int i = 0; i < 3; ++i)
-			{
-				s_Frame = i;
-				WaitForLastFrame();
-			}
 
 			// Get swapchain out of full screen before exiting
 			BOOL fs = false;
@@ -54,24 +67,27 @@ namespace Crow {
 			s_CommandQueue->Release();
 			s_rtvDescriptorHeap->Release();
 			s_CommandList->Release();
+			s_CommandAllocator->Release();
+			s_Fence->Release();
+
+			s_MainDescriptorHeap->Release();
 
 			for (int i = 0; i < 3; ++i)
 			{
 				s_RenderTargets[i]->Release();
-				s_CommandAllocator[i]->Release();
-				s_Fences[i]->Release();
 			};
-		}
 
-		void DirectXRenderAPI::CreateDeviceContext() 
-		{
+			s_DepthStencilBuffer->Release();
+			s_DepthStencilDescriptorHeap->Release();
 
+			delete m_ShaderFactory;
 		}
 
 		bool DirectXRenderAPI::InitAPI(const WindowProperties& winprop, void* hWnd) const
 		{
 
-			const int frameBufferCount = 3;
+			s_Initializing = true;
+
 			HRESULT hr;
 
 			IDXGIFactory4* dxgiFactory;
@@ -113,7 +129,7 @@ namespace Crow {
 
 			if (!adapterFound)
 			{
-				CR_CORE_ERROR("Graphic card does not support Directx12!");
+				CR_CORE_ERROR("No graphics card found that supports Directx 12!");
 				return false;
 			}
 			
@@ -132,7 +148,7 @@ namespace Crow {
 			char aaa = ' ';
 			WideCharToMultiByte(CP_ACP, 0, adapterdescW.Description, -1, adapterdesc, 128, &aaa, NULL);
 
-			m_CardName = std::string(adapterdesc);
+			s_CardName = std::string(adapterdesc);
 
 
 			D3D12_COMMAND_QUEUE_DESC cqDesc = {};
@@ -156,7 +172,7 @@ namespace Crow {
 			s_SampleDescription.Count = 1; // TODO: Add Multisampling 
 
 			DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
-			swapChainDesc.BufferCount = frameBufferCount;
+			swapChainDesc.BufferCount = s_FrameBufferCount;
 			swapChainDesc.BufferDesc = backBufferDesc;
 			swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // Render to screeen
 			swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
@@ -177,7 +193,7 @@ namespace Crow {
 			s_Frame = s_SwapChain->GetCurrentBackBufferIndex();
 
 			D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
-			rtvHeapDesc.NumDescriptors = frameBufferCount;
+			rtvHeapDesc.NumDescriptors = s_FrameBufferCount;
 			rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 			rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 
@@ -192,7 +208,7 @@ namespace Crow {
 			CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(s_rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
 
 			// Create a RTV for each buffer
-			for (int i = 0; i < frameBufferCount; i++)
+			for (int i = 0; i < s_FrameBufferCount; i++)
 			{
 				hr = s_SwapChain->GetBuffer(i, IID_PPV_ARGS(&s_RenderTargets[i]));
 				if (hr < 0)
@@ -208,34 +224,29 @@ namespace Crow {
 
 			// Create command allocator
 
-			for (int i = 0; i < frameBufferCount; i++)
+			hr = s_Device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&s_CommandAllocator));
+			if (hr < 0)
 			{
-				hr = s_Device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&s_CommandAllocator[i]));
-				if (hr < 0)
-				{
-					CR_CORE_ERROR("Failed to CreateCommand for buffer {}", i);
-					return false;
-				}
+				CR_CORE_ERROR("Failed to Create CommandAllocator!");
+				return false;
 			}
 
+
 			// create the command list with the first allocator
-			hr = s_Device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, s_CommandAllocator[0], NULL, IID_PPV_ARGS(&s_CommandList));
+			hr = s_Device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, s_CommandAllocator, NULL, IID_PPV_ARGS(&s_CommandList));
 			if (hr < 0)
 			{
 				CR_CORE_ERROR("Failed to Create CommandList!");
 				return false;
 			}
 
-			for (int i = 0; i < frameBufferCount; i++)
+			hr = s_Device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&s_Fence));
+			if (hr < 0)
 			{
-				hr = s_Device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&s_Fences[i]));
-				if (hr < 0)
-				{
-					CR_CORE_ERROR("Failed to Create fence for buffer {}", i);
-					return false;
-				}
-				s_FenceValue[i] = 0; // set the initial fence value to 0
+				CR_CORE_ERROR("Failed to Create fence");
+				return false;
 			}
+			s_FenceValue = 1;
 
 			// create a handle to a fence event
 			s_FenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
@@ -245,6 +256,34 @@ namespace Crow {
 				return false;
 			}
 
+			D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc = {};
+			dsvHeapDesc.NumDescriptors = 1;
+			dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+			dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+			s_Device->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&s_DepthStencilDescriptorHeap));
+
+			D3D12_DEPTH_STENCIL_VIEW_DESC depthStencilDesc = {};
+			depthStencilDesc.Format = DXGI_FORMAT_D32_FLOAT;
+			depthStencilDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+			depthStencilDesc.Flags = D3D12_DSV_FLAG_NONE;
+
+			D3D12_CLEAR_VALUE clearValue = {};
+			clearValue.Format = DXGI_FORMAT_D32_FLOAT;
+			clearValue.DepthStencil.Depth = 1.0f;
+			clearValue.DepthStencil.Stencil = 0.0f;
+
+			s_Device->CreateCommittedResource(
+				&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+				D3D12_HEAP_FLAG_NONE,
+				&CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_D32_FLOAT, winprop.m_Width, winprop.m_Height, 1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL),
+				D3D12_RESOURCE_STATE_DEPTH_WRITE,
+				&clearValue,
+				IID_PPV_ARGS(&s_DepthStencilBuffer)
+			);
+			s_DepthStencilDescriptorHeap->SetName(L"Crow: Depth & Stencil Resource Heap");
+
+			s_Device->CreateDepthStencilView(s_DepthStencilBuffer, &depthStencilDesc, s_DepthStencilDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
+
 			SetViewPort(winprop.m_Width, winprop.m_Height);
 
 			return true;
@@ -252,23 +291,32 @@ namespace Crow {
 
 		void DirectXRenderAPI::Begin() const
 		{
-			WaitForLastFrame();
+			WaitForPreviousFrame();
 
-			s_CommandAllocator[s_Frame]->Reset();
+			s_CommandAllocator->Reset();
 
-			for(auto pipe : m_PSOs)
-				s_CommandList->Reset(s_CommandAllocator[s_Frame], pipe);
+			for(auto pipe : s_PSOs)
+				s_CommandList->Reset(s_CommandAllocator, pipe);
 
 			s_CommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(s_RenderTargets[s_Frame], D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 			CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(s_rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), s_Frame, s_rtvDescriptorSize);
-			s_CommandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
-			s_CommandList->ClearRenderTargetView(rtvHandle, m_ClearColor, 0, nullptr);
+			CD3DX12_CPU_DESCRIPTOR_HANDLE depthStencilHandle(s_DepthStencilDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
+			s_CommandList->OMSetRenderTargets(1, &rtvHandle, FALSE, &depthStencilHandle);
+			s_CommandList->ClearRenderTargetView(rtvHandle, s_ClearColor, 0, nullptr);
+			s_CommandList->ClearDepthStencilView(s_DepthStencilDescriptorHeap->GetCPUDescriptorHandleForHeapStart(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+			ID3D12DescriptorHeap* descriptorHeaps[] = { s_MainDescriptorHeap };
+			s_CommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
+
 			s_CommandList->RSSetViewports(1, &s_ViewPort);
 			s_CommandList->RSSetScissorRects(1, &s_ScissorRect);
+
+			s_IsPopulating = true;
 		}
 
 		void DirectXRenderAPI::End() const
 		{
+			s_IsPopulating = false;
+
 			s_CommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(s_RenderTargets[s_Frame], D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
 			s_CommandList->Close();
 
@@ -276,17 +324,17 @@ namespace Crow {
 
 			s_CommandQueue->ExecuteCommandLists(_countof(commandLists), commandLists);
 
-			s_CommandQueue->Signal(s_Fences[s_Frame], s_FenceValue[s_Frame]);
+			s_CommandQueue->Signal(s_Fence, s_FenceValue);
 
 			s_SwapChain->Present(0, 0);
 		}
 
 		void DirectXRenderAPI::ClearColor(float r, float g, float b) const
 		{
-			m_ClearColor[0] = r;
-			m_ClearColor[1] = g;
-			m_ClearColor[2] = b;
-			m_ClearColor[3] = 1.0f;
+			s_ClearColor[0] = r;
+			s_ClearColor[1] = g;
+			s_ClearColor[2] = b;
+			s_ClearColor[3] = 1.0f;
 		}
 
 		void DirectXRenderAPI::SetViewPort(uint width, uint height) const
@@ -311,51 +359,107 @@ namespace Crow {
 
 		void DirectXRenderAPI::EnableAlpha() const
 		{
-
 		}
 
 		void DirectXRenderAPI::EnableDepthTest() const
 		{
-
+			if (s_Initializing)
+			{
+				s_DepthTest = true;
+				UpdateDepthStencilDescription();
+			}
+			else 
+			{
+				CR_CORE_WARNING("Cannot enable Depth Test after initialization!");
+			}
 		}
 
 		std::string DirectXRenderAPI::GetGraphicsInfo() const
 		{
-			return m_CardName;
+			return s_CardName;
 		}
 
-		void DirectXRenderAPI::WaitForLastFrame()
+		void DirectXRenderAPI::WaitForPreviousFrame()
 		{
 			s_Frame = s_SwapChain->GetCurrentBackBufferIndex();
 
 			// if Frame is not done
-			if (s_Fences[s_Frame]->GetCompletedValue() < s_FenceValue[s_Frame])
+			if (s_Fence->GetCompletedValue() < s_FenceValue)
 			{
-				s_Fences[s_Frame]->SetEventOnCompletion(s_FenceValue[s_Frame], s_FenceEvent);
+				s_Fence->SetEventOnCompletion(s_FenceValue, s_FenceEvent);
 
 				WaitForSingleObject(s_FenceEvent, INFINITE);
 			}
-			s_FenceValue[s_Frame]++;
+
+			s_FenceValue++;
 		}
 
 		void DirectXRenderAPI::EndInit() const
 		{
+			InitConstantBuffers();
 			s_CommandList->Close();
 			ID3D12CommandList* commandLists[] = { s_CommandList };
 			s_CommandQueue->ExecuteCommandLists(_countof(commandLists), commandLists);
 
-			s_FenceValue[s_Frame]++;
-			s_CommandQueue->Signal(s_Fences[s_Frame], s_FenceValue[s_Frame]);
+			s_FenceValue++;
+			s_CommandQueue->Signal(s_Fence, s_FenceValue);
 
-			for (VertexBuffer* vBuffer : m_VertexBuffers)
+
+			// Set buffer data
+			for (VertexBuffer* vBuffer : s_VertexBuffers)
 			{
 				vBuffer->SetBuffer();
 			}
 
-			for (IndexBuffer* iBuffer : m_IndexBuffers)
+			for (IndexBuffer* iBuffer : s_IndexBuffers)
 			{
 				iBuffer->SetBuffer();
 			}
+
+			s_Initializing = false;
+		}
+
+		void DirectXRenderAPI::InitConstantBuffers()
+		{
+			HRESULT hr;
+
+			int descriptorsCount = 0;
+			for (int i = 0; i < s_MappingShader.size(); i++)
+				descriptorsCount += static_cast<DirectXShader*>(s_MappingShader[i])->GetCBufferCount();
+
+				D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
+				heapDesc.NumDescriptors = descriptorsCount;
+				heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+				heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+				hr = s_Device->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&s_MainDescriptorHeap));
+				if (hr < 0)
+				{
+					CR_CORE_ERROR("Failed to create Main Descriptor Heap");
+				}
+
+				for (Shader* shader : s_MappingShader) // Doing this at the end because thats when all shaders should be created
+					shader->CreateConstantBuffers(-1);
+		}
+
+		void DirectXRenderAPI::UpdateDepthStencilDescription()
+		{
+
+			const D3D12_DEPTH_STENCILOP_DESC defaultStencilOp = // a stencil operation structure, again does not really matter since stencil testing is turned off
+			{ 
+				D3D12_STENCIL_OP_KEEP, 
+				D3D12_STENCIL_OP_KEEP,
+				D3D12_STENCIL_OP_KEEP,
+				D3D12_COMPARISON_FUNC_ALWAYS
+			};
+
+			s_DepthStencilDesc.DepthEnable = s_DepthTest;
+			s_DepthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+			s_DepthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+			s_DepthStencilDesc.StencilEnable = s_StencilTest;
+			s_DepthStencilDesc.StencilReadMask = D3D12_DEFAULT_STENCIL_READ_MASK;
+			s_DepthStencilDesc.StencilWriteMask = D3D12_DEFAULT_STENCIL_WRITE_MASK;
+			s_DepthStencilDesc.FrontFace = defaultStencilOp;
+			s_DepthStencilDesc.BackFace = defaultStencilOp;
 		}
 	}
 }

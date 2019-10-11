@@ -52,9 +52,6 @@
     <Filter Include="src\Crow\Graphics\Renderer\2D">
       <UniqueIdentifier>{42F5C9B1-AE0D-B1DB-77BA-4075E3914575}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Crow\Graphics\Shaders">
-      <UniqueIdentifier>{101EB230-7CE0-E5BA-C590-74473192BE98}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\Platform">
       <UniqueIdentifier>{21CA02E5-0D2D-9289-B6B2-CA3FA2F45D0C}</UniqueIdentifier>
     </Filter>
@@ -75,6 +72,9 @@
     </Filter>
     <Filter Include="src\Platform\GraphicAPI\OpenGL">
       <UniqueIdentifier>{DCDDA650-C803-71B7-B149-F6829D0E9683}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Platform\GraphicAPI\OpenGL\Shaders">
+      <UniqueIdentifier>{B51E096E-A170-E05D-8A8F-1D6E7680F946}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1230,6 +1230,9 @@
     <ClInclude Include="src\Crow\Graphics\Renderer\2D\Renderer2D.h">
       <Filter>src\Crow\Graphics\Renderer\2D</Filter>
     </ClInclude>
+    <ClInclude Include="src\Crow\Graphics\Renderer\ArrayBuffer.h">
+      <Filter>src\Crow\Graphics\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Crow\Graphics\Renderer\Buffer.h">
       <Filter>src\Crow\Graphics\Renderer</Filter>
     </ClInclude>
@@ -1275,8 +1278,26 @@
     <ClInclude Include="src\Platform\Application\Windows\WindowsAPIWindow.h">
       <Filter>src\Platform\Application\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXArrayBuffer.h">
+      <Filter>src\Platform\GraphicAPI\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXBuffer.h">
+      <Filter>src\Platform\GraphicAPI\DirectX</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXRenderAPI.h">
       <Filter>src\Platform\GraphicAPI\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXShader.h">
+      <Filter>src\Platform\GraphicAPI\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXShaderFactory.h">
+      <Filter>src\Platform\GraphicAPI\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\GraphicAPI\OpenGL\ArrayBuffer.h">
+      <Filter>src\Platform\GraphicAPI\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\GraphicAPI\OpenGL\OpenGLArrayBuffer.h">
+      <Filter>src\Platform\GraphicAPI\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\GraphicAPI\OpenGL\OpenGLBuffer.h">
       <Filter>src\Platform\GraphicAPI\OpenGL</Filter>
@@ -1287,21 +1308,15 @@
     <ClInclude Include="src\Platform\GraphicAPI\OpenGL\OpenGLShader.h">
       <Filter>src\Platform\GraphicAPI\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\GraphicAPI\OpenGL\OpenGLShaderFactory.h">
+      <Filter>src\Platform\GraphicAPI\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\GraphicAPI\OpenGL\OpenGLTexture.h">
       <Filter>src\Platform\GraphicAPI\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\PlatformAPI.h">
       <Filter>src\Platform</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXBuffer.h" />
-    <ClInclude Include="src\Platform\GraphicAPI\OpenGL\OpenGLShaderFactory.h" />
-    <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXShaderFactory.h" />
-    <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXShader.h" />
-    <ClInclude Include="src\Platform\GraphicAPI\OpenGL\OpenGLArrayBuffer.h">
-      <Filter>src\Platform\GraphicAPI\OpenGL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXArrayBuffer.h" />
-    <ClInclude Include="src\Crow\Graphics\Renderer\ArrayBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lib\stb_image\stb_image.cpp">
@@ -1327,6 +1342,9 @@
     </ClCompile>
     <ClCompile Include="src\Crow\Graphics\Renderer\2D\Renderer2D.cpp">
       <Filter>src\Crow\Graphics\Renderer\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Crow\Graphics\Renderer\ArrayBuffer.cpp">
+      <Filter>src\Crow\Graphics\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Crow\Graphics\Renderer\Buffer.cpp">
       <Filter>src\Crow\Graphics\Renderer</Filter>
@@ -1367,8 +1385,23 @@
     <ClCompile Include="src\Platform\Application\Windows\WindowsAPIWindow.cpp">
       <Filter>src\Platform\Application\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXArrayBuffer.cpp">
+      <Filter>src\Platform\GraphicAPI\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXBuffer.cpp">
+      <Filter>src\Platform\GraphicAPI\DirectX</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXRenderAPI.cpp">
       <Filter>src\Platform\GraphicAPI\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXShader.cpp">
+      <Filter>src\Platform\GraphicAPI\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXShaderFactory.cpp">
+      <Filter>src\Platform\GraphicAPI\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\GraphicAPI\OpenGL\OpenGLArrayBuffer.cpp">
+      <Filter>src\Platform\GraphicAPI\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\GraphicAPI\OpenGL\OpenGLBuffer.cpp">
       <Filter>src\Platform\GraphicAPI\OpenGL</Filter>
@@ -1379,23 +1412,26 @@
     <ClCompile Include="src\Platform\GraphicAPI\OpenGL\OpenGLShader.cpp">
       <Filter>src\Platform\GraphicAPI\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\GraphicAPI\OpenGL\OpenGLShaderFactory.cpp">
+      <Filter>src\Platform\GraphicAPI\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\GraphicAPI\OpenGL\OpenGLTexture.cpp">
       <Filter>src\Platform\GraphicAPI\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\PlatformAPI.cpp">
       <Filter>src\Platform</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXBuffer.cpp" />
-    <ClCompile Include="src\Platform\GraphicAPI\OpenGL\OpenGLShaderFactory.cpp" />
-    <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXShaderFactory.cpp" />
-    <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXShader.cpp" />
-    <ClCompile Include="src\Platform\GraphicAPI\OpenGL\OpenGLArrayBuffer.cpp">
-      <Filter>src\Platform\GraphicAPI\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXArrayBuffer.cpp" />
-    <ClCompile Include="src\Crow\Graphics\Renderer\ArrayBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\Platform\GraphicAPI\OpenGL\Shaders\Color.glsl" />
+    <None Include="src\Platform\GraphicAPI\OpenGL\Shaders\Basic.glsl">
+      <Filter>src\Platform\GraphicAPI\OpenGL\Shaders</Filter>
+    </None>
+    <None Include="src\Platform\GraphicAPI\OpenGL\Shaders\Color.glsl">
+      <Filter>src\Platform\GraphicAPI\OpenGL\Shaders</Filter>
+    </None>
+    <None Include="src\Platform\GraphicAPI\OpenGL\Shaders\UColor.glsl">
+      <Filter>src\Platform\GraphicAPI\OpenGL\Shaders</Filter>
+    </None>
+    <None Include="src\Platform\GraphicAPI\OpenGL\Shaders\Texture.glsl" />
   </ItemGroup>
 </Project>

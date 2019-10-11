@@ -7,6 +7,7 @@
 #include <d3dcompiler.h>
 #include <d3dx12.h>
 
+#include "DirectXShader.h"
 #include "DirectXShaderFactory.h"
 #include "DirectXBuffer.h"
 
@@ -20,15 +21,12 @@ namespace Crow {
 
 			static AbstractRenderAPI* CreateDirectXRenderAPI() { return new DirectXRenderAPI(); }
 
-			virtual void CreateDeviceContext() override;
-
 			virtual bool InitAPI(const WindowProperties& winprop, void* hWnd) const override;
 			virtual void EndInit() const override;
 
 			virtual void Begin() const override;
 			virtual void End() const override;
 
-			virtual inline void Clear() const override {}
 			virtual inline void ClearColor(float r, float g, float b) const override;
 			virtual inline void SetViewPort(uint width, uint height) const override;
 			virtual inline void DrawIndices(uint count) const override;
@@ -42,20 +40,29 @@ namespace Crow {
 
 			static inline ID3D12Device* GetDevice() { return s_Device; }
 			static inline ID3D12GraphicsCommandList* GetCommandList() { return s_CommandList; }
+			//static inline ID3D12DescriptorHeap* GetMainDescriptorHeap(int frame) { return s_MainDescriptorHeap[frame]; }
 			static inline DXGI_SAMPLE_DESC GetSampleDescription() { return s_SampleDescription; }
 
 			static inline D3D12_VIEWPORT GetViewPort() { return s_ViewPort; }
 			static inline D3D12_RECT GetScissorRect() { return s_ScissorRect; }
+			static inline D3D12_DEPTH_STENCIL_DESC GetDepthStencilDescription() { return s_DepthStencilDesc; }
+			static inline uint GetFrameBufferCount() { return s_FrameBufferCount; }
+			static inline int GetFrame() { return s_Frame; }
 
-			static void AddPipeline(ID3D12PipelineState* pipe) { m_PSOs.push_back(pipe); }
+			static void AddPipeline(ID3D12PipelineState* pipe) { s_PSOs.push_back(pipe); }
 
-			static void Upload(VertexBuffer* vBuffer) { m_VertexBuffers.push_back(vBuffer); }
-			static void Upload(IndexBuffer* iBuffer) { m_IndexBuffers.push_back(iBuffer); }
+			static void MapUniform(Shader* shader) { s_MappingShader.push_back(shader); }
+			static void Upload(VertexBuffer* vBuffer) { s_VertexBuffers.push_back(vBuffer); }
+			static void Upload(IndexBuffer* iBuffer) { s_IndexBuffers.push_back(iBuffer); }
+
+			static ID3D12DescriptorHeap* s_MainDescriptorHeap;
 		private:
-			static void WaitForLastFrame();
+			static void WaitForPreviousFrame();
+			static void InitConstantBuffers();
+			static void UpdateDepthStencilDescription();
 		private:
-			static std::vector<ID3D12PipelineState*> m_PSOs;
-
+			static std::vector<ID3D12PipelineState*> s_PSOs;
+			static uint s_FrameBufferCount;
 			DirectXShaderFactory* m_ShaderFactory;
 
 			static ID3D12Device* s_Device;
@@ -66,28 +73,40 @@ namespace Crow {
 			static ID3D12DescriptorHeap* s_rtvDescriptorHeap;
 
 			static ID3D12Resource* s_RenderTargets[3];
-			static ID3D12CommandAllocator* s_CommandAllocator[3 * 1]; // Triple buffering multiplied by amount of rendering threads
+			static ID3D12CommandAllocator* s_CommandAllocator;
 
 			static ID3D12GraphicsCommandList* s_CommandList;
 
-			static ID3D12Fence* s_Fences[3 * 1];
+			static ID3D12Fence* s_Fence;
+			static HANDLE s_FenceEvent;
+			static UINT64 s_FenceValue;
 
 			static D3D12_VIEWPORT s_ViewPort;
 			static D3D12_RECT s_ScissorRect;
 
-			static HANDLE s_FenceEvent;
+			static D3D12_DEPTH_STENCIL_DESC s_DepthStencilDesc;
+			static ID3D12Resource* s_DepthStencilBuffer;
+			static ID3D12DescriptorHeap* s_DepthStencilDescriptorHeap;
 
-			static UINT64 s_FenceValue[3 * 1];
+
 
 			static int s_Frame;
 			static int s_rtvDescriptorSize;
 
-			static float *m_ClearColor; // RGBA
+			static float *s_ClearColor; // RGBA
 
-			static std::string m_CardName;
+			static std::string s_CardName;
 
-			static std::vector<VertexBuffer*> m_VertexBuffers;
-			static std::vector<IndexBuffer*> m_IndexBuffers;
+			static std::vector<Shader*> s_MappingShader;
+			static std::vector<VertexBuffer*> s_VertexBuffers;
+			static std::vector<IndexBuffer*> s_IndexBuffers;
+
+			static bool s_DepthTest;
+			static bool s_StencilTest;
+			static bool s_Initializing;
+			static bool s_IsPopulating; // If not End() has been called after Begin()
+
+			//static std::vector<
 		};
 	}
 }

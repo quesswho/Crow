@@ -17,7 +17,7 @@ namespace Crow {
 				nullptr,
 				IID_PPV_ARGS(&m_VertexBuffer));
 
-			m_VertexBuffer->SetName(L"CROW: Vertex Buffer resource heap"); // Debug name
+			m_VertexBuffer->SetName(L"Crow: Vertex Buffer resource heap"); // Debug name
 
 			ID3D12Resource* vertexBufferUploadHeap;
 			DirectXRenderAPI::GetDevice()->CreateCommittedResource(
@@ -28,7 +28,7 @@ namespace Crow {
 				nullptr,
 				IID_PPV_ARGS(&vertexBufferUploadHeap));
 
-			m_VertexBuffer->SetName(L"CROW: Vertex Buffer Upload resource heap");
+			m_VertexBuffer->SetName(L"Crow: Vertex Buffer Upload resource heap");
 
 			D3D12_SUBRESOURCE_DATA vertexData = {};
 
@@ -77,7 +77,7 @@ namespace Crow {
 				nullptr,
 				IID_PPV_ARGS(&m_IndexBuffer));
 
-			m_IndexBuffer->SetName(L"CROW: Index Buffer resource heap");
+			m_IndexBuffer->SetName(L"Crow: Index Buffer resource heap");
 
 			ID3D12Resource* indexBufferUploadHeap;
 			DirectXRenderAPI::GetDevice()->CreateCommittedResource(
@@ -88,7 +88,7 @@ namespace Crow {
 				nullptr,
 				IID_PPV_ARGS(&indexBufferUploadHeap));
 
-			m_IndexBuffer->SetName(L"CROW: Index Buffer Upload resource heap");
+			m_IndexBuffer->SetName(L"Crow: Index Buffer Upload resource heap");
 
 			D3D12_SUBRESOURCE_DATA indexData = {};
 			indexData.pData = reinterpret_cast<BYTE*>(indices);

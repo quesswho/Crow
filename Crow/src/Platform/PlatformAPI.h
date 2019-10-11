@@ -29,8 +29,8 @@ namespace Crow {
 		};
 
 		enum ApplicationAPI {
-			GLFW,		// Multiplatform - Supports OpenGL, Vulkan & Metal
-			WINDOWS		// Windows only - Supports DirectX
+			GLFW,
+			WINDOWS
 		};
 
 		class PlatformAPI {
@@ -38,7 +38,7 @@ namespace Crow {
 			static GraphicAPI s_GraphicAPI;
 			static ApplicationAPI s_ApplicationAPI;
 
-			static void GraphicAPIInit(GraphicAPI grahpicApi); // Set all callbacks to right api
+			static void GraphicAPIInit(GraphicAPI grahpicApi); // Set all callbacks to right graphics api
 			static void ApplicationAPIInit(ApplicationAPI appApi); // Choses which ApplicationAPI will be used
 
 			static inline Window* (*CreateWindowAPI)(WindowProperties props); // Would have wanted to call the function "CreateWindow"

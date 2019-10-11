@@ -40,20 +40,17 @@ using namespace Crow;
 			4,5,6, 4,7,5
 		};
 
-		m_Shader = Shader::CreateFromSource("ColorShader", Application::GetAPI()->GetShaderFactory()->ColorShader(), bufferprop);
+		m_Shader = Shader::CreateFromSource("ColorShader", Application::GetAPI()->GetShaderFactory()->UniformColorShader(), bufferprop);
 
 		std::shared_ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices), bufferprop);
 		std::shared_ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(ulong));
 
 
 		m_ArrayBuffer = ArrayBuffer::Create(vertexBuffer, indexBuffer);
-
+		m_Color = glm::vec4(1.0f, 0.2f, 0.4f, 1.0f);
+		m_ColorA = 0.5f;
 	//	shader->Bind();
 		//shader->SetUniform3f("u_Color", glm::vec3(1.0f, 0.1f, 0.3f));
-
-
-		//m_Buffer->AddVertexBuffer(m_VertexBuffer);
-		//m_Buffer->SetIndexBuffer(m_IndexBuffer);
 
 		/*Texture* texture = Texture::Create("res/Texture/crow.png", TextureProperties(CROW_NEAREST_MIPMAP_NEAREST, CROW_NEAREST, CROW_CLAMP_TO_EDGE, CROW_CLAMP_TO_EDGE));
 		Texture* texture2 = Texture::Create("res/Texture/crow2.png", TextureProperties(CROW_NEAREST_MIPMAP_NEAREST, CROW_NEAREST, CROW_CLAMP_TO_EDGE, CROW_CLAMP_TO_EDGE));
@@ -112,6 +109,13 @@ using namespace Crow;
 			if (key == CROW_KEY_ESCAPE && action == CROW_KEY_PRESS)
 				Crow::Application::Shutdown();
 
+			if (Input::IsKeyPressed(CROW_KEY_R))
+				m_Color = glm::vec4(1.0f, 0.1f, 0.1f, 1.0f);
+			if (Input::IsKeyPressed(CROW_KEY_G))
+				m_Color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+			if (Input::IsKeyPressed(CROW_KEY_B))
+				m_Color = glm::vec4(0, 0, 1, 1);
+			
 			break;
 		case MOUSE:
 			CR_GAME_INFO("Mouse Button: {}", key);
@@ -121,6 +125,12 @@ using namespace Crow;
 
 	void Layer2D::OnUpdate(float elapsed)
 	{
+
+		if (Input::IsKeyPressed(CROW_KEY_E))
+			m_ColorA += elapsed * 0.5f;
+		if (Input::IsKeyPressed(CROW_KEY_Q))
+			m_ColorA -= elapsed * 0.5f;
+
 		/*glm::vec3 pos = m_Camera->GetCameraPos();
 		m_Camera->Update(elapsed);
 
@@ -146,6 +156,9 @@ using namespace Crow;
 
 	void Layer2D::OnRender()
 	{
+
+		m_Shader->SetUniformValue("u_Color", m_Color);
+		m_Shader->SetUniformValue("u_Colora", m_ColorA);
 		m_Shader->Bind();
 		m_ArrayBuffer->Bind();
 

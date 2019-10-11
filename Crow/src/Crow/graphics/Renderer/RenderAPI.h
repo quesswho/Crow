@@ -13,15 +13,12 @@ namespace Crow {
 
 		static AbstractRenderAPI* Create();
 
-		virtual void CreateDeviceContext() = 0;
-
 		virtual bool InitAPI(const WindowProperties& winpropm, void* windowHandle) const = 0;
 		virtual void EndInit() const = 0;
 
 		virtual void Begin() const = 0;
 		virtual void End() const = 0;
 
-		virtual inline void Clear() const = 0;
 		virtual inline void ClearColor(float r, float g, float b) const = 0;
 		virtual inline void SetViewPort(uint width, uint height) const = 0;
 		virtual inline void DrawIndices(uint count) const = 0;

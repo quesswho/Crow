@@ -24,4 +24,7 @@ private:
 
 	Crow::ArrayBuffer* m_ArrayBuffer;
 	Crow::Shader* m_Shader;
+
+	glm::vec4 m_Color;
+	float m_ColorA;
 };

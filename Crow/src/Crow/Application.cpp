@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string>
 #include "Platform/PlatformAPI.h"
+
 namespace Crow {
 
 	bool Application::s_Closed;
@@ -86,7 +87,6 @@ namespace Crow {
 
 	void Application::OnUpdate(float elapsed)
 	{
-		s_RenderAPI->Clear();
 		s_RenderAPI->Begin();
 		for (auto it = s_LayerManager->begin(); it != s_LayerManager->end(); it++)
 		{

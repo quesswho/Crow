@@ -23,16 +23,22 @@ namespace Crow {
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
+
 		virtual void ReloadFromPath(const char* path) = 0;
 		virtual void ReloadFromSource(std::string& source) = 0;
 
+		virtual void CreateConstantBuffers(int frame) = 0;
+
 		virtual const char* GetName() const = 0;
 
-		virtual void SetUniform1i(const char* location, int value) = 0;
-		virtual void SetUniform1f(const char* location, float value) = 0;
-		virtual void SetUniform2f(const char* location, glm::vec2& value) = 0;
-		virtual void SetUniform3f(const char* location, glm::vec3& value) = 0;
-		virtual void SetUniform4f(const char* location, glm::vec4& value) = 0;
-		virtual void SetUniformMat4(const char* location, const glm::mat4x4& value) = 0;
+		virtual void SetUniformValue(const char* location, int value) = 0;
+		virtual void SetUniformValue(const char* location, float value) = 0;
+		virtual void SetUniformValue(const char* location, glm::vec2& value) = 0;
+		virtual void SetUniformValue(const char* location, glm::vec3& value) = 0;
+		virtual void SetUniformValue(const char* location, glm::vec4& value) = 0;
+		virtual void SetUniformValue(const char* location, const glm::mat3x3& value) = 0;
+		virtual void SetUniformValue(const char* location, const glm::mat4x4& value) = 0;
+
+		virtual void SetUniformStruct(const char* location, const void* data) = 0;
 	};
 }

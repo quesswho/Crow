@@ -4,7 +4,6 @@
 
 #include "DirectXRenderAPI.h"
 
-#include <DirectXMath.h>
 
 namespace Crow {
 	namespace Platform {

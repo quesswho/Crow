@@ -45,7 +45,7 @@ namespace Crow {
 			{
 				m_Shader->ReloadFromSource(Application::GetAPI()->GetShaderFactory()->TextureShader());
 				texture->SetIndex(0);
-				m_Shader->SetUniform1i("u_Texture", 0);
+				m_Shader->SetUniformValue("u_Texture", 0);
 				m_Textures.push_back(texture);
 			}
 			else
@@ -68,6 +68,7 @@ namespace Crow {
 
 	void Object2D::Bind() const
 	{
+		m_Shader->Bind();
 		for (int i = 0; i < m_Textures.size(); i++)
 		{
 			m_Textures[i]->Bind();
@@ -77,6 +78,7 @@ namespace Crow {
 
 	void Object2D::Unbind() const
 	{
+		m_Shader->Unbind();
 		for (int i = 0; i < m_Textures.size(); i++)
 		{
 			m_Textures[i]->Unbind();
