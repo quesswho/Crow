@@ -4,6 +4,15 @@
 
 #include <memory>
 
+struct Light {
+	Light(glm::vec2 pos, glm::vec4 color)
+		: m_Pos(pos), m_Color(color)
+	{}
+
+	glm::vec4 m_Color;
+	glm::vec2 m_Pos;
+};
+
 class Layer2D : public Crow::Layer {
 public:
 
@@ -25,6 +34,5 @@ private:
 	Crow::ArrayBuffer* m_ArrayBuffer;
 	Crow::Shader* m_Shader;
 
-	glm::vec4 m_Color;
-	float m_ColorA;
+	Light* m_Light;
 };

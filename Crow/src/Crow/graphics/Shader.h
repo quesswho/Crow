@@ -11,9 +11,22 @@
 namespace Crow {
 
 
-	enum ShaderType { UKNOWN = -1, VERTEX = 0, FRAGMENT = 1 };
+	enum ShaderType { UNKNOWN = -1, VERTEX = 0, FRAGMENT = 1 };
 
 	struct Shader {
+
+		typedef enum UniformType
+		{
+			UNKNOWN = -1,
+			INT,
+			FLOAT,
+			FLOAT2,
+			FLOAT3,
+			FLOAT4,
+			MAT2,
+			MAT3,
+			MAT4
+		};
 
 		virtual ~Shader() = default;
 
@@ -27,7 +40,7 @@ namespace Crow {
 		virtual void ReloadFromPath(const char* path) = 0;
 		virtual void ReloadFromSource(std::string& source) = 0;
 
-		virtual void CreateConstantBuffers(int frame) = 0;
+		virtual void CreateConstantBuffers() = 0;
 
 		virtual const char* GetName() const = 0;
 
@@ -36,9 +49,10 @@ namespace Crow {
 		virtual void SetUniformValue(const char* location, glm::vec2& value) = 0;
 		virtual void SetUniformValue(const char* location, glm::vec3& value) = 0;
 		virtual void SetUniformValue(const char* location, glm::vec4& value) = 0;
+		virtual void SetUniformValue(const char* location, const glm::mat2x2& value) = 0;
 		virtual void SetUniformValue(const char* location, const glm::mat3x3& value) = 0;
 		virtual void SetUniformValue(const char* location, const glm::mat4x4& value) = 0;
 
-		virtual void SetUniformStruct(const char* location, const void* data) = 0;
+		virtual void SetUniformStruct(const char* location, void* data) = 0;
 	};
 }

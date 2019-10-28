@@ -25,7 +25,8 @@ namespace Crow {
 
 		enum GraphicAPI {
 			OPENGL,
-			DIRECTX		// Directx 12
+			//DIRECTX11,
+			DIRECTX12 // WIP don't use
 		};
 
 		enum ApplicationAPI {

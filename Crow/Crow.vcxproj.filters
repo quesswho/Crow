@@ -1426,12 +1426,17 @@
     <None Include="src\Platform\GraphicAPI\OpenGL\Shaders\Basic.glsl">
       <Filter>src\Platform\GraphicAPI\OpenGL\Shaders</Filter>
     </None>
+    <None Include="src\Platform\GraphicAPI\OpenGL\Shaders\BasicLight.glsl">
+      <Filter>src\Platform\GraphicAPI\OpenGL\Shaders</Filter>
+    </None>
     <None Include="src\Platform\GraphicAPI\OpenGL\Shaders\Color.glsl">
+      <Filter>src\Platform\GraphicAPI\OpenGL\Shaders</Filter>
+    </None>
+    <None Include="src\Platform\GraphicAPI\OpenGL\Shaders\Texture.glsl">
       <Filter>src\Platform\GraphicAPI\OpenGL\Shaders</Filter>
     </None>
     <None Include="src\Platform\GraphicAPI\OpenGL\Shaders\UColor.glsl">
       <Filter>src\Platform\GraphicAPI\OpenGL\Shaders</Filter>
     </None>
-    <None Include="src\Platform\GraphicAPI\OpenGL\Shaders\Texture.glsl" />
   </ItemGroup>
 </Project>

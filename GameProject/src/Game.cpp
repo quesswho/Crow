@@ -2,7 +2,7 @@
 
 #include "glm/vec3.hpp"
 #include "Crow/Graphics/ShaderFactory.h"
-
+#include <glm/ext/matrix_clip_space.hpp>
 #include <DirectXMath.h>
 
 using namespace Crow;
@@ -23,10 +23,10 @@ using namespace Crow;
 		//ArrayBuffer* m_Buffer = ArrayBuffer::Create();
 
 		float vertices[] = {
-			-0.5f,  0.5f, 0.1f, 0.0f, 0.0f, 1.0f, 1.0f,
-			 0.5f, -0.5f, 0.1f, 0.0f, 1.0f, 1.0f, 1.0f,
-			-0.5f, -0.5f, 0.1f, 0.0f, 0.0f, 1.0f, 1.0f,
-			 0.5f,  0.5f, 0.1f, 0.0f, 1.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.1f, 0.0f, 0.1f, 1.0f, 1.0f,
+			 0.5f, -0.5f, 0.1f, 0.0f, 0.1f, 1.0f, 1.0f,
+			-0.5f, -0.5f, 0.1f, 0.0f, 0.1f, 1.0f, 1.0f,
+			 0.5f,  0.5f, 0.1f, 0.0f, 0.1f, 1.0f, 1.0f,
 
 			 // Further away (green)
 			-0.75f, 0.75f, 0.2f, 0.0f, 1.0f, 0.0f, 1.0f,
@@ -40,15 +40,15 @@ using namespace Crow;
 			4,5,6, 4,7,5
 		};
 
-		m_Shader = Shader::CreateFromSource("ColorShader", Application::GetAPI()->GetShaderFactory()->UniformColorShader(), bufferprop);
+		m_Shader = Shader::CreateFromSource("ColorShader", Application::GetAPI()->GetShaderFactory()->BasicLightShader(), bufferprop);
 
 		std::shared_ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices), bufferprop);
 		std::shared_ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(ulong));
 
 
 		m_ArrayBuffer = ArrayBuffer::Create(vertexBuffer, indexBuffer);
-		m_Color = glm::vec4(1.0f, 0.2f, 0.4f, 1.0f);
-		m_ColorA = 0.5f;
+
+		m_Light = new Light(glm::vec2(0.0f, 0.0f), glm::vec4(0.5f, 0.1f, 0.5f, 1.0f));
 	//	shader->Bind();
 		//shader->SetUniform3f("u_Color", glm::vec3(1.0f, 0.1f, 0.3f));
 
@@ -109,12 +109,12 @@ using namespace Crow;
 			if (key == CROW_KEY_ESCAPE && action == CROW_KEY_PRESS)
 				Crow::Application::Shutdown();
 
-			if (Input::IsKeyPressed(CROW_KEY_R))
-				m_Color = glm::vec4(1.0f, 0.1f, 0.1f, 1.0f);
+			/*if (Input::IsKeyPressed(CROW_KEY_R))
+				m_Light->m_Pos = glm::vec3(0.0f, 0.0f, 0.0f);
 			if (Input::IsKeyPressed(CROW_KEY_G))
-				m_Color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+				m_Light->m_Pos = glm::vec3(0.0f, 0.1f, 0.0f);
 			if (Input::IsKeyPressed(CROW_KEY_B))
-				m_Color = glm::vec4(0, 0, 1, 1);
+				m_Light->m_Pos = glm::vec3(0.0f, 0.2f, 0.0f);*/
 			
 			break;
 		case MOUSE:
@@ -127,9 +127,9 @@ using namespace Crow;
 	{
 
 		if (Input::IsKeyPressed(CROW_KEY_E))
-			m_ColorA += elapsed * 0.5f;
+			m_Light->m_Pos.x += elapsed * 1.0f;
 		if (Input::IsKeyPressed(CROW_KEY_Q))
-			m_ColorA -= elapsed * 0.5f;
+			m_Light->m_Pos.x -= elapsed * 1.0f;
 
 		/*glm::vec3 pos = m_Camera->GetCameraPos();
 		m_Camera->Update(elapsed);
@@ -157,11 +157,9 @@ using namespace Crow;
 	void Layer2D::OnRender()
 	{
 
-		m_Shader->SetUniformValue("u_Color", m_Color);
-		m_Shader->SetUniformValue("u_Colora", m_ColorA);
 		m_Shader->Bind();
+		m_Shader->SetUniformStruct("u_Light", m_Light);
 		m_ArrayBuffer->Bind();
-
 		Application::GetAPI()->DrawIndices(m_ArrayBuffer->GetCount());
 
 		/*m_Renderer->Begin();
@@ -179,7 +177,7 @@ class Game : public Crow::Application {
 	
 public:
 	Game()
-		: Application("The Crows 2D", Crow::Platform::GraphicAPI::DIRECTX, Platform::ApplicationAPI::WINDOWS)
+		: Application(WindowProperties("The Crows 2D", 720, 720), Crow::Platform::GraphicAPI::OPENGL, Platform::ApplicationAPI::WINDOWS)
 	{
 		PushLayer(new Layer2D());
 	}

@@ -62,7 +62,7 @@ namespace Crow {
 			static void UpdateDepthStencilDescription();
 		private:
 			static std::vector<ID3D12PipelineState*> s_PSOs;
-			static uint s_FrameBufferCount;
+			static const uint s_FrameBufferCount = 2;
 			DirectXShaderFactory* m_ShaderFactory;
 
 			static ID3D12Device* s_Device;
@@ -72,7 +72,7 @@ namespace Crow {
 
 			static ID3D12DescriptorHeap* s_rtvDescriptorHeap;
 
-			static ID3D12Resource* s_RenderTargets[3];
+			static ID3D12Resource* s_RenderTargets[s_FrameBufferCount];
 			static ID3D12CommandAllocator* s_CommandAllocator;
 
 			static ID3D12GraphicsCommandList* s_CommandList;
@@ -87,8 +87,6 @@ namespace Crow {
 			static D3D12_DEPTH_STENCIL_DESC s_DepthStencilDesc;
 			static ID3D12Resource* s_DepthStencilBuffer;
 			static ID3D12DescriptorHeap* s_DepthStencilDescriptorHeap;
-
-
 
 			static int s_Frame;
 			static int s_rtvDescriptorSize;
@@ -105,8 +103,6 @@ namespace Crow {
 			static bool s_StencilTest;
 			static bool s_Initializing;
 			static bool s_IsPopulating; // If not End() has been called after Begin()
-
-			//static std::vector<
 		};
 	}
 }

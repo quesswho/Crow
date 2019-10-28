@@ -14,8 +14,8 @@ namespace Crow {
 					s_GraphicAPI = OPENGL;
 					OpenGLInit();
 					break;
-				case DIRECTX:
-					s_GraphicAPI = DIRECTX;
+				case DIRECTX12:
+					s_GraphicAPI = DIRECTX12;
 					CheckWindowsError();
 					DirectXInit();
 					break;

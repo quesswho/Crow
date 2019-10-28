@@ -8,7 +8,7 @@ namespace Crow {
 		ID3D12CommandQueue* DirectXRenderAPI::s_CommandQueue;
 		DXGI_SAMPLE_DESC DirectXRenderAPI::s_SampleDescription;
 		ID3D12DescriptorHeap* DirectXRenderAPI::s_rtvDescriptorHeap;
-		ID3D12Resource* DirectXRenderAPI::s_RenderTargets[3];
+		ID3D12Resource* DirectXRenderAPI::s_RenderTargets[s_FrameBufferCount];
 		ID3D12CommandAllocator* DirectXRenderAPI::s_CommandAllocator;
 		ID3D12GraphicsCommandList* DirectXRenderAPI::s_CommandList;
 		ID3D12Fence* DirectXRenderAPI::s_Fence;
@@ -19,7 +19,7 @@ namespace Crow {
 		int DirectXRenderAPI::s_rtvDescriptorSize;
 
 		std::vector<ID3D12PipelineState*> DirectXRenderAPI::s_PSOs;
-		uint DirectXRenderAPI::s_FrameBufferCount;
+		const uint DirectXRenderAPI::s_FrameBufferCount;
 
 		float* DirectXRenderAPI::s_ClearColor;
 		D3D12_VIEWPORT DirectXRenderAPI::s_ViewPort;
@@ -43,7 +43,6 @@ namespace Crow {
 
 		DirectXRenderAPI::DirectXRenderAPI()
 		{
-			s_FrameBufferCount = 3;
 			s_ClearColor = new float[3];
 			m_ShaderFactory = new DirectXShaderFactory();
 			s_DepthTest = false;
@@ -72,7 +71,7 @@ namespace Crow {
 
 			s_MainDescriptorHeap->Release();
 
-			for (int i = 0; i < 3; ++i)
+			for (int i = 0; i < s_FrameBufferCount; ++i)
 			{
 				s_RenderTargets[i]->Release();
 			};
@@ -438,7 +437,7 @@ namespace Crow {
 				}
 
 				for (Shader* shader : s_MappingShader) // Doing this at the end because thats when all shaders should be created
-					shader->CreateConstantBuffers(-1);
+					shader->CreateConstantBuffers();
 		}
 
 		void DirectXRenderAPI::UpdateDepthStencilDescription()

@@ -14,22 +14,22 @@ namespace Crow {
 	int Application::m_FramesPerSecond;
 	AbstractRenderAPI* Application::s_RenderAPI;
 	Window* Application::s_Window;
+	WindowProperties Application::s_WindowProperties;
 
-	Application::Application(const char* title, Platform::GraphicAPI graphicApi, Platform::ApplicationAPI appApi)
-		: m_ShortTitle(title)
+	Application::Application(WindowProperties winProp, Platform::GraphicAPI graphicApi, Platform::ApplicationAPI appApi)
 	{
 		Log::Init();
 
 		Platform::PlatformAPI::ApplicationAPIInit(appApi);
 		Platform::PlatformAPI::GraphicAPIInit(graphicApi);
 
-		WindowProperties props = WindowProperties(m_ShortTitle, 720, 720);
-		s_Window = Platform::PlatformAPI::CreateWindowAPI(props);
+		s_WindowProperties = winProp;
+		s_Window = Platform::PlatformAPI::CreateWindowAPI(s_WindowProperties);
 		s_RenderAPI = Platform::PlatformAPI::CreateRenderAPI();
 		s_Closed = false; // Application::s_Closed
 
 
-		if (!s_RenderAPI->InitAPI(props, s_Window->GetHandle()))
+		if (!s_RenderAPI->InitAPI(s_WindowProperties, s_Window->GetHandle()))
 		{
 			CR_CORE_FATAL("Failed to Initialize Graphics API: {}", s_RenderAPI->GetAPIName());
 		}
@@ -74,7 +74,7 @@ namespace Crow {
 			if (elapsed > 1.0) // If it has been 1 second
 			{
 				m_FramesPerSecond = frames;
-				s_Window->SetTitle(std::string(m_ShortTitle).append(" : ").append(std::to_string(m_FramesPerSecond)).append(" FPS").c_str());
+				s_Window->SetTitle(std::string(s_WindowProperties.m_Title).append(" : ").append(std::to_string(m_FramesPerSecond)).append(" FPS").c_str());
 				frames = 0;
 				elapsed = 0;
 			}

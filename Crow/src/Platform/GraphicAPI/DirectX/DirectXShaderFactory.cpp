@@ -18,9 +18,14 @@ namespace Crow {
 #include "Shaders/Texture.hlsl"
 			;
 
+		static const char* s_BasicLightShader =
+#include "Shaders/BasicLight.hlsl"
+			;
+
 		std::string DirectXShaderFactory::BasicShader() { return std::string(s_BasicShader); }
 		std::string DirectXShaderFactory::ColorShader() { return std::string(s_ColorShader); }
 		std::string DirectXShaderFactory::UniformColorShader() { return std::string(s_CbColorShader); }
 		std::string DirectXShaderFactory::TextureShader() { return std::string(s_TextureShader); }
+		std::string DirectXShaderFactory::BasicLightShader() { return std::string(s_BasicLightShader); }
 	}
 }

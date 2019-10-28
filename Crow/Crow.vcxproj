@@ -79,7 +79,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;CR_PLATFORM_WINDOWS;CR_x64;GLFW_INCLUDE_NONE;CR_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;lib\spdlog\include;lib\glfw\include;lib\glad\include;lib\glm;lib\stb_image;lib\d3dx12;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
@@ -550,6 +550,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Platform\GraphicAPI\OpenGL\Shaders\Basic.glsl" />
+    <None Include="src\Platform\GraphicAPI\OpenGL\Shaders\BasicLight.glsl" />
     <None Include="src\Platform\GraphicAPI\OpenGL\Shaders\Color.glsl" />
     <None Include="src\Platform\GraphicAPI\OpenGL\Shaders\Texture.glsl" />
     <None Include="src\Platform\GraphicAPI\OpenGL\Shaders\UColor.glsl" />
@@ -565,4 +566,4 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-</Project>
+</Project> 

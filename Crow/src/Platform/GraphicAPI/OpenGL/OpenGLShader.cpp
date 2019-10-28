@@ -5,6 +5,7 @@
 #include <glad/glad.h>
 #include <sstream>
 #include <regex>
+#include <algorithm>
 
 namespace Crow {
 	namespace Platform {
@@ -92,7 +93,7 @@ namespace Crow {
 
 		void OpenGLShader::Init(std::string& fileSource)
 		{
-			ShaderType type = UKNOWN;
+			ShaderType type = ShaderType::UNKNOWN;
 
 			std::string stringFragmentSource = "";
 			std::string stringVertexSource = "";
@@ -130,29 +131,32 @@ namespace Crow {
 			}
 
 			CompileShader(stringVertexSource.c_str(), stringFragmentSource.c_str());
-
+			FindUniformStructs(stringVertexSource.append("\n").append(stringFragmentSource));
 		}
 
 		void OpenGLShader::FindUniformStructs(std::string& source)
 		{
-			/*bool writing = false;
+			bool writing = false;
 			std::string uniformStructName;
 
-			std::unordered_map<std::unordered_map<std::string&, UniformType>, const char*> structUniforms;
+			std::vector<TempShaderUniformStruct> structs; // struct name, uniforms, size
 
 			std::istringstream sourceStream(source);
 			std::string line;
+
+			int size = 0;
 
 			while (std::getline(sourceStream, line))
 			{
 				if (line._Starts_with("struct"))
 				{
 					writing = true;
-					line.erase(std::remove(line.begin(), line.end(), " {"), line.end());
-					line.erase(std::remove(line.begin(), line.end(), "{"), line.end());
-					uniformStructName = line.substr(strlen("cbuffer") + 1, line.length());
+					line.erase(std::remove(line.begin(), line.end(), '{'), line.end());
+					while (line.back() == ' ') line = line.substr(0, line.size() - 1); // Remove space at end
 
-					std::unordered_map<std::string&, int> uniforms;
+					uniformStructName = line.substr(strlen("struct") + 1, line.length());
+					
+					std::vector<TempUniform> uniforms; // Name, size
 
 					while (std::getline(sourceStream, line) && !(line._Starts_with("}")) && writing)
 					{
@@ -169,22 +173,41 @@ namespace Crow {
 						if (line._Starts_with("{"))
 							line.replace(line.begin(), line.begin() + 1, "");  // Get rid of '{'
 
-						uniforms.emplace(StringToUniformType(line.substr(0, line.find(" "))), line.substr(line.find(" ") + 1));
+						
+						size += StringToUniformTypeSize(line.substr(0, line.find(" ")));
 
+						uniforms.push_back(TempUniform(line.substr(line.find(" ") + 1, line.size()), StringToUniformType(line.substr(0, line.find(" ")))));
 					}
 					writing = false;		// End of cbuffer
-					structUniforms.emplace(uniforms, uniformStructName);
-				}
-				for (auto& structUni : structUniforms)
+					structs.push_back(TempShaderUniformStruct(uniformStructName, uniforms, size));
+					size = 0;
+				} 
+				else if (line._Starts_with("uniform"))
 				{
-					if (line._Starts_with(structUni.second))
+					while (line.back() == ' ') line = line.substr(0, line.size() - 1); // Remove space at end
+
+					line = line.substr(strlen("uniform") + 1, line.size());
+					std::string structtype = line.substr(0, line.find(" "));
+					line.erase(std::remove(line.begin(), line.end(), ';'), line.end());
+
+					std::string uniformStructName = line.substr(strlen(structtype.c_str()) + 1).c_str();
+
+					for (auto& structUni : structs)
 					{
-						std::vector<int> locations;
-						//locations.push_back()
+						if (line._Starts_with(std::string(structUni.m_Name)))
+						{
+							std::vector<Uniform> newUniforms;
+							for (auto& uni : structUni.m_Uniforms)
+							{
+								newUniforms.push_back(Uniform(glGetUniformLocation(m_ShaderID, std::string(uniformStructName).append(".").append(uni.m_Name).c_str()), uni.m_Type));
+							}
+
+							m_UniformStructs.push_back(ShaderUniformStruct(line.substr(strlen(structtype.c_str()) + 1), newUniforms, structUni.m_Size));
+							m_UniformStructLocations.emplace(line.substr(strlen(structtype.c_str()) + 1), m_UniformStructLocations.size()); // Cache the location of each uniformstruct
+						}
 					}
 				}
-			
-			}*/
+			}
 		}
 
 
@@ -243,6 +266,10 @@ namespace Crow {
 		{
 			glUniform4f(GetLocation(location), value.x, value.y, value.z, value.w);
 		}
+		void OpenGLShader::SetUniformValue(const char* location, const glm::mat2x2& value)
+		{
+			glUniformMatrix2fv(GetLocation(location), 1, GL_FALSE, &value[0][0]);
+		}
 		void OpenGLShader::SetUniformValue(const char* location, const glm::mat3x3& value)
 		{
 			glUniformMatrix3fv(GetLocation(location), 1, GL_FALSE, &value[0][0]);
@@ -250,6 +277,108 @@ namespace Crow {
 		void OpenGLShader::SetUniformValue(const char* location, const glm::mat4x4& value)
 		{
 			glUniformMatrix3fv(GetLocation(location), 1, GL_FALSE, &value[0][0]);
+		}
+
+		void OpenGLShader::SetUniformStruct(const char* location, void* data)
+		{
+ 			if (m_UniformStructLocations.find(std::string(location)) != m_UniformStructLocations.end())
+			{
+				const ShaderUniformStruct shaderStruct = m_UniformStructs.at(m_UniformStructLocations.at(location));
+
+				uchar* bytes = reinterpret_cast<uchar*>(data);
+				for (Uniform uni : shaderStruct.m_Uniforms)
+				{
+					switch (uni.m_Type)
+					{
+					case INT:
+						glUniform1iv(uni.m_Location, 1, (const GLint*)bytes);
+						bytes += 4;
+						break;
+					case FLOAT:
+						glUniform1fv(uni.m_Location, 1, (const GLfloat*)bytes);
+						bytes += 4;
+						break;
+					case FLOAT2:
+						glUniform2fv(uni.m_Location, 1, (const GLfloat*)bytes);
+						bytes += 8;
+						break;
+					case FLOAT3:
+						glUniform3fv(uni.m_Location, 1, (const GLfloat*)bytes);
+						bytes += 12;
+						break;
+					case FLOAT4:
+						glUniform4fv(uni.m_Location, 1, (const GLfloat*)bytes);
+						bytes += 16;
+						break;
+					case MAT2:
+						glUniformMatrix2fv(uni.m_Location, 1, GL_FALSE, (const GLfloat*)bytes);
+						bytes += 16;
+						break;
+					case MAT3:
+						glUniformMatrix3fv(uni.m_Location, 1, GL_FALSE, (const GLfloat*)bytes);
+						bytes += 36;
+						break;
+					case MAT4:
+						glUniformMatrix4fv(uni.m_Location, 1, GL_FALSE, (const GLfloat*)bytes);
+						bytes += 64;
+						break;
+					}
+				}
+			}
+			else
+			{
+				CR_CORE_WARNING("\"{}\" Uniform structure not found!", location);
+			}
+		}
+
+		int OpenGLShader::StringToUniformTypeSize(std::string& type)
+		{
+			if (type == "float" 
+				|| type == "int")	return 4;
+			if (type == "vec2")		return 2 * 4;
+			if (type == "vec3")		return 3 * 4;
+			if (type == "vec4")		return 4 * 4;
+			if (type == "mat2")		return 2 * 2 * 4;
+			if (type == "mat3")		return 3 * 3 * 4;
+			if (type == "mat4")		return 4 * 4 * 4;
+			return -1;
+		}
+
+		Shader::UniformType OpenGLShader::StringToUniformType(std::string& type)
+		{
+			if (type == "int")		return UniformType::INT;
+			if (type == "float")	return UniformType::FLOAT;
+			if (type == "vec2")		return UniformType::FLOAT2;
+			if (type == "vec3")		return UniformType::FLOAT3;
+			if (type == "vec4")		return UniformType::FLOAT4;
+			if (type == "mat2")		return UniformType::MAT2;
+			if (type == "mat3")		return UniformType::MAT3;
+			if (type == "mat4")		return UniformType::MAT4;
+			return OpenGLShader::UniformType::UNKNOWN;
+		}
+
+		int OpenGLShader::UniformTypeToUniformTypeSize(Shader::UniformType type)
+		{
+			switch (type)
+			{
+				case FLOAT:
+				case INT:
+					return 4;
+				case FLOAT2:
+					return 2 * 4;
+				case FLOAT3:
+					return 3 * 4;
+				case FLOAT4:
+					return 4 * 4;
+				case MAT2:
+					return 2 * 2 * 4;
+				case MAT3:
+					return 3 * 3 * 4;
+				case MAT4:
+					return 4 * 4 * 4;
+				default:
+					return -1;
+			}
 		}
 	}
 }

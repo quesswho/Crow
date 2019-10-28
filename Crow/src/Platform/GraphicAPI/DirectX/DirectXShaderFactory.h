@@ -10,6 +10,7 @@ namespace Crow {
 			virtual std::string ColorShader() override;
 			virtual std::string UniformColorShader() override;
 			virtual std::string TextureShader() override;
+			virtual std::string BasicLightShader() override;
 		};
 	}
 }

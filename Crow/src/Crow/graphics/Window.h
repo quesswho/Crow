@@ -6,11 +6,23 @@ namespace Crow {
 	struct WindowProperties // Title, width and height struct
 	{
 		const char* m_Title;
-		const uint m_Width;
-		const uint m_Height;
-		WindowProperties(const char* title, const uint width, const uint height)
+		uint m_Width;
+		uint m_Height;
+		WindowProperties(char* title, const uint width, const uint height)
 			: m_Title(title), m_Width(width), m_Height(height)
 		{}
+
+		WindowProperties()
+			: m_Title(""), m_Width(1), m_Height(1)
+		{}
+
+		WindowProperties& operator=(const WindowProperties& other)
+		{
+			this->m_Title = other.m_Title;
+			this->m_Width = other.m_Width;
+			this->m_Height = other.m_Height;
+			return *this;
+		}
 	};
 	
 	class Window

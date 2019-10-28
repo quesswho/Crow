@@ -14,11 +14,11 @@ namespace Crow {
 	{
 	public:
 		Application()
-			: Application("Crow Engine", Platform::GraphicAPI::OPENGL, Platform::ApplicationAPI::GLFW)
+			: Application(WindowProperties("Crow Engine", 720, 720), Platform::GraphicAPI::OPENGL, Platform::ApplicationAPI::GLFW)
 		{}
 
-		Application(const char* title, Platform::GraphicAPI graphicApi, Platform::ApplicationAPI appApi);
-
+		Application(WindowProperties winprop, Platform::GraphicAPI graphicApi, Platform::ApplicationAPI appApi);
+		
 		virtual ~Application();
 
 		static std::unique_ptr<Input> m_Input;
@@ -37,6 +37,8 @@ namespace Crow {
 		void PopLayer(Layer* layer);
 
 		static int m_FramesPerSecond;
+
+		static WindowProperties s_WindowProperties;
 	private:
 		virtual void OnUpdate(float elapsed);
 	private:
@@ -44,8 +46,6 @@ namespace Crow {
 		static std::unique_ptr<LayerManager> s_LayerManager;
 		static std::unique_ptr<Timer> m_Timer;
 		static AbstractRenderAPI* s_RenderAPI;
-
-		const char* m_ShortTitle;
 	};
 }
 
