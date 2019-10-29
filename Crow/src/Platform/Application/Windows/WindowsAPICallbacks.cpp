@@ -21,7 +21,7 @@ namespace Crow {
 			Application::GetAPI()->SetViewPort(width, height);
 		}
 
-		void WindowsAPICallbacks::key_callback(int flags, int key, uint msg) // Calls when the user pressed a key on their keyboard
+		void WindowsAPICallbacks::key_callback(int flags, uint key, uint msg) // Calls when the user pressed a key on their keyboard
 		{
 			key = DecodeWindowsKey(key);
 			Input::KeyCallback(std::tuple<int, int>(key, (msg == WM_KEYDOWN || msg == WM_SYSKEYDOWN ? 1 : 0))); // Action value is calculated with if button is down and if it is in repeat

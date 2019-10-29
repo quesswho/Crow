@@ -1,7 +1,5 @@
 #include "GLFWAPIWindow.h"
 
-#include "GLFWAPICallbacks.h"
-
 namespace Crow {
 	namespace Platform {
 

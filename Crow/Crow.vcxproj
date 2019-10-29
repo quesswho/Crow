@@ -45,19 +45,21 @@
     <IntDir>..\bin\Debug-windows-x86_64\Crow\intermediates\</IntDir>
     <TargetName>Crow</TargetName>
     <TargetExt>.lib</TargetExt>
+    <IncludePath>lib\spdlog\include;lib\glfw\include;lib\glad\include;lib\glm;lib\stb_image;lib\d3dx12;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\bin\Release-windows-x86_64\Crow\</OutDir>
     <IntDir>..\bin\Release-windows-x86_64\Crow\intermediates\</IntDir>
     <TargetName>Crow</TargetName>
     <TargetExt>.lib</TargetExt>
+    <IncludePath>lib\spdlog\include;lib\glfw\include;lib\glad\include;lib\glm;lib\stb_image;lib\d3dx12;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;CR_PLATFORM_WINDOWS;CR_x64;GLFW_INCLUDE_NONE;CR_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;lib\spdlog\include;lib\glfw\include;lib\glad\include;lib\glm;lib\stb_image;lib\d3dx12;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -78,7 +80,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;CR_PLATFORM_WINDOWS;CR_x64;GLFW_INCLUDE_NONE;CR_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;lib\spdlog\include;lib\glfw\include;lib\glad\include;lib\glm;lib\stb_image;lib\d3dx12;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -470,9 +472,6 @@
     <ClInclude Include="lib\stb_image\stb_image.h" />
     <ClInclude Include="src\Crow.h" />
     <ClInclude Include="src\Crow\Application.h" />
-    <ClInclude Include="src\Crow\Collider\Circle.h" />
-    <ClInclude Include="src\Crow\Collider\Collider.h" />
-    <ClInclude Include="src\Crow\Collider\Rectangle.h" />
     <ClInclude Include="src\Crow\Common.h" />
     <ClInclude Include="src\Crow\Event\Events.h" />
     <ClInclude Include="src\Crow\Event\Input.h" />
@@ -498,11 +497,11 @@
     <ClInclude Include="src\Platform\Application\GLFW\GLFWAPIWindow.h" />
     <ClInclude Include="src\Platform\Application\Windows\WindowsAPICallbacks.h" />
     <ClInclude Include="src\Platform\Application\Windows\WindowsAPIWindow.h" />
-    <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXArrayBuffer.h" />
-    <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXBuffer.h" />
-    <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXRenderAPI.h" />
-    <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXShader.h" />
-    <ClInclude Include="src\Platform\GraphicAPI\DirectX\DirectXShaderFactory.h" />
+    <ClInclude Include="src\Platform\GraphicAPI\DirectX12\DirectX12ArrayBuffer.h" />
+    <ClInclude Include="src\Platform\GraphicAPI\DirectX12\DirectX12Buffer.h" />
+    <ClInclude Include="src\Platform\GraphicAPI\DirectX12\DirectX12RenderAPI.h" />
+    <ClInclude Include="src\Platform\GraphicAPI\DirectX12\DirectX12Shader.h" />
+    <ClInclude Include="src\Platform\GraphicAPI\DirectX12\DirectX12ShaderFactory.h" />
     <ClInclude Include="src\Platform\GraphicAPI\OpenGL\ArrayBuffer.h" />
     <ClInclude Include="src\Platform\GraphicAPI\OpenGL\OpenGLArrayBuffer.h" />
     <ClInclude Include="src\Platform\GraphicAPI\OpenGL\OpenGLBuffer.h" />
@@ -535,11 +534,11 @@
     <ClCompile Include="src\Platform\Application\GLFW\GLFWAPIWindow.cpp" />
     <ClCompile Include="src\Platform\Application\Windows\WindowsAPICallbacks.cpp" />
     <ClCompile Include="src\Platform\Application\Windows\WindowsAPIWindow.cpp" />
-    <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXArrayBuffer.cpp" />
-    <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXBuffer.cpp" />
-    <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXRenderAPI.cpp" />
-    <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXShader.cpp" />
-    <ClCompile Include="src\Platform\GraphicAPI\DirectX\DirectXShaderFactory.cpp" />
+    <ClCompile Include="src\Platform\GraphicAPI\DirectX12\DirectX12ArrayBuffer.cpp" />
+    <ClCompile Include="src\Platform\GraphicAPI\DirectX12\DirectX12Buffer.cpp" />
+    <ClCompile Include="src\Platform\GraphicAPI\DirectX12\DirectX12RenderAPI.cpp" />
+    <ClCompile Include="src\Platform\GraphicAPI\DirectX12\DirectX12Shader.cpp" />
+    <ClCompile Include="src\Platform\GraphicAPI\DirectX12\DirectX12ShaderFactory.cpp" />
     <ClCompile Include="src\Platform\GraphicAPI\OpenGL\OpenGLArrayBuffer.cpp" />
     <ClCompile Include="src\Platform\GraphicAPI\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\GraphicAPI\OpenGL\OpenGLRenderAPI.cpp" />
@@ -566,4 +565,4 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-</Project> 
+</Project>

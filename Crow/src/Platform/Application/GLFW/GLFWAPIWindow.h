@@ -2,8 +2,7 @@
 #include "Crow/Graphics/Window.h"
 #include "Crow/Common.h"
 
-//#include <glad/glad.h> // Fix "#error Opengl header already included, remove this include, glad already provides it"
-#include <GLFW/glfw3.h>
+#include "GLFWAPICallbacks.h"
 
 namespace Crow {
 	namespace Platform {

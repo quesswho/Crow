@@ -1,6 +1,8 @@
+#include "Crow/Application.h" // Fix redifinition of APIENTRY
+
 #include "GLFWAPICallbacks.h"
+
 #include "Crow/Event/Input.h"
-#include "Crow/Application.h"
 
 namespace Crow {
 	namespace Platform {
@@ -32,7 +34,7 @@ namespace Crow {
 
 		void Callbacks::cursor_position_callback(GLFWwindow* window, double xpos, double ypos) // Calls when the user moves their mouse
 		{
-			Input::MousePosCallback(std::tuple<int, int>(xpos, ypos));
+			Input::MousePosCallback(std::tuple<double, double>(xpos, ypos));
 		}
 
 	}

@@ -15,12 +15,12 @@ typedef unsigned long ulong;
 	#define CR_CORE_INFO(...) Crow::Log::getCoreLogger()->info(__VA_ARGS__)
 	#define CR_CORE_WARNING(...) Crow::Log::getCoreLogger()->warn(__VA_ARGS__)
 	#define CR_CORE_ERROR(...) Crow::Log::getCoreLogger()->error(__VA_ARGS__)
-	#define CR_CORE_FATAL(...) Crow::Log::getCoreLogger()->error(__VA_ARGS__); __debugbreak;
+	#define CR_CORE_FATAL(...) Crow::Log::getCoreLogger()->error(__VA_ARGS__); __debugbreak();
 
 	#define CR_GAME_INFO(...) Crow::Log::getGameLogger()->info(__VA_ARGS__)
 	#define CR_GAME_WARNING(...) Crow::Log::getGameLogger()->warn(__VA_ARGS__)
 	#define CR_GAME_ERROR(...) Crow::Log::getGameLogger()->error(__VA_ARGS__)
-	#define CR_GAME_FATAL(...) Crow::Log::getGameLogger()->error(__VA_ARGS__); __debugbreak;
+	#define CR_GAME_FATAL(...) Crow::Log::getGameLogger()->error(__VA_ARGS__); __debugbreak();
 #else
 	#define CR_CORE_INFO(...)
 	#define CR_CORE_WARNING(...)

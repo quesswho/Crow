@@ -10,21 +10,21 @@ namespace Crow {
 		public:
 
 			struct TempUniform {
-				TempUniform(std::string& name, UniformType type)
+				TempUniform(const std::string& name, UniformType type)
 					: m_Name(name), m_Type(type)
 				{}
-
-				std::string m_Name;
+				
+				const std::string m_Name;
 				UniformType m_Type;
 			};
 
 			struct TempShaderUniformStruct {
 
-				TempShaderUniformStruct(std::string& name, std::vector<TempUniform> uniforms, int size)
+				TempShaderUniformStruct(const std::string& name, std::vector<TempUniform> uniforms, int size)
 					: m_Name(name), m_Uniforms(uniforms), m_Size(size)
 				{}
 
-				std::string m_Name;
+				const std::string m_Name;
 				std::vector<TempUniform> m_Uniforms;
 				int m_Size;
 			};
@@ -86,8 +86,8 @@ namespace Crow {
 
 			virtual void SetUniformStruct(const char* location, void* data) override;
 		private:
-			static int StringToUniformTypeSize(std::string& string);
-			static UniformType StringToUniformType(std::string& string);
+			static int StringToUniformTypeSize(std::string_view string);
+			static UniformType StringToUniformType(std::string_view string);
 			static int UniformTypeToUniformTypeSize(UniformType type);
 
 			static inline float BytesToFloat(BYTE* bytes)

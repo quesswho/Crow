@@ -42,7 +42,10 @@ workspace "Crow"
 		}
 
 		includedirs { 
-			"%{prj.name}/src",
+			"%{prj.name}/src"
+		}
+		
+		sysincludedirs { 
 			"%{prj.name}/lib/spdlog/include",
 			"%{prj.name}/lib/glfw/include",
 			"%{prj.name}/lib/glad/include",
@@ -93,7 +96,10 @@ workspace "Crow"
 		}
 
 		includedirs { 
-			"Crow/src",
+			"Crow/src"
+		}
+		
+		sysincludedirs {
 			"Crow/lib/spdlog/include",
 			"Crow/lib/glfw/include",
 			"Crow/lib/glad/include",

@@ -2,21 +2,21 @@
 #include "Crow/Common.h"
 #include "Crow/Graphics/Renderer/Buffer.h"
 
-#include "DirectXRenderAPI.h"
+#include "DirectX12RenderAPI.h"
 
 
 namespace Crow {
 	namespace Platform {
 
-		class DirectXVertexBuffer : public VertexBuffer {
+		class DirectX12VertexBuffer : public VertexBuffer {
 		private:
 			ID3D12Resource* m_VertexBuffer;
 			D3D12_VERTEX_BUFFER_VIEW m_VertexBufferView;
 		public:
-			DirectXVertexBuffer(float* vertices, const uint size, const BufferProperties& prop);
-			virtual ~DirectXVertexBuffer() override;
+			DirectX12VertexBuffer(float* vertices, const uint size, const BufferProperties& prop);
+			virtual ~DirectX12VertexBuffer() override;
 
-			static inline std::shared_ptr<VertexBuffer> CreateDirectXVertexBuffer(float* vertices, const uint size, const BufferProperties& prop) { return  std::make_shared<DirectXVertexBuffer>(vertices, size, prop); }
+			static inline std::shared_ptr<VertexBuffer> CreateDirectX12VertexBuffer(float* vertices, const uint size, const BufferProperties& prop) { return  std::make_shared<DirectX12VertexBuffer>(vertices, size, prop); }
 			
 			virtual void SetBuffer() override;
 
@@ -30,15 +30,15 @@ namespace Crow {
 			const uint m_Size;
 		};
 
-		class DirectXIndexBuffer : public IndexBuffer {
+		class DirectX12IndexBuffer : public IndexBuffer {
 		private:
 			ID3D12Resource* m_IndexBuffer;
 			D3D12_INDEX_BUFFER_VIEW m_IndexBufferView;
 		public:
-			DirectXIndexBuffer(ulong* indices, const uint count);
-			~DirectXIndexBuffer() override;
+			DirectX12IndexBuffer(ulong* indices, const uint count);
+			~DirectX12IndexBuffer() override;
 
-			static inline std::shared_ptr<IndexBuffer> CreateDirectXIndexBuffer(ulong* indices, const uint count) { return std::make_shared<DirectXIndexBuffer>(indices, count); }
+			static inline std::shared_ptr<IndexBuffer> CreateDirectX12IndexBuffer(ulong* indices, const uint count) { return std::make_shared<DirectX12IndexBuffer>(indices, count); }
 
 			virtual void SetBuffer() override;
 

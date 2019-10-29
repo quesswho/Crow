@@ -21,7 +21,7 @@ namespace Crow {
 		Texture* m_BatchTexture;
 		std::vector<VertexData> m_Batch;
 		int m_Size;
-		std::vector<int> m_BatchIndices;
+		std::vector<uint> m_BatchIndices;
 		int m_Count;
 	public:
 

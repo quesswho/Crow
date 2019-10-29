@@ -46,6 +46,7 @@
     <IntDir>..\bin\Debug-windows-x86_64\GameProject\intermediates\</IntDir>
     <TargetName>GameProject</TargetName>
     <TargetExt>.exe</TargetExt>
+    <IncludePath>..\Crow\lib\spdlog\include;..\Crow\lib\glfw\include;..\Crow\lib\glad\include;..\Crow\lib\glm;..\Crow\lib\stb_image;..\Crow\lib\d3dx12;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -53,13 +54,14 @@
     <IntDir>..\bin\Release-windows-x86_64\GameProject\intermediates\</IntDir>
     <TargetName>GameProject</TargetName>
     <TargetExt>.exe</TargetExt>
+    <IncludePath>..\Crow\lib\spdlog\include;..\Crow\lib\glfw\include;..\Crow\lib\glad\include;..\Crow\lib\glm;..\Crow\lib\stb_image;..\Crow\lib\d3dx12;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>CR_PLATFORM_WINDOWS;CR_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Crow\src;..\Crow\lib\spdlog\include;..\Crow\lib\glfw\include;..\Crow\lib\glad\include;..\Crow\lib\glm;..\Crow\lib\stb_image;..\Crow\lib\d3dx12;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Crow\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -77,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>CR_PLATFORM_WINDOWS;CR_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Crow\src;..\Crow\lib\spdlog\include;..\Crow\lib\glfw\include;..\Crow\lib\glad\include;..\Crow\lib\glm;..\Crow\lib\stb_image;..\Crow\lib\d3dx12;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Crow\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>

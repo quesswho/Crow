@@ -2,33 +2,21 @@
 
 #include "Crow/Graphics/Shader.h"
 
-#include "DirectXRenderAPI.h"
+#include "DirectX12RenderAPI.h"
 
 namespace Crow {
 	namespace Platform {
 
-		class DirectXShader : public Shader {
+		class DirectX12Shader : public Shader {
 
 		private:
+			struct DX12ConstantBuffer {
 
-			struct IDXSingleFieldUniform {};
-
-			template<typename T>
-			struct DXSingleFieldUniform : public IDXSingleFieldUniform {
-				DXSingleFieldUniform(T data)
-					: m_Data(data)
+				DX12ConstantBuffer(int size, int reg)
+					: m_Size(size), m_Reg(reg), m_GPUAddress(0), m_ConstantBufferHandle(), m_ConstantBufferUploadHeap(0)
 				{}
 
-				T m_Data;
-			};
-
-			struct DXConstantBuffer {
-
-				DXConstantBuffer(int size, int reg)
-					: m_Size(size), m_Reg(reg)
-				{}
-
-				~DXConstantBuffer()
+				~DX12ConstantBuffer()
 				{
 					m_ConstantBufferUploadHeap->Release();
 					delete m_GPUAddress;
@@ -54,17 +42,17 @@ namespace Crow {
 			const char* m_Name;
 			int m_ConstantBufferShaderType; // Vertex 1, Fragment 2, Both 3
 
-			std::vector<DXConstantBuffer*> m_UniformConstantBuffers;
+			std::vector<DX12ConstantBuffer*> m_UniformConstantBuffers;
 			std::unordered_map<std::string, int> m_ConstantBufferLocations;	// name, index
 			
 		public:
-			explicit DirectXShader(const char* name, const char* path, const BufferProperties& shaderInput); // File path
-			explicit DirectXShader(const char* name, std::string& source, const BufferProperties& shaderInput); // Shader code
+			explicit DirectX12Shader(const char* name, const char* path, const BufferProperties& shaderInput); // File path
+			explicit DirectX12Shader(const char* name, std::string& source, const BufferProperties& shaderInput); // Shader code
 
-			~DirectXShader() override;
+			~DirectX12Shader() override;
 
-			static Shader* CreateDirectXShaderFromPath(const char* name, const char* path, const BufferProperties& shaderInput) { return new DirectXShader(name, path, shaderInput); }
-			static Shader* CreateDirectXShaderFromSource(const char* name, std::string& source, const BufferProperties& shaderInput) { return new DirectXShader(name, source, shaderInput); }
+			static Shader* CreateDirectX12ShaderFromPath(const char* name, const char* path, const BufferProperties& shaderInput) { return new DirectX12Shader(name, path, shaderInput); }
+			static Shader* CreateDirectX12ShaderFromSource(const char* name, std::string& source, const BufferProperties& shaderInput) { return new DirectX12Shader(name, source, shaderInput); }
 
 			virtual void Bind() const;
 			virtual void Unbind() const;
@@ -89,7 +77,7 @@ namespace Crow {
 
 			D3D12_SHADER_BYTECODE GetVertexShader() { return m_CompiledVertexShader; }
 			D3D12_SHADER_BYTECODE GetFragmentShader() { return m_CompiledFragmentShader; }
-			int GetCBufferCount() const { return m_UniformConstantBuffers.size(); }
+			size_t GetCBufferCount() const { return m_UniformConstantBuffers.size(); }
 
 		private:
 			DXGI_FORMAT ConvertToDXGIFormat(int componentCount);

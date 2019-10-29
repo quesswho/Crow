@@ -7,19 +7,19 @@
 #include <d3dcompiler.h>
 #include <d3dx12.h>
 
-#include "DirectXShader.h"
-#include "DirectXShaderFactory.h"
-#include "DirectXBuffer.h"
+#include "DirectX12Shader.h"
+#include "DirectX12ShaderFactory.h"
+#include "DirectX12Buffer.h"
 
 namespace Crow {
 	namespace Platform {
 
-		class DirectXRenderAPI : public AbstractRenderAPI {
+		class DirectX12RenderAPI : public AbstractRenderAPI {
 		public:
-			DirectXRenderAPI();
-			virtual ~DirectXRenderAPI() override;
+			DirectX12RenderAPI();
+			virtual ~DirectX12RenderAPI() override;
 
-			static AbstractRenderAPI* CreateDirectXRenderAPI() { return new DirectXRenderAPI(); }
+			static AbstractRenderAPI* CreateDirectX12RenderAPI() { return new DirectX12RenderAPI(); }
 
 			virtual bool InitAPI(const WindowProperties& winprop, void* hWnd) const override;
 			virtual void EndInit() const override;
@@ -63,7 +63,7 @@ namespace Crow {
 		private:
 			static std::vector<ID3D12PipelineState*> s_PSOs;
 			static const uint s_FrameBufferCount = 2;
-			DirectXShaderFactory* m_ShaderFactory;
+			DirectX12ShaderFactory* m_ShaderFactory;
 
 			static ID3D12Device* s_Device;
 			static IDXGISwapChain3* s_SwapChain;

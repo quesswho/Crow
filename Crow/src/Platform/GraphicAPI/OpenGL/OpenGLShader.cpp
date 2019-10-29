@@ -104,21 +104,21 @@ namespace Crow {
 			{
 				if (line == "#shader fragment")
 				{
-					type = FRAGMENT;
+					type = ShaderType::FRAGMENT;
 					continue;
 				}
 
 				if (line == "#shader vertex")
 				{
-					type = VERTEX;
+					type = ShaderType::VERTEX;
 					continue;
 				}
 
 				switch (type) {
-				case FRAGMENT:
+				case ShaderType::FRAGMENT:
 					stringFragmentSource.append(line).append("\n");
 					break;
-				case VERTEX:
+				case ShaderType::VERTEX:
 					stringVertexSource.append(line).append("\n");
 					break;
 				}
@@ -154,8 +154,10 @@ namespace Crow {
 					line.erase(std::remove(line.begin(), line.end(), '{'), line.end());
 					while (line.back() == ' ') line = line.substr(0, line.size() - 1); // Remove space at end
 
-					uniformStructName = line.substr(strlen("struct") + 1, line.length());
+					//uniformStructName = line.substr(strlen("struct") + 1, line.length());
 					
+					uniformStructName = std::string_view(line.c_str() + strlen("struct") + 1, line.length() - strlen("struct") - 1);
+
 					std::vector<TempUniform> uniforms; // Name, size
 
 					while (std::getline(sourceStream, line) && !(line._Starts_with("}")) && writing)
@@ -174,14 +176,14 @@ namespace Crow {
 							line.replace(line.begin(), line.begin() + 1, "");  // Get rid of '{'
 
 						
-						size += StringToUniformTypeSize(line.substr(0, line.find(" ")));
-
-						uniforms.push_back(TempUniform(line.substr(line.find(" ") + 1, line.size()), StringToUniformType(line.substr(0, line.find(" ")))));
+						size += StringToUniformTypeSize(std::string_view(line.c_str(), line.find(" ")));
+						
+						uniforms.push_back(TempUniform(line.substr(line.find(" ") + 1, line.size()), StringToUniformType(std::string_view(line.c_str(), line.find(" ")))));
 					}
 					writing = false;		// End of cbuffer
 					structs.push_back(TempShaderUniformStruct(uniformStructName, uniforms, size));
 					size = 0;
-				} 
+				}
 				else if (line._Starts_with("uniform"))
 				{
 					while (line.back() == ' ') line = line.substr(0, line.size() - 1); // Remove space at end
@@ -194,7 +196,7 @@ namespace Crow {
 
 					for (auto& structUni : structs)
 					{
-						if (line._Starts_with(std::string(structUni.m_Name)))
+						if (line._Starts_with(structUni.m_Name))
 						{
 							std::vector<Uniform> newUniforms;
 							for (auto& uni : structUni.m_Uniforms)
@@ -290,35 +292,35 @@ namespace Crow {
 				{
 					switch (uni.m_Type)
 					{
-					case INT:
+					case UniformType::INT:
 						glUniform1iv(uni.m_Location, 1, (const GLint*)bytes);
 						bytes += 4;
 						break;
-					case FLOAT:
+					case UniformType::FLOAT:
 						glUniform1fv(uni.m_Location, 1, (const GLfloat*)bytes);
 						bytes += 4;
 						break;
-					case FLOAT2:
+					case UniformType::FLOAT2:
 						glUniform2fv(uni.m_Location, 1, (const GLfloat*)bytes);
 						bytes += 8;
 						break;
-					case FLOAT3:
+					case UniformType::FLOAT3:
 						glUniform3fv(uni.m_Location, 1, (const GLfloat*)bytes);
 						bytes += 12;
 						break;
-					case FLOAT4:
+					case UniformType::FLOAT4:
 						glUniform4fv(uni.m_Location, 1, (const GLfloat*)bytes);
 						bytes += 16;
 						break;
-					case MAT2:
+					case UniformType::MAT2:
 						glUniformMatrix2fv(uni.m_Location, 1, GL_FALSE, (const GLfloat*)bytes);
 						bytes += 16;
 						break;
-					case MAT3:
+					case UniformType::MAT3:
 						glUniformMatrix3fv(uni.m_Location, 1, GL_FALSE, (const GLfloat*)bytes);
 						bytes += 36;
 						break;
-					case MAT4:
+					case UniformType::MAT4:
 						glUniformMatrix4fv(uni.m_Location, 1, GL_FALSE, (const GLfloat*)bytes);
 						bytes += 64;
 						break;
@@ -331,7 +333,7 @@ namespace Crow {
 			}
 		}
 
-		int OpenGLShader::StringToUniformTypeSize(std::string& type)
+		int OpenGLShader::StringToUniformTypeSize(std::string_view type)
 		{
 			if (type == "float" 
 				|| type == "int")	return 4;
@@ -344,7 +346,7 @@ namespace Crow {
 			return -1;
 		}
 
-		Shader::UniformType OpenGLShader::StringToUniformType(std::string& type)
+		Shader::UniformType OpenGLShader::StringToUniformType(std::string_view type)
 		{
 			if (type == "int")		return UniformType::INT;
 			if (type == "float")	return UniformType::FLOAT;
@@ -361,20 +363,19 @@ namespace Crow {
 		{
 			switch (type)
 			{
-				case FLOAT:
-				case INT:
+				case UniformType::FLOAT:
+				case UniformType::INT:
 					return 4;
-				case FLOAT2:
+				case UniformType::FLOAT2:
 					return 2 * 4;
-				case FLOAT3:
+				case UniformType::FLOAT3:
 					return 3 * 4;
-				case FLOAT4:
-					return 4 * 4;
-				case MAT2:
+				case UniformType::FLOAT4: // 4 * 4 = 2 * 2 * 4
+				case UniformType::MAT2:
 					return 2 * 2 * 4;
-				case MAT3:
+				case UniformType::MAT3:
 					return 3 * 3 * 4;
-				case MAT4:
+				case UniformType::MAT4:
 					return 4 * 4 * 4;
 				default:
 					return -1;

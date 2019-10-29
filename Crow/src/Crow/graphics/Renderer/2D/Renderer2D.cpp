@@ -48,7 +48,7 @@ namespace Crow {
 
 		for (uint i = 0; i < renderable->m_Count; i++)
 		{
-			m_BatchIndices.push_back(renderable->m_Indices[i] + m_Batch.size());
+			m_BatchIndices.push_back(renderable->m_Indices[i] + (uint) m_Batch.size());
 		}
 		m_Count += renderable->m_Count;
 

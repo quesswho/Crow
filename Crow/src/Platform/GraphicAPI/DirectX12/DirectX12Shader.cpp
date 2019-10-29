@@ -1,26 +1,25 @@
-#include "DirectXShader.h"
+#include "DirectX12Shader.h"
 #include "Crow/FileUtils.h"
 
 #include <glad/glad.h>
 #include <sstream>
-//#include <regex>
 
 namespace Crow {
 	namespace Platform {
 
-		DirectXShader::DirectXShader(const char* name, const char* path, const BufferProperties& shaderInput)
+		DirectX12Shader::DirectX12Shader(const char* name, const char* path, const BufferProperties& shaderInput)
 			: m_Name(name), m_ShaderInput(shaderInput), m_ConstantBufferShaderType(0)
 		{
 			Init(FileUtils::ReadFile(path));
 		}
 
-		DirectXShader::DirectXShader(const char* name, std::string& source, const BufferProperties& shaderInput)
+		DirectX12Shader::DirectX12Shader(const char* name, std::string& source, const BufferProperties& shaderInput)
 			: m_Name(name), m_ShaderInput(shaderInput), m_ConstantBufferShaderType(0)
 		{
 			Init(source);
 		}
 
-		DirectXShader::~DirectXShader()
+		DirectX12Shader::~DirectX12Shader()
 		{
 			m_FragmentShader->Release();
 			m_VertexShader->Release();
@@ -32,7 +31,7 @@ namespace Crow {
 		}
 
 
-		void DirectXShader::Init(std::string& fileSource)
+		void DirectX12Shader::Init(std::string& fileSource)
 		{
 			ShaderType type = ShaderType::UNKNOWN;
 
@@ -54,21 +53,21 @@ namespace Crow {
 
 				if (line == "#shader fragment")
 				{
-					type = FRAGMENT;
+					type = ShaderType::FRAGMENT;
 					continue;
 				}
 
 				if (line == "#shader vertex")
 				{
-					type = VERTEX;
+					type = ShaderType::VERTEX;
 					continue;
 				}
 
 				switch (type) {
-				case FRAGMENT:
+				case ShaderType::FRAGMENT:
 					stringFragmentSource.append(line).append("\n");
 					break;
-				case VERTEX:
+				case ShaderType::VERTEX:
 					stringVertexSource.append(line).append("\n");
 					break;
 				}
@@ -83,21 +82,21 @@ namespace Crow {
 			FindConstantBuffer(stringVertexSource, stringFragmentSource);
 			CompileShader(stringVertexSource.c_str(), stringFragmentSource.c_str());
 			InitPSO();
-			DirectXRenderAPI::MapUniform(this);
+			DirectX12RenderAPI::MapUniform(this);
 		}
 
 
-		void DirectXShader::ReloadFromPath(const char* path)
+		void DirectX12Shader::ReloadFromPath(const char* path)
 		{
 			Init(FileUtils::ReadFile(path));
 		}
 
-		void DirectXShader::ReloadFromSource(std::string& source)
+		void DirectX12Shader::ReloadFromSource(std::string& source)
 		{
 			Init(source);
 		}
 
-		void DirectXShader::FindConstantBuffer(std::string& vertex, std::string& fragment)
+		void DirectX12Shader::FindConstantBuffer(std::string& vertex, std::string& fragment)
 		{
 			bool writing = false;
 			UniformType type = UniformType::UNKNOWN;
@@ -115,21 +114,20 @@ namespace Crow {
 				if (line._Starts_with("cbuffer"))
 				{
 					writing = true;
-					reg = line.find(':'); // Using reg as a temporary value before setting register value
+					reg = (int)line.find(':'); // Using reg as a temporary value before setting register value
 					if (reg != std::string::npos)
 					{
 						cbuffername = line.substr(strlen("cbuffer") + 1, reg - strlen("cbuffer") - 2);
-						reg = line.find("register(b", reg);
+						reg = (int)line.find("register(b", reg);
 						if (reg != std::string::npos)
 						{
-							reg = std::stoi(line.substr((reg + 10), line.size() - reg - 11)); // Convert to int between "register(b" and ')'
+							reg = std::stoi(line.substr((((size_t)reg + 10)), line.size() - reg - 11)); // Convert to int between "register(b" and ')'
 							size = 0;
 						}
 					}
 
 					std::unordered_map<UniformType, std::string> uniforms;
 
-					//DirectXConstantBuffer* buffer = new DirectXConstantBuffer(name, reg);
 					while (std::getline(source, line) && !(line._Starts_with("}")) && writing)
 					{
 						line.erase(std::remove(line.begin(), line.end(), '\t'), line.end()); // Remove tab space
@@ -154,7 +152,7 @@ namespace Crow {
 					writing = false;		// End of cbuffer
 
 					m_ConstantBufferLocations.emplace(cbuffername, m_ConstantBufferLocations.size());
-					m_UniformConstantBuffers.push_back(new DXConstantBuffer(size, reg));
+					m_UniformConstantBuffers.push_back(new DX12ConstantBuffer(size, reg));
 
 
 					// Performance
@@ -175,21 +173,20 @@ namespace Crow {
 				if (line._Starts_with("cbuffer"))
 				{
 					writing = true;
-					reg = line.find(':'); // Using reg as a temporary value before setting register value
+					reg = (int)line.find(':'); // Using reg as a temporary value before setting register value
 					if (reg != std::string::npos)
 					{
 						cbuffername = line.substr(strlen("cbuffer") + 1, reg - strlen("cbuffer") - 2);
-						reg = line.find("register(b", reg);
+						reg = (int)line.find("register(b", reg);
 						if (reg != std::string::npos)
 						{
-							reg = std::stoi(line.substr((reg + 10), line.size() - reg - 11)); // Convert to int between "register(b" and ')'
+							reg = std::stoi(line.substr((size_t)reg + 10, line.size() - reg - 11)); // Convert to int between "register(b" and ')'
 							size = 0;
 						}
 					}
 
 					std::unordered_map<UniformType, std::string> uniforms;
 
-					//DirectXConstantBuffer* buffer = new DirectXConstantBuffer(name, reg);
 					while (std::getline(source, line) && !(line._Starts_with("}")) && writing)
 					{
 						line.erase(std::remove(line.begin(), line.end(), '\t'), line.end()); // Remove tab space
@@ -214,7 +211,7 @@ namespace Crow {
 					writing = false;		// End of cbuffer
 
 					m_ConstantBufferLocations.emplace(cbuffername, m_ConstantBufferLocations.size());
-					m_UniformConstantBuffers.push_back(new DXConstantBuffer(size, reg));
+					m_UniformConstantBuffers.push_back(new DX12ConstantBuffer(size, reg));
 
 
 					// Performance
@@ -229,7 +226,7 @@ namespace Crow {
 		}
 
 
-		void DirectXShader::CompileShader(const char* vertex, const char* fragment)
+		void DirectX12Shader::CompileShader(const char* vertex, const char* fragment)
 		{
 			HRESULT hr;
 			ID3DBlob* errorBuff;
@@ -292,15 +289,15 @@ namespace Crow {
 			}
 		}
 
-		void DirectXShader::CreateConstantBuffers()
+		void DirectX12Shader::CreateConstantBuffers()
 		{
-			const UINT cbvSrvDescriptorSize = DirectXRenderAPI::GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-			CD3DX12_CPU_DESCRIPTOR_HANDLE cbvSrvCpuHandle(DirectXRenderAPI::s_MainDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
-			CD3DX12_GPU_DESCRIPTOR_HANDLE cbvSrvGpuHandle(DirectXRenderAPI::s_MainDescriptorHeap->GetGPUDescriptorHandleForHeapStart());
+			const UINT cbvSrvDescriptorSize = DirectX12RenderAPI::GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+			CD3DX12_CPU_DESCRIPTOR_HANDLE cbvSrvCpuHandle(DirectX12RenderAPI::s_MainDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
+			CD3DX12_GPU_DESCRIPTOR_HANDLE cbvSrvGpuHandle(DirectX12RenderAPI::s_MainDescriptorHeap->GetGPUDescriptorHandleForHeapStart());
 			HRESULT hr;
 			for (int i = 0; i < m_ConstantBufferLocations.size(); i++)
 			{
-				hr = DirectXRenderAPI::GetDevice()->CreateCommittedResource(
+				hr = DirectX12RenderAPI::GetDevice()->CreateCommittedResource(
 					&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 					D3D12_HEAP_FLAG_NONE,
 					&CD3DX12_RESOURCE_DESC::Buffer(1024 * 64),	// Temporary
@@ -319,7 +316,7 @@ namespace Crow {
 				D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
 				cbvDesc.BufferLocation = m_UniformConstantBuffers[i]->m_ConstantBufferUploadHeap->GetGPUVirtualAddress();
 				cbvDesc.SizeInBytes = (m_UniformConstantBuffers[i]->m_Size + 255) & ~255;    // CB size is required to be 256-byte aligned.
-				DirectXRenderAPI::GetDevice()->CreateConstantBufferView(&cbvDesc, cbvSrvCpuHandle);
+				DirectX12RenderAPI::GetDevice()->CreateConstantBufferView(&cbvDesc, cbvSrvCpuHandle);
 
 				m_UniformConstantBuffers[i]->m_ConstantBufferHandle = cbvSrvGpuHandle;
 
@@ -332,18 +329,18 @@ namespace Crow {
 			}
 		}
 
-		void DirectXShader::InitPSO()
+		void DirectX12Shader::InitPSO()
 		{
 			HRESULT hr;
 
-			const int cbCount = m_UniformConstantBuffers.size();
+			const uint cbCount = (uint)m_UniformConstantBuffers.size();
 
 			CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc;
 
 			if (cbCount != 0)
 			{
 				D3D12_DESCRIPTOR_RANGE* descriptorTableRanges = new D3D12_DESCRIPTOR_RANGE[cbCount];
-				for (int i = 0; i < cbCount; i++)
+				for (uint i = 0; i < cbCount; i++)
 				{
 					descriptorTableRanges[i].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 					descriptorTableRanges[i].NumDescriptors = 1;
@@ -383,7 +380,7 @@ namespace Crow {
 				CR_CORE_ERROR("Failed to serialize root signature!");
 				return;
 			}
-			hr = DirectXRenderAPI::GetDevice()->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&m_RootSignature));
+			hr = DirectX12RenderAPI::GetDevice()->CreateRootSignature(0, signature->GetBufferPointer(), signature->GetBufferSize(), IID_PPV_ARGS(&m_RootSignature));
 			if (hr < 0)
 			{
 				CR_CORE_ERROR("Failed to create root signature!");
@@ -392,10 +389,10 @@ namespace Crow {
 
 			if (m_ShaderInput.m_Stride > 0)
 			{
-				const int size = m_ShaderInput.m_Elements.size();
+				const uint size = (uint)m_ShaderInput.m_Elements.size();
 				D3D12_INPUT_ELEMENT_DESC* inputLayout = new D3D12_INPUT_ELEMENT_DESC[size];
 
-				for (int i = 0; i < size; i++)
+				for (uint i = 0; i < size; i++)
 				{
 					BufferElement element = m_ShaderInput.m_Elements[i];
 					inputLayout[i] = { element.GetName(), 0, ConvertToDXGIFormat(element.GetComponentCount()), 0, (uint)element.GetOffset() * 4, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 };
@@ -412,40 +409,40 @@ namespace Crow {
 				psoDesc.PS = m_CompiledFragmentShader;
 				psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 				psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
-				psoDesc.SampleDesc = DirectXRenderAPI::GetSampleDescription();
+				psoDesc.SampleDesc = DirectX12RenderAPI::GetSampleDescription();
 				psoDesc.SampleMask = 0xffffffff;
 				psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 				psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 				psoDesc.NumRenderTargets = 1;
-				psoDesc.DepthStencilState = DirectXRenderAPI::GetDepthStencilDescription();
+				psoDesc.DepthStencilState = DirectX12RenderAPI::GetDepthStencilDescription();
 
-				hr = DirectXRenderAPI::GetDevice()->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_PSO));
+				hr = DirectX12RenderAPI::GetDevice()->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_PSO));
 				if (hr < 0)
 				{
 					CR_CORE_ERROR("Failed to create graphics pipeline state!");
 				}
-				DirectXRenderAPI::AddPipeline(m_PSO);
+				DirectX12RenderAPI::AddPipeline(m_PSO);
 			}
 			else {
 				CR_CORE_ERROR("Vertex buffer is missing Properties!");
 			}
 		}
 
-		void DirectXShader::Bind() const
+		void DirectX12Shader::Bind() const
 		{
-			DirectXRenderAPI::GetCommandList()->SetGraphicsRootSignature(m_RootSignature);
-			DirectXRenderAPI::GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+			DirectX12RenderAPI::GetCommandList()->SetGraphicsRootSignature(m_RootSignature);
+			DirectX12RenderAPI::GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-			for(DXConstantBuffer* buffer : m_UniformConstantBuffers)
-				DirectXRenderAPI::GetCommandList()->SetGraphicsRootDescriptorTable(buffer->m_Reg, buffer->m_ConstantBufferHandle);
+			for(DX12ConstantBuffer* buffer : m_UniformConstantBuffers)
+				DirectX12RenderAPI::GetCommandList()->SetGraphicsRootDescriptorTable(buffer->m_Reg, buffer->m_ConstantBufferHandle);
 
 		}
 
-		void DirectXShader::Unbind() const
+		void DirectX12Shader::Unbind() const
 		{}
 
 
-		int DirectXShader::GetLocation(const char* location)
+		int DirectX12Shader::GetLocation(const char* location)
 		{
 #ifdef CR_RELEASE
 			return m_ConstantBufferLocations.at(location);
@@ -460,48 +457,48 @@ namespace Crow {
 #endif
 		}
 
-		void DirectXShader::SetUniformValue(const char* location, int value)
+		void DirectX12Shader::SetUniformValue(const char* location, int value)
 		{
 			memcpy(m_UniformConstantBuffers[GetLocation(location)]->m_GPUAddress, &value, sizeof(value));
 		}
 
-		void DirectXShader::SetUniformValue(const char* location, float value)
+		void DirectX12Shader::SetUniformValue(const char* location, float value)
 		{
 			memcpy(m_UniformConstantBuffers[GetLocation(location)]->m_GPUAddress, &value, sizeof(value));
 		}
-		void DirectXShader::SetUniformValue(const char* location, glm::vec2& value)
+		void DirectX12Shader::SetUniformValue(const char* location, glm::vec2& value)
 		{
 			memcpy(m_UniformConstantBuffers[GetLocation(location)]->m_GPUAddress, &value, sizeof(value));
 		}
-		void DirectXShader::SetUniformValue(const char* location, glm::vec3& value)
+		void DirectX12Shader::SetUniformValue(const char* location, glm::vec3& value)
 		{
 			memcpy(m_UniformConstantBuffers[GetLocation(location)]->m_GPUAddress, &value, sizeof(value));
 		}
-		void DirectXShader::SetUniformValue(const char* location, glm::vec4& value)
+		void DirectX12Shader::SetUniformValue(const char* location, glm::vec4& value)
 		{
 			memcpy(m_UniformConstantBuffers[GetLocation(location)]->m_GPUAddress, &value, sizeof(value));
 		}
-		void DirectXShader::SetUniformValue(const char* location, const glm::mat2x2& value)
+		void DirectX12Shader::SetUniformValue(const char* location, const glm::mat2x2& value)
 		{
 			memcpy(m_UniformConstantBuffers[GetLocation(location)]->m_GPUAddress, &value, sizeof(value));
 		}
-		void DirectXShader::SetUniformValue(const char* location, const glm::mat3x3& value)
-		{
-			memcpy(m_UniformConstantBuffers[GetLocation(location)]->m_GPUAddress, &value, sizeof(value));
-		}
-
-		void DirectXShader::SetUniformValue(const char* location, const glm::mat4x4& value)
+		void DirectX12Shader::SetUniformValue(const char* location, const glm::mat3x3& value)
 		{
 			memcpy(m_UniformConstantBuffers[GetLocation(location)]->m_GPUAddress, &value, sizeof(value));
 		}
 
-		void DirectXShader::SetUniformStruct(const char* location, void* data)
+		void DirectX12Shader::SetUniformValue(const char* location, const glm::mat4x4& value)
 		{
-			DXConstantBuffer* cb = m_UniformConstantBuffers[GetLocation(location)];
+			memcpy(m_UniformConstantBuffers[GetLocation(location)]->m_GPUAddress, &value, sizeof(value));
+		}
+
+		void DirectX12Shader::SetUniformStruct(const char* location, void* data)
+		{
+			DX12ConstantBuffer* cb = m_UniformConstantBuffers[GetLocation(location)];
 			memcpy(cb->m_GPUAddress, &data, cb->m_Size);
 		}
 
-		DXGI_FORMAT DirectXShader::ConvertToDXGIFormat(int componentCount)
+		DXGI_FORMAT DirectX12Shader::ConvertToDXGIFormat(int componentCount)
 		{
 			switch (componentCount) // Not in sequential order because they are sorted in a way that should return the most common one first
 			{
@@ -518,7 +515,7 @@ namespace Crow {
 			}
 		}
 
-		DirectXShader::UniformType DirectXShader::StringToUniformType(std::string& string)
+		DirectX12Shader::UniformType DirectX12Shader::StringToUniformType(std::string& string)
 		{
 			if (string == "int32")     return UniformType::INT;
 			if (string == "float")     return UniformType::FLOAT;
@@ -527,21 +524,22 @@ namespace Crow {
 			if (string == "float4")    return UniformType::FLOAT4;
 			if (string == "float3x3")  return UniformType::MAT3;
 			if (string == "float4x4")  return UniformType::MAT4;
-			return UNKNOWN;
+			return UniformType::UNKNOWN;
 		}
 
-		uint DirectXShader::UniformTypeToSize(UniformType type)
+		uint DirectX12Shader::UniformTypeToSize(UniformType type)
 		{
 			switch (type)
 			{
-				case UniformType::INT:     return 4;
-				case UniformType::FLOAT:   return 4;
-				case UniformType::FLOAT2:  return 4 * 2;
-				case UniformType::FLOAT3:  return 4 * 3;
-				case UniformType::FLOAT4:  return 4 * 4;
-				case UniformType::MAT3:    return 4 * 3 * 3;
-				case UniformType::MAT4:    return 4 * 4 * 4;
-				default: return UNKNOWN;
+				case UniformType::INT:      return 4;
+				case UniformType::FLOAT:    return 4;
+				case UniformType::FLOAT2:   return 4 * 2;
+				case UniformType::FLOAT3:   return 4 * 3;
+				case UniformType::FLOAT4:
+				case UniformType::MAT2:		return 2 * 2 * 4;
+				case UniformType::MAT3:     return 4 * 3 * 3;
+				case UniformType::MAT4:     return 4 * 4 * 4;
+				default: return -1;
 			}
 		}
 	}

@@ -1,15 +1,15 @@
-#include "DirectXBuffer.h"
+#include "DirectX12Buffer.h"
 
 namespace Crow {
 	namespace Platform {
 
 
-		DirectXVertexBuffer::DirectXVertexBuffer(float* vertices, const uint size, const BufferProperties& prop)
+		DirectX12VertexBuffer::DirectX12VertexBuffer(float* vertices, const uint size, const BufferProperties& prop)
 			: m_BufferProperties(prop), m_Size(size)
 		{
 			m_VertexBufferView = {};
 
-			DirectXRenderAPI::GetDevice()->CreateCommittedResource(
+			DirectX12RenderAPI::GetDevice()->CreateCommittedResource(
 				&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 				D3D12_HEAP_FLAG_NONE,
 				&CD3DX12_RESOURCE_DESC::Buffer(size),
@@ -20,7 +20,7 @@ namespace Crow {
 			m_VertexBuffer->SetName(L"Crow: Vertex Buffer resource heap"); // Debug name
 
 			ID3D12Resource* vertexBufferUploadHeap;
-			DirectXRenderAPI::GetDevice()->CreateCommittedResource(
+			DirectX12RenderAPI::GetDevice()->CreateCommittedResource(
 				&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 				D3D12_HEAP_FLAG_NONE,
 				&CD3DX12_RESOURCE_DESC::Buffer(m_Size),
@@ -36,40 +36,40 @@ namespace Crow {
 			vertexData.RowPitch = m_Size;
 			vertexData.SlicePitch = m_Size;
 
-			UpdateSubresources(DirectXRenderAPI::GetCommandList(), m_VertexBuffer, vertexBufferUploadHeap, 0, 0, 1, &vertexData);
-			DirectXRenderAPI::GetCommandList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_VertexBuffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
+			UpdateSubresources(DirectX12RenderAPI::GetCommandList(), m_VertexBuffer, vertexBufferUploadHeap, 0, 0, 1, &vertexData);
+			DirectX12RenderAPI::GetCommandList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_VertexBuffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER));
 
-			DirectXRenderAPI::Upload(this);
+			DirectX12RenderAPI::Upload(this);
 		}
 
-		DirectXVertexBuffer::~DirectXVertexBuffer()
+		DirectX12VertexBuffer::~DirectX12VertexBuffer()
 		{
 			m_VertexBuffer->Release();
 		}
 
-		void DirectXVertexBuffer::SetBuffer()
+		void DirectX12VertexBuffer::SetBuffer()
 		{
 			m_VertexBufferView.BufferLocation = m_VertexBuffer->GetGPUVirtualAddress();
 			m_VertexBufferView.StrideInBytes = m_BufferProperties.m_Stride * 4;
 			m_VertexBufferView.SizeInBytes = m_Size;
 		}
 
-		void DirectXVertexBuffer::Bind() const
+		void DirectX12VertexBuffer::Bind() const
 		{
-			DirectXRenderAPI::GetCommandList()->IASetVertexBuffers(0, 1, &m_VertexBufferView);
+			DirectX12RenderAPI::GetCommandList()->IASetVertexBuffers(0, 1, &m_VertexBufferView);
 		}
 
-		void DirectXVertexBuffer::Unbind() const
+		void DirectX12VertexBuffer::Unbind() const
 		{}
 
 		/////////////
 
-		DirectXIndexBuffer::DirectXIndexBuffer(ulong* indices, const uint count)
+		DirectX12IndexBuffer::DirectX12IndexBuffer(ulong* indices, const uint count)
 			: m_Count(count), m_Size(count * sizeof(uint))
 		{
 			m_IndexBufferView = {};
 
-			DirectXRenderAPI::GetDevice()->CreateCommittedResource(
+			DirectX12RenderAPI::GetDevice()->CreateCommittedResource(
 				&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 				D3D12_HEAP_FLAG_NONE,
 				&CD3DX12_RESOURCE_DESC::Buffer(m_Size),
@@ -80,7 +80,7 @@ namespace Crow {
 			m_IndexBuffer->SetName(L"Crow: Index Buffer resource heap");
 
 			ID3D12Resource* indexBufferUploadHeap;
-			DirectXRenderAPI::GetDevice()->CreateCommittedResource(
+			DirectX12RenderAPI::GetDevice()->CreateCommittedResource(
 				&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 				D3D12_HEAP_FLAG_NONE,
 				&CD3DX12_RESOURCE_DESC::Buffer(m_Size),
@@ -95,30 +95,30 @@ namespace Crow {
 			indexData.RowPitch = m_Size;
 			indexData.SlicePitch = m_Size;
 
-			UpdateSubresources(DirectXRenderAPI::GetCommandList(), m_IndexBuffer, indexBufferUploadHeap, 0, 0, 1, &indexData);
-			DirectXRenderAPI::GetCommandList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_IndexBuffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_INDEX_BUFFER));
+			UpdateSubresources(DirectX12RenderAPI::GetCommandList(), m_IndexBuffer, indexBufferUploadHeap, 0, 0, 1, &indexData);
+			DirectX12RenderAPI::GetCommandList()->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_IndexBuffer, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_INDEX_BUFFER));
 
-			DirectXRenderAPI::Upload(this);
+			DirectX12RenderAPI::Upload(this);
 		}
 
-		DirectXIndexBuffer::~DirectXIndexBuffer()
+		DirectX12IndexBuffer::~DirectX12IndexBuffer()
 		{
 			m_IndexBuffer->Release();
 		}
 
-		void DirectXIndexBuffer::SetBuffer()
+		void DirectX12IndexBuffer::SetBuffer()
 		{
 			m_IndexBufferView.BufferLocation = m_IndexBuffer->GetGPUVirtualAddress();
 			m_IndexBufferView.Format = DXGI_FORMAT_R32_UINT;
 			m_IndexBufferView.SizeInBytes = m_Size;
 		}
 
-		void DirectXIndexBuffer::Bind() const
+		void DirectX12IndexBuffer::Bind() const
 		{
-			DirectXRenderAPI::GetCommandList()->IASetIndexBuffer(&m_IndexBufferView);
+			DirectX12RenderAPI::GetCommandList()->IASetIndexBuffer(&m_IndexBufferView);
 		}
 
-		void DirectXIndexBuffer::Unbind() const
+		void DirectX12IndexBuffer::Unbind() const
 		{}
 
 	}

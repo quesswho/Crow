@@ -10,7 +10,7 @@ using namespace Crow;
 	Layer2D::Layer2D()
 		: m_Camera(new OrthographicCamera(glm::vec2(0.0f, 0.0f), 2.0f, 2.0f, 3.0f, 3.0f))
 	{
-		Application::GetAPI()->ClearColor(0.5, 0.7, 0.5);
+		Application::GetAPI()->ClearColor(0.5f, 0.7f, 0.5f);
 		Application::GetAPI()->EnableDepthTest();
 
 		//m_Renderer = std::make_unique<Renderer2D>();
@@ -27,7 +27,7 @@ using namespace Crow;
 			 0.5f, -0.5f, 0.1f, 0.0f, 0.1f, 1.0f, 1.0f,
 			-0.5f, -0.5f, 0.1f, 0.0f, 0.1f, 1.0f, 1.0f,
 			 0.5f,  0.5f, 0.1f, 0.0f, 0.1f, 1.0f, 1.0f,
-
+			 
 			 // Further away (green)
 			-0.75f, 0.75f, 0.2f, 0.0f, 1.0f, 0.0f, 1.0f,
 			 0.0f,  0.0f,  0.2f, 0.0f, 1.0f, 0.0f, 1.0f,

@@ -10,14 +10,14 @@ namespace Crow {
 		{
 			switch (grahpicApi)
 			{
-				case OPENGL:
-					s_GraphicAPI = OPENGL;
+				case GraphicAPI::OPENGL:
+					s_GraphicAPI = GraphicAPI::OPENGL;
 					OpenGLInit();
 					break;
-				case DIRECTX12:
-					s_GraphicAPI = DIRECTX12;
-					CheckWindowsError();
-					DirectXInit();
+				case GraphicAPI::DIRECTX12:
+					s_GraphicAPI = GraphicAPI::DIRECTX12;
+					if (!CheckWindowsError()) GraphicAPIInit(GraphicAPI::OPENGL);
+					DirectX12Init();
 					break;
 			}
 		}
@@ -26,15 +26,15 @@ namespace Crow {
 		{
 			switch(appApi)
 			{
-			case GLFW:
-				s_ApplicationAPI = GLFW;
-				GLFWInit();
-				break;
-			case WINDOWS:
-				CR_WINDOWSERROR();
-				s_ApplicationAPI = WINDOWS;
-				WindowsInit();
-				break;
+				case ApplicationAPI::GLFW:
+					s_ApplicationAPI = ApplicationAPI::GLFW;
+					GLFWInit();
+					break;
+				case ApplicationAPI::WINDOWS:
+					CR_WINDOWSERROR();
+					s_ApplicationAPI = ApplicationAPI::WINDOWS;
+					WindowsInit();
+					break;
 			}
 		}
 
@@ -63,27 +63,29 @@ namespace Crow {
 			CreateTexture = &OpenGLTexture::CreateOpenGLTexture;
 		}
 
-		void PlatformAPI::DirectXInit()
+		void PlatformAPI::DirectX12Init()
 		{
-			CreateRenderAPI = &DirectXRenderAPI::CreateDirectXRenderAPI;
+			CreateRenderAPI = &DirectX12RenderAPI::CreateDirectX12RenderAPI;
 
-			CreateVertexBuffer = &DirectXVertexBuffer::CreateDirectXVertexBuffer;
-			CreateIndexBuffer = &DirectXIndexBuffer::CreateDirectXIndexBuffer;
+			CreateVertexBuffer = &DirectX12VertexBuffer::CreateDirectX12VertexBuffer;
+			CreateIndexBuffer = &DirectX12IndexBuffer::CreateDirectX12IndexBuffer;
 
-			CreateArrayBuffer = &DirectXArrayBuffer::CreateDirectXArrayBuffer;
+			CreateArrayBuffer = &DirectX12ArrayBuffer::CreateDirectX12ArrayBuffer;
 
-			CreateShaderFromPath = &DirectXShader::CreateDirectXShaderFromPath;
-			CreateShaderFromSource = &DirectXShader::CreateDirectXShaderFromSource;
+			CreateShaderFromPath = &DirectX12Shader::CreateDirectX12ShaderFromPath;
+			CreateShaderFromSource = &DirectX12Shader::CreateDirectX12ShaderFromSource;
 
-			CreateTexture = &OpenGLTexture::CreateOpenGLTexture;
+			CreateTexture = &OpenGLTexture::CreateOpenGLTexture;						//TODO: replace with D3D12 class
 		}
 
-		void PlatformAPI::CheckWindowsError()
+		bool PlatformAPI::CheckWindowsError()
 		{
 			if (s_ApplicationAPI != ApplicationAPI::WINDOWS)
 			{
-				CR_CORE_WARNING("Cannot use a non Windows application for DirectX!");
+				CR_CORE_WARNING("Cannot use a non Windows application for DirectX! Using OpenGL instead.");
+				return false;
 			}
+			return true;
 		}
 
 	}

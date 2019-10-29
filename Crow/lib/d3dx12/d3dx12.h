@@ -16,6 +16,8 @@
 
 #if defined( __cplusplus )
 
+#pragma warning(disable : 26812)
+
 struct CD3DX12_DEFAULT {};
 extern const DECLSPEC_SELECTANY CD3DX12_DEFAULT D3D12_DEFAULT;
 

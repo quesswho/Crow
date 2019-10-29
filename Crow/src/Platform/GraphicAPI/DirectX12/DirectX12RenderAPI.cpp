@@ -1,57 +1,57 @@
-#include "DirectXRenderAPI.h"
+#include "DirectX12RenderAPI.h"
 
 namespace Crow {
 	namespace Platform {
 
-		ID3D12Device* DirectXRenderAPI::s_Device;
-		IDXGISwapChain3* DirectXRenderAPI::s_SwapChain;
-		ID3D12CommandQueue* DirectXRenderAPI::s_CommandQueue;
-		DXGI_SAMPLE_DESC DirectXRenderAPI::s_SampleDescription;
-		ID3D12DescriptorHeap* DirectXRenderAPI::s_rtvDescriptorHeap;
-		ID3D12Resource* DirectXRenderAPI::s_RenderTargets[s_FrameBufferCount];
-		ID3D12CommandAllocator* DirectXRenderAPI::s_CommandAllocator;
-		ID3D12GraphicsCommandList* DirectXRenderAPI::s_CommandList;
-		ID3D12Fence* DirectXRenderAPI::s_Fence;
+		ID3D12Device* DirectX12RenderAPI::s_Device;
+		IDXGISwapChain3* DirectX12RenderAPI::s_SwapChain;
+		ID3D12CommandQueue* DirectX12RenderAPI::s_CommandQueue;
+		DXGI_SAMPLE_DESC DirectX12RenderAPI::s_SampleDescription;
+		ID3D12DescriptorHeap* DirectX12RenderAPI::s_rtvDescriptorHeap;
+		ID3D12Resource* DirectX12RenderAPI::s_RenderTargets[s_FrameBufferCount];
+		ID3D12CommandAllocator* DirectX12RenderAPI::s_CommandAllocator;
+		ID3D12GraphicsCommandList* DirectX12RenderAPI::s_CommandList;
+		ID3D12Fence* DirectX12RenderAPI::s_Fence;
 
-		HANDLE DirectXRenderAPI::s_FenceEvent;
-		UINT64 DirectXRenderAPI::s_FenceValue;
-		int DirectXRenderAPI::s_Frame;
-		int DirectXRenderAPI::s_rtvDescriptorSize;
+		HANDLE DirectX12RenderAPI::s_FenceEvent;
+		UINT64 DirectX12RenderAPI::s_FenceValue;
+		int DirectX12RenderAPI::s_Frame;
+		int DirectX12RenderAPI::s_rtvDescriptorSize;
 
-		std::vector<ID3D12PipelineState*> DirectXRenderAPI::s_PSOs;
-		const uint DirectXRenderAPI::s_FrameBufferCount;
+		std::vector<ID3D12PipelineState*> DirectX12RenderAPI::s_PSOs;
+		const uint DirectX12RenderAPI::s_FrameBufferCount;
 
-		float* DirectXRenderAPI::s_ClearColor;
-		D3D12_VIEWPORT DirectXRenderAPI::s_ViewPort;
-		D3D12_RECT DirectXRenderAPI::s_ScissorRect;
+		float* DirectX12RenderAPI::s_ClearColor;
+		D3D12_VIEWPORT DirectX12RenderAPI::s_ViewPort;
+		D3D12_RECT DirectX12RenderAPI::s_ScissorRect;
 
-		ID3D12DescriptorHeap* DirectXRenderAPI::s_MainDescriptorHeap;
-		D3D12_DEPTH_STENCIL_DESC DirectXRenderAPI::s_DepthStencilDesc;
-		ID3D12Resource* DirectXRenderAPI::s_DepthStencilBuffer;
-		ID3D12DescriptorHeap* DirectXRenderAPI::s_DepthStencilDescriptorHeap;
+		ID3D12DescriptorHeap* DirectX12RenderAPI::s_MainDescriptorHeap;
+		D3D12_DEPTH_STENCIL_DESC DirectX12RenderAPI::s_DepthStencilDesc;
+		ID3D12Resource* DirectX12RenderAPI::s_DepthStencilBuffer;
+		ID3D12DescriptorHeap* DirectX12RenderAPI::s_DepthStencilDescriptorHeap;
 
-		std::string DirectXRenderAPI::s_CardName;
+		std::string DirectX12RenderAPI::s_CardName;
 
-		std::vector<Shader*> DirectXRenderAPI::s_MappingShader;
-		std::vector<VertexBuffer*> DirectXRenderAPI::s_VertexBuffers;
-		std::vector<IndexBuffer*> DirectXRenderAPI::s_IndexBuffers;
+		std::vector<Shader*> DirectX12RenderAPI::s_MappingShader;
+		std::vector<VertexBuffer*> DirectX12RenderAPI::s_VertexBuffers;
+		std::vector<IndexBuffer*> DirectX12RenderAPI::s_IndexBuffers;
 
-		bool DirectXRenderAPI::s_DepthTest;
-		bool DirectXRenderAPI::s_StencilTest;
-		bool DirectXRenderAPI::s_Initializing;
-		bool DirectXRenderAPI::s_IsPopulating;
+		bool DirectX12RenderAPI::s_DepthTest;
+		bool DirectX12RenderAPI::s_StencilTest;
+		bool DirectX12RenderAPI::s_Initializing;
+		bool DirectX12RenderAPI::s_IsPopulating;
 
-		DirectXRenderAPI::DirectXRenderAPI()
+		DirectX12RenderAPI::DirectX12RenderAPI()
 		{
 			s_ClearColor = new float[3];
-			m_ShaderFactory = new DirectXShaderFactory();
+			m_ShaderFactory = new DirectX12ShaderFactory();
 			s_DepthTest = false;
 			s_StencilTest = false;
 			s_Initializing = false;
 			s_IsPopulating = false;
 		}
 
-		DirectXRenderAPI::~DirectXRenderAPI() 
+		DirectX12RenderAPI::~DirectX12RenderAPI() 
 		{
 			WaitForPreviousFrame();
 			CloseHandle(s_FenceEvent);
@@ -82,7 +82,7 @@ namespace Crow {
 			delete m_ShaderFactory;
 		}
 
-		bool DirectXRenderAPI::InitAPI(const WindowProperties& winprop, void* hWnd) const
+		bool DirectX12RenderAPI::InitAPI(const WindowProperties& winprop, void* hWnd) const
 		{
 
 			s_Initializing = true;
@@ -269,7 +269,7 @@ namespace Crow {
 			D3D12_CLEAR_VALUE clearValue = {};
 			clearValue.Format = DXGI_FORMAT_D32_FLOAT;
 			clearValue.DepthStencil.Depth = 1.0f;
-			clearValue.DepthStencil.Stencil = 0.0f;
+			clearValue.DepthStencil.Stencil = 0;
 
 			s_Device->CreateCommittedResource(
 				&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
@@ -288,7 +288,7 @@ namespace Crow {
 			return true;
 		}
 
-		void DirectXRenderAPI::Begin() const
+		void DirectX12RenderAPI::Begin() const
 		{
 			WaitForPreviousFrame();
 
@@ -312,7 +312,7 @@ namespace Crow {
 			s_IsPopulating = true;
 		}
 
-		void DirectXRenderAPI::End() const
+		void DirectX12RenderAPI::End() const
 		{
 			s_IsPopulating = false;
 
@@ -328,7 +328,7 @@ namespace Crow {
 			s_SwapChain->Present(0, 0);
 		}
 
-		void DirectXRenderAPI::ClearColor(float r, float g, float b) const
+		void DirectX12RenderAPI::ClearColor(float r, float g, float b) const
 		{
 			s_ClearColor[0] = r;
 			s_ClearColor[1] = g;
@@ -336,10 +336,10 @@ namespace Crow {
 			s_ClearColor[3] = 1.0f;
 		}
 
-		void DirectXRenderAPI::SetViewPort(uint width, uint height) const
+		void DirectX12RenderAPI::SetViewPort(uint width, uint height) const
 		{
-			s_ViewPort.Width = width;
-			s_ViewPort.Height = height;
+			s_ViewPort.Width = (float)width;	// Why is this a float
+			s_ViewPort.Height = (float)height;
 			s_ViewPort.TopLeftX = 0;
 			s_ViewPort.TopLeftY = 0;
 			s_ViewPort.MinDepth = 0.0f;
@@ -351,16 +351,16 @@ namespace Crow {
 			s_ScissorRect.left = 0;
 		}
 
-		void DirectXRenderAPI::DrawIndices(uint count) const
+		void DirectX12RenderAPI::DrawIndices(uint count) const
 		{
 			s_CommandList->DrawIndexedInstanced(count, 1, 0, 0, 0);
 		}
 
-		void DirectXRenderAPI::EnableAlpha() const
+		void DirectX12RenderAPI::EnableAlpha() const
 		{
 		}
 
-		void DirectXRenderAPI::EnableDepthTest() const
+		void DirectX12RenderAPI::EnableDepthTest() const
 		{
 			if (s_Initializing)
 			{
@@ -373,12 +373,12 @@ namespace Crow {
 			}
 		}
 
-		std::string DirectXRenderAPI::GetGraphicsInfo() const
+		std::string DirectX12RenderAPI::GetGraphicsInfo() const
 		{
 			return s_CardName;
 		}
 
-		void DirectXRenderAPI::WaitForPreviousFrame()
+		void DirectX12RenderAPI::WaitForPreviousFrame()
 		{
 			s_Frame = s_SwapChain->GetCurrentBackBufferIndex();
 
@@ -393,7 +393,7 @@ namespace Crow {
 			s_FenceValue++;
 		}
 
-		void DirectXRenderAPI::EndInit() const
+		void DirectX12RenderAPI::EndInit() const
 		{
 			InitConstantBuffers();
 			s_CommandList->Close();
@@ -418,13 +418,13 @@ namespace Crow {
 			s_Initializing = false;
 		}
 
-		void DirectXRenderAPI::InitConstantBuffers()
+		void DirectX12RenderAPI::InitConstantBuffers()
 		{
 			HRESULT hr;
 
-			int descriptorsCount = 0;
+			uint descriptorsCount = 0;
 			for (int i = 0; i < s_MappingShader.size(); i++)
-				descriptorsCount += static_cast<DirectXShader*>(s_MappingShader[i])->GetCBufferCount();
+				descriptorsCount += (uint)static_cast<DirectX12Shader*>(s_MappingShader[i])->GetCBufferCount();
 
 				D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
 				heapDesc.NumDescriptors = descriptorsCount;
@@ -440,7 +440,7 @@ namespace Crow {
 					shader->CreateConstantBuffers();
 		}
 
-		void DirectXRenderAPI::UpdateDepthStencilDescription()
+		void DirectX12RenderAPI::UpdateDepthStencilDescription()
 		{
 
 			const D3D12_DEPTH_STENCILOP_DESC defaultStencilOp = // a stencil operation structure, again does not really matter since stencil testing is turned off

@@ -121,7 +121,7 @@ namespace Crow {
 			case WM_KEYUP:
 			case WM_SYSKEYDOWN:
 			case WM_SYSKEYUP:
-				WindowsAPICallbacks::key_callback(lParam, wParam, msg);
+				WindowsAPICallbacks::key_callback((uint)lParam, (uint)wParam, msg);
 				break;
 			case WM_MOUSEMOVE:
 				WindowsAPICallbacks::cursor_position_callback(LOWORD(lParam), HIWORD(lParam));

@@ -8,7 +8,6 @@
 
 #include <initializer_list>
 #include <glm/gtc/matrix_transform.hpp>
-#include "Crow/Collider/Rectangle.h"
 
 #include "Crow/Application.h"
 
@@ -27,33 +26,31 @@ namespace Crow {
 
 		glm::mat4x4 m_ModelMatrix;
 
-		Rectangle* m_Collider;
-
 		bool m_IsShaderSpecified;
 	public:
 		Object2D(const std::shared_ptr<VertexBuffer> vBuffer, const std::shared_ptr<IndexBuffer> iBuffer, glm::vec3 position = glm::vec3(0.0f))
 			: m_ArrayBuffer(ArrayBuffer::Create(vBuffer, iBuffer)), m_Shader(Shader::CreateFromSource("Object2DShader", Application::GetAPI()->GetShaderFactory()->ColorShader(), vBuffer->GetBufferProperties())),
-			m_ModelMatrix(glm::mat4(1.0f)), m_Position(position), m_Scale(1.0f), m_Rotation(0.0f), m_IsShaderSpecified(false), m_Collider(0)
+			m_ModelMatrix(glm::mat4(1.0f)), m_Position(position), m_Scale(1.0f), m_Rotation(0.0f), m_IsShaderSpecified(false)
 		{
 			CalculateModelMatrix();
 		}
 
 		Object2D(const std::shared_ptr<VertexBuffer> vBuffer, const std::shared_ptr<IndexBuffer> iBuffer, Texture* texture, glm::vec3 position = glm::vec3(0.0f)) // Only one texture for object without a specified shader!
 			: m_ArrayBuffer(ArrayBuffer::Create(vBuffer, iBuffer)), m_Shader(Shader::CreateFromSource("Object2DShader", Application::GetAPI()->GetShaderFactory()->TextureShader(), vBuffer->GetBufferProperties())),
-			m_ModelMatrix(glm::mat4(1.0f)), m_Position(position), m_Scale(1.0f), m_Rotation(0.0f), m_IsShaderSpecified(false), m_Collider(0)
+			m_ModelMatrix(glm::mat4(1.0f)), m_Position(position), m_Scale(1.0f), m_Rotation(0.0f), m_IsShaderSpecified(false)
 		{
 			m_Textures.push_back(texture);
 			CalculateModelMatrix();
 		}
 
 		Object2D(const ArrayBuffer* arrayBuffer, Shader* shader, glm::vec3 position = glm::vec3(0.0f))
-			: m_ArrayBuffer(arrayBuffer), m_Shader(shader), m_ModelMatrix(glm::mat4(1.0f)), m_Position(position), m_Scale(1.0f), m_Rotation(0.0f), m_IsShaderSpecified(true), m_Collider(0)
+			: m_ArrayBuffer(arrayBuffer), m_Shader(shader), m_ModelMatrix(glm::mat4(1.0f)), m_Position(position), m_Scale(1.0f), m_Rotation(0.0f), m_IsShaderSpecified(true)
 		{
 			CalculateModelMatrix();
 		}
 
 		Object2D(const ArrayBuffer* arrayBuffer, Shader* shader, Texture* texture, glm::vec3 position = glm::vec3(0.0f))
-			: m_ArrayBuffer(arrayBuffer), m_Shader(shader), m_ModelMatrix(glm::mat4(1.0f)), m_Position(position), m_Scale(1.0f), m_Rotation(0.0f), m_IsShaderSpecified(true), m_Collider(0)
+			: m_ArrayBuffer(arrayBuffer), m_Shader(shader), m_ModelMatrix(glm::mat4(1.0f)), m_Position(position), m_Scale(1.0f), m_Rotation(0.0f), m_IsShaderSpecified(true)
 		{
 			if(texture != NULL)
 				m_Textures.push_back(texture);
@@ -61,7 +58,7 @@ namespace Crow {
 		}
 
 		Object2D(const ArrayBuffer* arrayBuffer, Shader* shader, std::vector<Texture*> textures, glm::vec3 position = glm::vec3(0.0f))
-			: m_ArrayBuffer(arrayBuffer), m_Shader(shader), m_Textures(textures), m_ModelMatrix(glm::mat4(1.0f)), m_Position(position), m_Scale(1.0f), m_Rotation(0.0f), m_IsShaderSpecified(true), m_Collider(0)
+			: m_ArrayBuffer(arrayBuffer), m_Shader(shader), m_Textures(textures), m_ModelMatrix(glm::mat4(1.0f)), m_Position(position), m_Scale(1.0f), m_Rotation(0.0f), m_IsShaderSpecified(true)
 		{
 			CalculateModelMatrix();
 		}
@@ -71,8 +68,8 @@ namespace Crow {
 		~Object2D();
 
 		inline const glm::vec3& GetPosition() const { return m_Position; }
-		inline void SetPosition(const glm::vec3& position) { m_Position = position; CalculateModelMatrix();  UpdateCollider(); }
-		inline void AddPosition(const glm::vec3& other) { m_Position += other; CalculateModelMatrix(); UpdateCollider(); }
+		inline void SetPosition(const glm::vec3& position) { m_Position = position; CalculateModelMatrix(); }
+		inline void AddPosition(const glm::vec3& other) { m_Position += other; CalculateModelMatrix(); }
 
 		inline const glm::vec3& GetScale() const { return m_Scale; }
 		inline void SetScale(const glm::vec3& scale) { m_Scale = scale; CalculateModelMatrix(); }
@@ -85,19 +82,7 @@ namespace Crow {
 		inline const glm::mat4x4& GetModelMatrix() const { return m_ModelMatrix; }
 		inline void SetModelMatrix(const glm::mat4x4& model) { m_ModelMatrix = model; }
 
-		inline void SetCollision(Rectangle* collision) { m_Collider = collision; m_Collider->m_Position.x = m_Position.x; m_Collider->m_Position.y = m_Position.y; }
-		inline void SetCollision(glm::vec2 size) { m_Collider = new Rectangle(glm::vec2(size.x, size.y), glm::vec2(m_Position.x, m_Position.y)); }
-
-		inline Rectangle* GetCollision() const { return m_Collider; }
-
-		bool IsColliding(Rectangle* other) const;
-		bool IsColliding(Object2D* other) const { return IsColliding(other->GetCollision()); }
-
-		glm::vec2 GetCorrection(Rectangle* other) const;
-		glm::vec2 GetCorrection(Object2D* other) const { return GetCorrection(other->GetCollision()); }
-
 		void AddTexture(Texture* texture);
-
 
 		const inline uint GetCount() const { return m_ArrayBuffer->GetCount(); }
 
@@ -105,13 +90,6 @@ namespace Crow {
 		void Unbind() const;
 
 	private:
-		void UpdateCollider()
-		{
-			if (m_Collider != NULL)
-			{
-				m_Collider->m_Position.x = m_Position.x; m_Collider->m_Position.y = m_Position.y;
-			}
-		}
 		void CalculateModelMatrix();
 	};
 

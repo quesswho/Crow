@@ -6,7 +6,7 @@ namespace Crow {
 	
 	short int Input::s_Keys[];
 	short int Input::s_MouseKeys[];
-	std::tuple<int, int> Input::s_MousePos;
+	std::tuple<double, double> Input::s_MousePos;
 
 	void Input::Init()
 	{
@@ -28,7 +28,7 @@ namespace Crow {
 		Application::OnEvent(MouseEvent(key));
 	}
 
-	void Input::MousePosCallback(std::tuple<int, int> pos)
+	void Input::MousePosCallback(std::tuple<double, double> pos)
 	{
 		s_MousePos = pos;
 		Application::OnEvent(MousePosEvent(pos));

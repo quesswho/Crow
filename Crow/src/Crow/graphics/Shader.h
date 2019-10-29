@@ -11,11 +11,12 @@
 namespace Crow {
 
 
-	enum ShaderType { UNKNOWN = -1, VERTEX = 0, FRAGMENT = 1 };
 
 	struct Shader {
 
-		typedef enum UniformType
+		enum class ShaderType { UNKNOWN = -1, VERTEX = 0, FRAGMENT = 1 };
+
+		enum class UniformType
 		{
 			UNKNOWN = -1,
 			INT,

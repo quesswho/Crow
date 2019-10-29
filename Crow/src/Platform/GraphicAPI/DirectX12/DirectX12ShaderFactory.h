@@ -4,7 +4,7 @@
 
 namespace Crow {
 	namespace Platform {
-		class DirectXShaderFactory : public ShaderFactory {
+		class DirectX12ShaderFactory : public ShaderFactory {
 
 			virtual std::string BasicShader() override;
 			virtual std::string ColorShader() override;
