@@ -55,7 +55,6 @@ namespace Crow {
 			std::unordered_map<const char*, int> m_UniformLocations;
 			std::vector<ShaderUniformStruct> m_UniformStructs;
 			std::unordered_map<std::string, int> m_UniformStructLocations;
-			//std::unordered_map<std::string, std::vector<Uniform>> m_StructUniforms; // name, uniforms
 		public:
 			explicit OpenGLShader(const char* name, const char* path, const BufferProperties& shaderInput); // File path
 			explicit OpenGLShader(const char* name, std::string& source, const BufferProperties& shaderInput); // Shader code

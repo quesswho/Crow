@@ -6,7 +6,7 @@ namespace Crow {
 	
 	short int Input::s_Keys[];
 	short int Input::s_MouseKeys[];
-	std::tuple<double, double> Input::s_MousePos;
+	Math::Vec2<int> Input::s_MousePos;
 
 	void Input::Init()
 	{
@@ -14,21 +14,19 @@ namespace Crow {
 		memset(s_MouseKeys, 0, sizeof(s_MouseKeys));
 	}
 	
-	void Input::KeyCallback(std::tuple<int, int> key)
+	void Input::KeyCallback(Math::Vec2<int> key)
 	{
-		auto[keyCode, action] = key;
-		s_Keys[keyCode] = action;
+		s_Keys[key.x] = key.y;
 		Application::OnEvent(KeyEvent(key));
 	}
 
-	void Input::MouseCallback(std::tuple<int, int> key)
+	void Input::MouseCallback(Math::Vec2<int> key)
 	{
-		auto[keyCode, action] = key;
-		s_MouseKeys[keyCode] = action;
+		s_MouseKeys[key.x] = key.y;
 		Application::OnEvent(MouseEvent(key));
 	}
 
-	void Input::MousePosCallback(std::tuple<double, double> pos)
+	void Input::MousePosCallback(Math::Vec2<int> pos)
 	{
 		s_MousePos = pos;
 		Application::OnEvent(MousePosEvent(pos));

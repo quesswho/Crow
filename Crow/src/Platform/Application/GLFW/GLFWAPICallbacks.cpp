@@ -24,17 +24,17 @@ namespace Crow {
 
 		void Callbacks::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) // Calls when the user pressed a key on their keyboard
 		{
-			Input::KeyCallback(std::tuple<int, int>(key, action));
+			Input::KeyCallback(Math::Vec2<int>(key, action));
 		}
 
 		void Callbacks::mouse_button_callback(GLFWwindow* window, int button, int action, int mods) // Calls when the user pressed a button on their mouse
 		{
-			Input::MouseCallback(std::tuple<int, int>(button, action));
+			Input::MouseCallback(Math::Vec2<int>(button, action));
 		}
 
 		void Callbacks::cursor_position_callback(GLFWwindow* window, double xpos, double ypos) // Calls when the user moves their mouse
 		{
-			Input::MousePosCallback(std::tuple<double, double>(xpos, ypos));
+			Input::MousePosCallback(Math::Vec2<int>((int)xpos, (int)ypos));
 		}
 
 	}

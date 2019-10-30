@@ -3,13 +3,26 @@
 #include "glm/vec3.hpp"
 #include "Crow/Graphics/ShaderFactory.h"
 #include <glm/ext/matrix_clip_space.hpp>
-#include <DirectXMath.h>
 
 using namespace Crow;
 
 	Layer2D::Layer2D()
 		: m_Camera(new OrthographicCamera(glm::vec2(0.0f, 0.0f), 2.0f, 2.0f, 3.0f, 3.0f))
 	{
+		
+		Math::Vec2<float> test(10, 0);
+
+		Math::Vec2<float> a = test + 1.5;
+		test += 0.34;
+
+		test.Normalize();
+
+		test = Math::Vec2<float>(10, 3);
+
+		test.LimitVector(2);
+
+		float mag = test.Magnitude();
+
 		Application::GetAPI()->ClearColor(0.5f, 0.7f, 0.5f);
 		Application::GetAPI()->EnableDepthTest();
 
@@ -98,7 +111,8 @@ using namespace Crow;
 
 	void Layer2D::OnEvent(Event& e)
 	{
-		auto [key, action] = e.getKeyValue();
+		auto key = e.GetKey().x;
+		auto action = e.GetKey().y;
 		switch (e.m_Type)
 		{
 		case MOUSEPOS: // key = x, action = y

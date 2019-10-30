@@ -1,6 +1,6 @@
 #pragma once
 
-#include <tuple>
+#include "Crow/Math/Vector/Vec2.h"
 
 #define MAX_KEYS 512
 
@@ -16,18 +16,18 @@ namespace Crow {
 
 		inline static short int GetKeyState(int key) { return s_Keys[key]; }
 		inline static short int GetKeyState(short int key) { return s_MouseKeys[key]; }
-		inline static std::tuple<double, double> GetMousePosition() { return s_MousePos; }
+		inline static Math::Vec2<int> GetMousePosition() { return s_MousePos; }
 
 		static bool IsKeyPressed(short int key) { return s_Keys[key] > 0; } // if key action is more than KEY_RELEASE
 
-		static void KeyCallback(std::tuple<int, int> key);
-		static void MouseCallback(std::tuple<int, int> key);
-		static void MousePosCallback(std::tuple<double, double> key);
+		static void KeyCallback(Math::Vec2<int> key);
+		static void MouseCallback(Math::Vec2<int> key);
+		static void MousePosCallback(Math::Vec2<int> key);
 
 	private:
 		static short int s_Keys[MAX_KEYS];
 		static short int s_MouseKeys[MAX_KEYS];
-		static std::tuple<double, double> s_MousePos;
+		static Math::Vec2<int> s_MousePos;
 	};
 
 }

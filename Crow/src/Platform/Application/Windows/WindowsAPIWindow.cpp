@@ -182,8 +182,8 @@ namespace Crow {
 			POINT mouse;
 			GetCursorPos(&mouse);
 			ScreenToClient(m_Hwnd, &mouse);
-			auto [mx, my] = Input::GetMousePosition();
-			if (mx != mouse.x && my != mouse.y)
+			auto vec = Input::GetMousePosition();
+			if (vec.x != mouse.x && vec.y != mouse.y)
 			{
 				WindowsAPICallbacks::cursor_position_callback(mouse.x, mouse.y);
 			}

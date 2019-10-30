@@ -16,31 +16,31 @@ namespace Crow {
 		Event(EventType type)
 			: m_Type(type)
 		{}
-		virtual std::tuple<int, int> getKeyValue() = 0;
+		virtual Math::Vec2<int> GetKey() = 0;
 	};
 
 	struct KeyEvent : public Event {
-		std::tuple<int, int> m_Key;
-		KeyEvent(std::tuple<int, int> key)
+		Math::Vec2<int> m_Key;
+		KeyEvent(Math::Vec2<int> key)
 			: Event(KEY), m_Key(key)
 		{}
-		inline std::tuple<int, int> getKeyValue() override { return m_Key; }
+		inline Math::Vec2<int> GetKey() override { return m_Key; }
 	};
 
 	struct MouseEvent : public Event {
-		std::tuple<int, int> m_Key;
-		MouseEvent(std::tuple<int, int> key)
+		Math::Vec2<int> m_Key;
+		MouseEvent(Math::Vec2<int> key)
 			: Event(MOUSE), m_Key(key)
 		{}
-		inline std::tuple<int, int> getKeyValue() override { return m_Key; }
+		inline Math::Vec2<int> GetKey() override { return m_Key; }
 	};
 
 	struct MousePosEvent : public Event {
-		std::tuple<int, int> m_Vec;
-		MousePosEvent(std::tuple<int, int> vec)
+		Math::Vec2<int> m_Vec;
+		MousePosEvent(Math::Vec2<int> vec)
 			: Event(MOUSEPOS), m_Vec(vec)
 		{}
-		inline std::tuple<int, int> getKeyValue() override { return m_Vec; }
+		inline Math::Vec2<int> GetKey() override { return m_Vec; }
 	};
 
 }

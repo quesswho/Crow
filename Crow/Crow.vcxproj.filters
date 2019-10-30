@@ -49,6 +49,12 @@
     <Filter Include="src\Crow\Graphics\Renderer\2D">
       <UniqueIdentifier>{42F5C9B1-AE0D-B1DB-77BA-4075E3914575}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Crow\Math">
+      <UniqueIdentifier>{50EB4D5D-BCAB-C993-85E6-1211F1650E70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Crow\Math\Vector">
+      <UniqueIdentifier>{72CF92F9-5E5E-1CC3-077D-30BEF3EA2C69}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Platform">
       <UniqueIdentifier>{21CA02E5-0D2D-9289-B6B2-CA3FA2F45D0C}</UniqueIdentifier>
     </Filter>
@@ -1250,6 +1256,12 @@
     </ClInclude>
     <ClInclude Include="src\Crow\Macros.h">
       <Filter>src\Crow</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Crow\Math\Math.h">
+      <Filter>src\Crow\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Crow\Math\Vector\Vec2.h">
+      <Filter>src\Crow\Math\Vector</Filter>
     </ClInclude>
     <ClInclude Include="src\Crow\Timer.h">
       <Filter>src\Crow</Filter>
