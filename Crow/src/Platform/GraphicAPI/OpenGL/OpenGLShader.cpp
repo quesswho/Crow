@@ -247,24 +247,24 @@ namespace Crow {
 			return locationi;
 		}
 
-		void OpenGLShader::SetUniformValue(const char* location, int value)
+		void OpenGLShader::SetUniformValue(const char* location, const int value)
 		{
 			glUniform1i(GetLocation(location), value);
 		}
 
-		void OpenGLShader::SetUniformValue(const char* location, float value)
+		void OpenGLShader::SetUniformValue(const char* location, const float value)
 		{
 			glUniform1f(GetLocation(location), value);
 		}
-		void OpenGLShader::SetUniformValue(const char* location, glm::vec2& value)
+		void OpenGLShader::SetUniformValue(const char* location, const Crow::Math::Vec2<float>& value)
 		{
 			glUniform2f(GetLocation(location), value.x, value.y);
 		}
-		void OpenGLShader::SetUniformValue(const char* location, glm::vec3& value)
+		void OpenGLShader::SetUniformValue(const char* location, const Crow::Math::Vec3<float>& value)
 		{
 			glUniform3f(GetLocation(location), value.x, value.y, value.z);
 		}
-		void OpenGLShader::SetUniformValue(const char* location, glm::vec4& value)
+		void OpenGLShader::SetUniformValue(const char* location, const Crow::Math::Vec4<float>& value)
 		{
 			glUniform4f(GetLocation(location), value.x, value.y, value.z, value.w);
 		}
@@ -276,9 +276,9 @@ namespace Crow {
 		{
 			glUniformMatrix3fv(GetLocation(location), 1, GL_FALSE, &value[0][0]);
 		}
-		void OpenGLShader::SetUniformValue(const char* location, const glm::mat4x4& value)
+		void OpenGLShader::SetUniformValue(const char* location, const Math::Mat4<float>& value)
 		{
-			glUniformMatrix3fv(GetLocation(location), 1, GL_FALSE, &value[0][0]);
+			glUniformMatrix4fv(GetLocation(location), 1, GL_FALSE, &value.m_Elements[0]);
 		}
 
 		void OpenGLShader::SetUniformStruct(const char* location, void* data)

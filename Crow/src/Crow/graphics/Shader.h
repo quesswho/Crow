@@ -7,6 +7,7 @@
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 #include <glm/mat4x4.hpp>
+#include "Crow/Math/Matrix/Mat4.h"
 
 namespace Crow {
 
@@ -45,14 +46,14 @@ namespace Crow {
 
 		virtual const char* GetName() const = 0;
 
-		virtual void SetUniformValue(const char* location, int value) = 0;
-		virtual void SetUniformValue(const char* location, float value) = 0;
-		virtual void SetUniformValue(const char* location, glm::vec2& value) = 0;
-		virtual void SetUniformValue(const char* location, glm::vec3& value) = 0;
-		virtual void SetUniformValue(const char* location, glm::vec4& value) = 0;
+		virtual void SetUniformValue(const char* location, const int value) = 0;
+		virtual void SetUniformValue(const char* location, const float value) = 0;
+		virtual void SetUniformValue(const char* location, const Math::Vec2<float>&  value) = 0;
+		virtual void SetUniformValue(const char* location, const Math::Vec3<float>& value) = 0;
+		virtual void SetUniformValue(const char* location, const Math::Vec4<float>& value) = 0;
 		virtual void SetUniformValue(const char* location, const glm::mat2x2& value) = 0;
 		virtual void SetUniformValue(const char* location, const glm::mat3x3& value) = 0;
-		virtual void SetUniformValue(const char* location, const glm::mat4x4& value) = 0;
+		virtual void SetUniformValue(const char* location, const Math::Mat4<float>& value) = 0;
 
 		virtual void SetUniformStruct(const char* location, void* data) = 0;
 	};

@@ -29,15 +29,16 @@ namespace Crow {
 
 		uint WindowsAPICallbacks::DecodeWindowsKey(uint key)
 		{
-			if (key > 28 || key > 91)
+			if (key > 0x1E && key > 0x91)
 				return key;
+
 			switch (key)
 			{
 				case VK_LSHIFT:
 					return CROW_KEY_LEFT_SHIFT;
 				case VK_RSHIFT:
 					return CROW_KEY_RIGHT_SHIFT;
-				case VK_LCONTROL:
+				case VK_CONTROL:
 					return CROW_KEY_LEFT_CONTROL;
 				case VK_RCONTROL:
 					return CROW_KEY_RIGHT_CONTROL;
@@ -51,6 +52,14 @@ namespace Crow {
 					return CROW_KEY_CAPS_LOCK;
 				case VK_RETURN:
 					return CROW_KEY_ENTER;
+				case VK_UP:
+					return CROW_KEY_UP;
+				case VK_DOWN:
+					return CROW_KEY_DOWN;
+				case VK_LEFT:
+					return CROW_KEY_LEFT;
+				case VK_RIGHT:
+					return CROW_KEY_RIGHT;
 				case VK_PRIOR:
 					return CROW_KEY_PAGE_UP;
 				case VK_NEXT:

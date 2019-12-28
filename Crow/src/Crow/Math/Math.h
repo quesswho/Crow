@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vector/Vec2.h"
+
 
 #define D_MATH_PI 3.1415926535897932
 #define MATH_PI 3.1415926535897932f
@@ -10,7 +10,7 @@ namespace Crow {
 		
 		static float ToRadians(int degrees)
 		{
-			return degrees * D_MATH_PI / 180.0f;
+			return degrees * MATH_PI / 180.0f;
 		}
 
 		static double ToRadians(double degrees)

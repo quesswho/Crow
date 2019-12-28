@@ -1317,6 +1317,10 @@
     <ClInclude Include="src\Platform\PlatformAPI.h">
       <Filter>src\Platform</Filter>
     </ClInclude>
+    <ClInclude Include="src\Crow\Math\Vector\Vec3.h" />
+    <ClInclude Include="src\Crow\Math\Vector\Vec4.h" />
+    <ClInclude Include="src\Crow\Math\Matrix\Mat4.h" />
+    <ClInclude Include="src\Crow\Math\Maths.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lib\stb_image\stb_image.cpp">

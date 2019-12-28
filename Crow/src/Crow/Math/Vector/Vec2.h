@@ -66,11 +66,11 @@ namespace Crow {
 			}
 
 			// Return normalized vector
-			constexpr Vec2 Normalize() const
+			inline Vec2 Normalize() const
 			{
 				float mag = this->Magnitude();
 				if (mag > 0)
-					return *this / mag;
+					return *this * (1 / mag);
 
 				return *this; // Can't normalize a zero vector
 			}
@@ -80,11 +80,20 @@ namespace Crow {
 			{
 				float mag = this->Magnitude();
 				if (mag > 0)
-					*this /= mag;
+					*this *= (1 / mag);
+			}
+
+			// Normalize a vector
+			static inline const Vec2 Normalize(const Vec2 vec)
+			{
+				float mag = vec.Magnitude();
+				if (mag > 0)
+					return vec * (1 / mag);
+				return vec;
 			}
 
 			// Limit magninute with int
-			constexpr Vec2 Limit(int limit) const
+			inline Vec2 Limit(int limit) const
 			{
 				return this->Normalize() * limit;
 			}
@@ -96,7 +105,7 @@ namespace Crow {
 			}
 
 			// Limit magninute with double
-			constexpr Vec2 Limit(double limit) const
+			inline Vec2 Limit(double limit) const
 			{
 				return this->Normalize() * limit;
 			}
@@ -108,7 +117,7 @@ namespace Crow {
 			}
 
 			// Limit magninute with float
-			constexpr Vec2 Limit(float limit) const
+			inline Vec2 Limit(float limit) const
 			{	
 				return this->Normalize() * limit;
 			}

@@ -34,5 +34,10 @@ private:
 	Crow::ArrayBuffer* m_ArrayBuffer;
 	Crow::Shader* m_Shader;
 
+	Crow::Math::Mat4<float> m_Projection;
+	Crow::Math::Mat4<float> m_Model;
+	Crow::Math::Mat4<float> m_View;
+	Crow::Math::Mat4<float> m_Look;
+
 	Light* m_Light;
 };

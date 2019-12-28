@@ -5,26 +5,31 @@
 #include <glm/ext/matrix_clip_space.hpp>
 
 using namespace Crow;
-
+using namespace Math;
 	Layer2D::Layer2D()
 		: m_Camera(new OrthographicCamera(glm::vec2(0.0f, 0.0f), 2.0f, 2.0f, 3.0f, 3.0f))
 	{
-		
-		Math::Vec2<float> test(10, 0);
+		m_Projection = Mat4<float>::PerspectiveMatrix(45.0f, 720.0f / 720.0f, 0.01f, 100.0f);
+		//m_Projection = Mat4<float>::OrthographicMatrix(-0.5f, 0.5f, -0.5f, 0.5f, 0.01, 100.0f);
 
-		Math::Vec2<float> a = test + 1.5;
-		test += 0.34;
+		Vec4 teatatats = Vec4(10.0f, 21.1241f, 1053.2f, 0.0f);
 
-		test.Normalize();
+		//teatatats.NormalizeVector();
 
-		test = Math::Vec2<float>(10, 3);
+		Vec4 teatatats2 = Vec4<float>::Normalize(teatatats);
 
-		test.LimitVector(2);
+		teatatats = teatatats2.Normalize();
 
-		float mag = test.Magnitude();
+		glm::mat4 testa = glm::lookAt(glm::vec3(0.0f, 0.0f, 30.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		m_View = Mat4<float>::LookAt(Vec3<float>(0.0f, -1.0f, 3.0f), Vec3<float>(0.0f, 0.0f, 0.0f));
+
+
+		m_Model *= Mat4<float>::Scale(Vec3(1.0f, 1.0f, 1.0f));
+		//m_Model *= Mat4<float>::Translate(Vec3(2.0f, 2.0f, 0.0f));
+		//m_View = Mat4<float>::Translate(Vec3(0.0f, 0.0f, -3.0f));
 
 		Application::GetAPI()->ClearColor(0.5f, 0.7f, 0.5f);
-		Application::GetAPI()->EnableDepthTest();
+		//Application::GetAPI()->EnableDepthTest();
 
 		//m_Renderer = std::make_unique<Renderer2D>();
 
@@ -36,10 +41,10 @@ using namespace Crow;
 		//ArrayBuffer* m_Buffer = ArrayBuffer::Create();
 
 		float vertices[] = {
-			-0.5f,  0.5f, 0.1f, 0.0f, 0.1f, 1.0f, 1.0f,
-			 0.5f, -0.5f, 0.1f, 0.0f, 0.1f, 1.0f, 1.0f,
-			-0.5f, -0.5f, 0.1f, 0.0f, 0.1f, 1.0f, 1.0f,
-			 0.5f,  0.5f, 0.1f, 0.0f, 0.1f, 1.0f, 1.0f,
+			-0.1f,  0.1f, 0.0f, 0.0f, 0.1f, 1.0f, 1.0f,
+			 0.1f, -0.1f, 0.0f, 0.0f, 0.1f, 1.0f, 1.0f,
+			-0.1f, -0.1f, 0.0f, 0.0f, 0.1f, 1.0f, 1.0f,
+			 0.1f,  0.1f, 0.0f, 0.0f, 0.1f, 1.0f, 1.0f,
 			 
 			 // Further away (green)
 			-0.75f, 0.75f, 0.2f, 0.0f, 1.0f, 0.0f, 1.0f,
@@ -52,6 +57,15 @@ using namespace Crow;
 			0,1,2, 0,3,1,
 			4,5,6, 4,7,5
 		};
+
+
+		Vec4<float> a(vertices[0], vertices[1], vertices[2], 0.0f);
+		a *= m_Projection;
+
+		glm::vec4 v(vertices[0], vertices[1], vertices[2], 0.0f);
+		//v *= test;
+
+
 
 		m_Shader = Shader::CreateFromSource("ColorShader", Application::GetAPI()->GetShaderFactory()->BasicLightShader(), bufferprop);
 
@@ -140,11 +154,34 @@ using namespace Crow;
 	void Layer2D::OnUpdate(float elapsed)
 	{
 
-		if (Input::IsKeyPressed(CROW_KEY_E))
-			m_Light->m_Pos.x += elapsed * 1.0f;
-		if (Input::IsKeyPressed(CROW_KEY_Q))
-			m_Light->m_Pos.x -= elapsed * 1.0f;
+		if (Input::IsKeyPressed(CROW_KEY_UP))
+			m_Light->m_Pos.y += elapsed * 1.0f;
+		if (Input::IsKeyPressed(CROW_KEY_DOWN))
+			m_Light->m_Pos.y-= elapsed * 1.0f;
 
+		if (Input::IsKeyPressed(CROW_KEY_LEFT))
+			m_Light->m_Pos.x -= elapsed * 1.0f;
+		if (Input::IsKeyPressed(CROW_KEY_RIGHT))
+			m_Light->m_Pos.x += elapsed * 1.0f;
+
+		if (Input::IsKeyPressed(CROW_KEY_W))
+			m_View *= Mat4<float>::Translate(Vec3(0.0f, 0.0f, elapsed * 1.0f));
+		if (Input::IsKeyPressed(CROW_KEY_S))
+			m_View *= Mat4<float>::Translate(Vec3(0.0f, 0.0f, elapsed * -1.0f));
+		if (Input::IsKeyPressed(CROW_KEY_A))
+			m_View *= Mat4<float>::Translate(Vec3(elapsed * 1.0f, 0.0f, 0.0f));
+		if (Input::IsKeyPressed(CROW_KEY_D))
+			m_View *= Mat4<float>::Translate(Vec3(elapsed * -1.0f, 0.0f, 0.0f));
+		if (Input::IsKeyPressed(CROW_KEY_SPACE))
+			m_View *= Mat4<float>::Translate(Vec3(0.0f, elapsed * -1.0f, 0.0f));
+		if (Input::IsKeyPressed(CROW_KEY_LEFT_CONTROL))
+			m_View *= Mat4<float>::Translate(Vec3(0.0f, elapsed * 1.0f, 0.0f));
+
+
+		if (Input::IsKeyPressed(CROW_KEY_Q))
+			m_Model *= Mat4<float>::Rotate(90.0f * elapsed, Vec3(0.0f, 1.0f, 1.0f));
+		if (Input::IsKeyPressed(CROW_KEY_E))
+			m_Model *= Mat4<float>::Rotate(-90.0f * elapsed, Vec3(0.0f, 1.0f, 1.0f));
 		/*glm::vec3 pos = m_Camera->GetCameraPos();
 		m_Camera->Update(elapsed);
 
@@ -173,6 +210,9 @@ using namespace Crow;
 
 		m_Shader->Bind();
 		m_Shader->SetUniformStruct("u_Light", m_Light);
+		m_Shader->SetUniformValue("u_Projection", m_Projection);
+		m_Shader->SetUniformValue("u_Model", m_Model);
+		m_Shader->SetUniformValue("u_View", m_View);
 		m_ArrayBuffer->Bind();
 		Application::GetAPI()->DrawIndices(m_ArrayBuffer->GetCount());
 
