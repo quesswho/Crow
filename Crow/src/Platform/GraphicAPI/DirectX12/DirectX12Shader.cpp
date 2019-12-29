@@ -482,7 +482,7 @@ namespace Crow {
 		{
 			memcpy(m_UniformConstantBuffers[GetLocation(location)]->m_GPUAddress, &value, sizeof(value));
 		}
-		void DirectX12Shader::SetUniformValue(const char* location, const glm::mat3x3& value)
+		void DirectX12Shader::SetUniformValue(const char* location, const Math::Mat3<float>& value)
 		{
 			memcpy(m_UniformConstantBuffers[GetLocation(location)]->m_GPUAddress, &value, sizeof(value));
 		}

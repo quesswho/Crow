@@ -10,4 +10,4 @@
 #include "Crow/graphics/Camera/OrthographicCamera.h"
 
 // Math
-#include "Crow/Math/Math.h"
+#include "Crow/Math/Maths.h"

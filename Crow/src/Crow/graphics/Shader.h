@@ -3,11 +3,8 @@
 
 #include "Renderer/Buffer.h"
 
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
-#include <glm/mat4x4.hpp>
-#include "Crow/Math/Matrix/Mat4.h"
+#include <glm/mat2x2.hpp>
+#include "Crow/Math/Maths.h"
 
 namespace Crow {
 
@@ -52,7 +49,7 @@ namespace Crow {
 		virtual void SetUniformValue(const char* location, const Math::Vec3<float>& value) = 0;
 		virtual void SetUniformValue(const char* location, const Math::Vec4<float>& value) = 0;
 		virtual void SetUniformValue(const char* location, const glm::mat2x2& value) = 0;
-		virtual void SetUniformValue(const char* location, const glm::mat3x3& value) = 0;
+		virtual void SetUniformValue(const char* location, const Math::Mat3<float>& value) = 0;
 		virtual void SetUniformValue(const char* location, const Math::Mat4<float>& value) = 0;
 
 		virtual void SetUniformStruct(const char* location, void* data) = 0;

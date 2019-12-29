@@ -492,12 +492,14 @@
     <ClInclude Include="src\Crow\Graphics\Window.h" />
     <ClInclude Include="src\Crow\Log.h" />
     <ClInclude Include="src\Crow\Macros.h" />
-    <ClInclude Include="src\Crow\Math\Math.h" />
+    <ClInclude Include="src\Crow\Math\MathFunc.h" />
     <ClInclude Include="src\Crow\Math\Maths.h" />
+    <ClInclude Include="src\Crow\Math\Matrix\Mat3.h" />
     <ClInclude Include="src\Crow\Math\Matrix\Mat4.h" />
     <ClInclude Include="src\Crow\Math\Vector\Vec2.h" />
     <ClInclude Include="src\Crow\Math\Vector\Vec3.h" />
     <ClInclude Include="src\Crow\Math\Vector\Vec4.h" />
+    <ClInclude Include="src\Crow\Math\Vector\VectorMath.h" />
     <ClInclude Include="src\Crow\Timer.h" />
     <ClInclude Include="src\Platform\Application\GLFW\GLFWAPICallbacks.h" />
     <ClInclude Include="src\Platform\Application\GLFW\GLFWAPIWindow.h" />

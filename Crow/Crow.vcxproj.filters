@@ -1257,9 +1257,6 @@
     <ClInclude Include="src\Crow\Macros.h">
       <Filter>src\Crow</Filter>
     </ClInclude>
-    <ClInclude Include="src\Crow\Math\Math.h">
-      <Filter>src\Crow\Math</Filter>
-    </ClInclude>
     <ClInclude Include="src\Crow\Math\Vector\Vec2.h">
       <Filter>src\Crow\Math\Vector</Filter>
     </ClInclude>
@@ -1321,6 +1318,11 @@
     <ClInclude Include="src\Crow\Math\Vector\Vec4.h" />
     <ClInclude Include="src\Crow\Math\Matrix\Mat4.h" />
     <ClInclude Include="src\Crow\Math\Maths.h" />
+    <ClInclude Include="src\Crow\Math\Vector\VectorMath.h" />
+    <ClInclude Include="src\Crow\Math\Matrix\Mat3.h" />
+    <ClInclude Include="src\Crow\Math\MathFunc.h">
+      <Filter>src\Crow\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lib\stb_image\stb_image.cpp">

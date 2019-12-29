@@ -1,7 +1,8 @@
 #pragma once
-#include "../Vector/Vec4.h"
 
-#include "Crow/Math/Math.h"
+#include "Crow/Math/MathFunc.h"
+#include "Crow/Math/Vector/VectorMath.h"
+
 namespace Crow {
 	namespace Math
 	{
@@ -10,29 +11,36 @@ namespace Crow {
 		template<typename T = float>
 		struct Mat4 {
 
+			union {
+				T m_Elements[16];
+				Vec4<T> m_Columns[4];
+			};
+
 			Mat4() { Identity(); }
+
+			Mat4(float diagonal) { Identity(diagonal); }
 
 			Mat4(const Vec4<T>& first, const Vec4<T>& second, const Vec4<T>& third, const Vec4<T>& forth)
 			{
 				m_Elements[GetIndex(0, 0)] = first.x;
 				m_Elements[GetIndex(0, 1)] = first.y;
 				m_Elements[GetIndex(0, 2)] = first.z;
-				m_Elements[GetIndex(0, 3)] = first.z;
+				m_Elements[GetIndex(0, 3)] = first.w;
 
 				m_Elements[GetIndex(1, 0)] = second.x;
 				m_Elements[GetIndex(1, 1)] = second.y;
 				m_Elements[GetIndex(1, 2)] = second.z;
-				m_Elements[GetIndex(1, 3)] = second.z;
+				m_Elements[GetIndex(1, 3)] = second.w;
 
 				m_Elements[GetIndex(2, 0)] = third.x;
 				m_Elements[GetIndex(2, 1)] = third.y;
 				m_Elements[GetIndex(2, 2)] = third.z;
-				m_Elements[GetIndex(2, 3)] = third.z;
+				m_Elements[GetIndex(2, 3)] = third.w;
 
 				m_Elements[GetIndex(3, 0)] = forth.x;
 				m_Elements[GetIndex(3, 1)] = forth.y;
 				m_Elements[GetIndex(3, 2)] = forth.z;
-				m_Elements[GetIndex(3, 3)] = forth.z;
+				m_Elements[GetIndex(3, 3)] = forth.w;
 			}
 
 			Mat4(T first, T second, T third, T forth, T fifth, T sixth, T seventh, T eighth, T ninth, T tenth, T eleventh, T twelveth, T thirteenth, T fourteenth, T fifteenth, T sixteenth)
@@ -68,10 +76,16 @@ namespace Crow {
 				m_Elements[GetIndex(3, 3)] = (T)1;
 			}
 
-			union {
-				T m_Elements[16];
-				Vec4<T> m_Columns[4];
-			};
+			inline void Identity(float diagonal)
+			{
+				memset(m_Elements, 0, 16 * 4);
+
+				m_Elements[GetIndex(0, 0)] = (T)diagonal;
+				m_Elements[GetIndex(1, 1)] = (T)diagonal;
+				m_Elements[GetIndex(2, 2)] = (T)diagonal;
+				m_Elements[GetIndex(3, 3)] = (T)diagonal;
+			}
+
 
 			// Addition
 
@@ -174,9 +188,61 @@ namespace Crow {
 				return *this;
 			}
 
+			// Test
+
+			const bool operator==(const Mat4& other)
+			{
+				return (m_Elements[GetIndex(0, 0)] == other.m_Elements[GetIndex(0, 0)] &&
+					m_Elements[GetIndex(0, 1)] == other.m_Elements[GetIndex(0, 1)] &&
+					m_Elements[GetIndex(0, 2)] == other.m_Elements[GetIndex(0, 2)] &&
+					m_Elements[GetIndex(0, 3)] == other.m_Elements[GetIndex(0, 3)] &&
+
+					m_Elements[GetIndex(1, 0)] == other.m_Elements[GetIndex(1, 0)] &&
+					m_Elements[GetIndex(1, 1)] == other.m_Elements[GetIndex(1, 1)] &&
+					m_Elements[GetIndex(1, 2)] == other.m_Elements[GetIndex(1, 2)] &&
+					m_Elements[GetIndex(1, 3)] == other.m_Elements[GetIndex(1, 3)] &&
+
+					m_Elements[GetIndex(2, 0)] == other.m_Elements[GetIndex(2, 0)] &&
+					m_Elements[GetIndex(2, 1)] == other.m_Elements[GetIndex(2, 1)] &&
+					m_Elements[GetIndex(2, 2)] == other.m_Elements[GetIndex(2, 2)] &&
+					m_Elements[GetIndex(2, 3)] == other.m_Elements[GetIndex(2, 3)] &&
+
+					m_Elements[GetIndex(3, 0)] == other.m_Elements[GetIndex(3, 0)] &&
+					m_Elements[GetIndex(3, 1)] == other.m_Elements[GetIndex(3, 1)] &&
+					m_Elements[GetIndex(3, 2)] == other.m_Elements[GetIndex(3, 2)] &&
+					m_Elements[GetIndex(3, 3)] == other.m_Elements[GetIndex(3, 3)]);
+			}
+
+			const bool operator!=(const Mat4& other)
+			{
+				return !(m_Elements[GetIndex(0, 0)] == other.m_Elements[GetIndex(0, 0)] &&
+					m_Elements[GetIndex(0, 1)] == other.m_Elements[GetIndex(0, 1)] &&
+					m_Elements[GetIndex(0, 2)] == other.m_Elements[GetIndex(0, 2)] &&
+					m_Elements[GetIndex(0, 3)] == other.m_Elements[GetIndex(0, 3)] &&
+
+					m_Elements[GetIndex(1, 0)] == other.m_Elements[GetIndex(1, 0)] &&
+					m_Elements[GetIndex(1, 1)] == other.m_Elements[GetIndex(1, 1)] &&
+					m_Elements[GetIndex(1, 2)] == other.m_Elements[GetIndex(1, 2)] &&
+					m_Elements[GetIndex(1, 3)] == other.m_Elements[GetIndex(1, 3)] &&
+
+					m_Elements[GetIndex(2, 0)] == other.m_Elements[GetIndex(2, 0)] &&
+					m_Elements[GetIndex(2, 1)] == other.m_Elements[GetIndex(2, 1)] &&
+					m_Elements[GetIndex(2, 2)] == other.m_Elements[GetIndex(2, 2)] &&
+					m_Elements[GetIndex(2, 3)] == other.m_Elements[GetIndex(2, 3)] &&
+
+					m_Elements[GetIndex(3, 0)] == other.m_Elements[GetIndex(3, 0)] &&
+					m_Elements[GetIndex(3, 1)] == other.m_Elements[GetIndex(3, 1)] &&
+					m_Elements[GetIndex(3, 2)] == other.m_Elements[GetIndex(3, 2)] &&
+					m_Elements[GetIndex(3, 3)] == other.m_Elements[GetIndex(3, 3)]);
+			}
+
+			///////
+			// Useful Matrices
+			///////
+
 			static constexpr Mat4 Translate(const Vec3<T>& translation)
 			{
-				Mat4 result = Mat4();
+				Mat4 result;
 
 				result.m_Elements[GetIndex(3, 0)] = translation.x;
 				result.m_Elements[GetIndex(3, 1)] = translation.y;
@@ -186,7 +252,7 @@ namespace Crow {
 
 			static constexpr Mat4 Scale(const Vec3<T>& scale)
 			{
-				Mat4 result = Mat4();
+				Mat4 result;
 
 				result.m_Elements[GetIndex(0, 0)] = scale.x;
 				result.m_Elements[GetIndex(1, 1)] = scale.y;
@@ -195,36 +261,30 @@ namespace Crow {
 			}
 
 			// Recommended to normalize axis
-			static constexpr Mat4 Rotate(const float degrees, const Vec3<T>& axis)
+			static inline constexpr Mat4 Rotate(const float degrees, const Vec3<T>& axis)
 			{
+				Mat4 result;
 
 				const float r = ToRadians(degrees);
 
 				const float c = cos(r);
 				const float s = sin(r);
 
-				const float cs = 1.0 - c;
+				const Vec3<T> csAxis = axis * (1.0f - c);
+				axis.x
 
-				Mat4 result = Mat4();
+				result.m_Elements[GetIndex(0, 0)] = c + axis.x * csAxis.x;
+				result.m_Elements[GetIndex(0, 1)] = -axis.z * s + csAxis.x * axis.y;
+				result.m_Elements[GetIndex(0, 2)] = axis.y * s + csAxis.x * axis.z;
+				
+				result.m_Elements[GetIndex(1, 0)] = axis.z * s + csAxis.y * axis.x;
+				result.m_Elements[GetIndex(1, 1)] = c + axis.y * csAxis.y;
+				result.m_Elements[GetIndex(1, 2)] = -axis.x * s + csAxis.y * axis.z;
 
-				result.m_Elements[GetIndex(0, 0)] = c + axis.u * axis.u * cs;
-				result.m_Elements[GetIndex(0, 1)] = -axis.w * s + axis.u * axis.v * cs;
-				result.m_Elements[GetIndex(0, 2)] = axis.v * s + axis.u * axis.w * cs;
-				// result.m_Elements[GetIndex(0, 3)] = 0;
-				result.m_Elements[GetIndex(1, 0)] = axis.w * s + axis.v * axis.u * cs;
-				result.m_Elements[GetIndex(1, 1)] = c + axis.v * axis.v * cs;
-				result.m_Elements[GetIndex(1, 2)] = -axis.u * s + axis.v * axis.w * cs;
-				// result.m_Elements[GetIndex(1, 3)] = 0;
-				result.m_Elements[GetIndex(2, 0)] = -axis.v * s + axis.w * axis.u * cs;
-				result.m_Elements[GetIndex(2, 1)] = axis.u * s + axis.w * axis.v * cs;
-				result.m_Elements[GetIndex(2, 2)] = c + axis.w * axis.w * cs;
-				/*	
-					result.m_Elements[GetIndex(2, 3)] = 0;
-					result.m_Elements[GetIndex(3, 0)] = 0;
-					result.m_Elements[GetIndex(3, 1)] = 0;
-					result.m_Elements[GetIndex(3, 2)] = 0;
-					result.m_Elements[GetIndex(3, 3)] = 1;
-				*/
+				result.m_Elements[GetIndex(2, 0)] = -axis.y * s + csAxis.z * axis.x;
+				result.m_Elements[GetIndex(2, 1)] = axis.x * s + csAxis.z * axis.y;
+				result.m_Elements[GetIndex(2, 2)] = c + axis.z * csAxis.z;
+
 				return result;
 			}
 
@@ -276,13 +336,13 @@ namespace Crow {
 
 			static const Mat4 LookAt(const Vec3<T>& from, const Vec3<T>& to)
 			{
-				Mat4<T> result;
+				Mat4 result;
 
-				static const Vec3<T> tmp(0, 1, 0);
+				static const Vec3 tmp(0.0f, 1.0f, 0.0f);
 
-				Vec3<T> forward = Vec3<float>::Normalize(from - to);
-				Vec3<T> right = Vec3<float>::NegativeNormalize(Vec3<float>::Cross(forward, tmp));
-				Vec3<T> up = Vec3<float>::Cross(forward, right);
+				Vec3 forward = Normalize(from - to);
+				Vec3 right = NegativeNormalize(Cross(forward, tmp));
+				Vec3 up = Cross(forward, right);
 
 
 				result.m_Elements[GetIndex(0, 0)] = right.x;
@@ -294,9 +354,9 @@ namespace Crow {
 				result.m_Elements[GetIndex(2, 0)] = forward.x;
 				result.m_Elements[GetIndex(2, 1)] = forward.y;
 				result.m_Elements[GetIndex(2, 2)] = forward.z;
-				result.m_Elements[GetIndex(3, 0)] = -from.Dot(right, from);
-				result.m_Elements[GetIndex(3, 1)] = -from.Dot(up, from);;
-				result.m_Elements[GetIndex(3, 2)] = -from.Dot(forward, from);
+				result.m_Elements[GetIndex(3, 0)] = -from.Dot(right);
+				result.m_Elements[GetIndex(3, 1)] = -from.Dot(up);
+				result.m_Elements[GetIndex(3, 2)] = -from.Dot(forward);
 				return result;
 			}
 

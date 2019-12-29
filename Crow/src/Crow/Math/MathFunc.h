@@ -18,7 +18,7 @@ namespace Crow {
 			return degrees * D_MATH_PI / 180.0f;
 		}
 
-		static float ToRadians(float degrees)
+		static constexpr float ToRadians(float degrees)
 		{
 			return degrees * MATH_PI / 180.0f;
 		}

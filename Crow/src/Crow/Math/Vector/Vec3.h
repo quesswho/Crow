@@ -56,7 +56,7 @@ namespace Crow {
 			{
 				this->x = (T)0;
 				this->y = (T)0;
-				this->z = (T)1;
+				this->z = (T)-1;
 			}
 
 			inline void Left()
@@ -100,7 +100,7 @@ namespace Crow {
 			{
 				float mag = this->Magnitude();
 				if (mag > 0)
-					return *this * (1 / mag);
+					return *this * (1.0f / mag);
 
 				return *this; // Can't normalize a zero vector
 			}
@@ -110,24 +110,7 @@ namespace Crow {
 			{
 				float mag = this->Magnitude();
 				if (mag > 0)
-					*this *= (1 / mag);
-			}
-
-			static inline const Vec3 Normalize(const Vec3 vec)
-			{
-				float mag = vec.Magnitude();
-				if (mag > 0)
-					return vec * (1.0f / mag);
-				return vec;
-			}
-
-			// Return a negative normalized vector
-			static inline const Vec3 NegativeNormalize(const Vec3 vec)
-			{
-				float mag = vec.Magnitude();
-				if (mag > 0)
-					return vec * -(1.0f / mag);
-				return vec;
+					*this *= (1.0f / mag);
 			}
 
 			// Limit magninute with int
@@ -177,25 +160,20 @@ namespace Crow {
 			// Dot product 
 			inline float Dot(const Vec3& other) const
 			{
-				return this->x * other.x + this->y * other.y + this->z * other->z;
+				return this->x * other.x + this->y * other.y + this->z * other.z;
 			}
 
 			// Dot product 
-			static inline float Dot(const Vec3& first, const Vec3& second)
+			inline float Dot(float x, float y, float z) const
 			{
-				return first.x * second.x + first.y * second.y + first.z * second.z;
+				return this->x * x + this->y * y + this->z * z;
 			}
+
 
 			// Cross product
 			inline Vec3 Cross(const Vec3& other) const
 			{
 				return Vec3(this->y * other.z - this->z * other.y, this->z * other.x - this->x * other.z, this->x * other.y - this->y * other.x);
-			}
-
-			// Cross product
-			static inline Vec3 Cross(const Vec3& first, const Vec3& second)
-			{
-				return Vec3(first.y * second.z - first.z * second.y, first.z * second.x - first.x * second.z, first.x * second.y - first.y * second.x);
 			}
 
 			// Assignment //

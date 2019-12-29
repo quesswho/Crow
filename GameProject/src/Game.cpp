@@ -16,13 +16,15 @@ using namespace Math;
 
 		//teatatats.NormalizeVector();
 
-		Vec4 teatatats2 = Vec4<float>::Normalize(teatatats);
+		Vec4 teatatats2 = Normalize(teatatats);
 
 		teatatats = teatatats2.Normalize();
 
 		glm::mat4 testa = glm::lookAt(glm::vec3(0.0f, 0.0f, 30.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		m_View = Mat4<float>::LookAt(Vec3<float>(0.0f, -1.0f, 3.0f), Vec3<float>(0.0f, 0.0f, 0.0f));
 
+
+		m_2DModel = Mat3<float>::Scale(Vec2(1.0f, 2.0f));
 
 		m_Model *= Mat4<float>::Scale(Vec3(1.0f, 1.0f, 1.0f));
 		//m_Model *= Mat4<float>::Translate(Vec3(2.0f, 2.0f, 0.0f));
@@ -47,10 +49,10 @@ using namespace Math;
 			 0.1f,  0.1f, 0.0f, 0.0f, 0.1f, 1.0f, 1.0f,
 			 
 			 // Further away (green)
-			-0.75f, 0.75f, 0.2f, 0.0f, 1.0f, 0.0f, 1.0f,
-			 0.0f,  0.0f,  0.2f, 0.0f, 1.0f, 0.0f, 1.0f,
-			-0.75f, 0.0f,  0.2f, 0.0f, 1.0f, 0.0f, 1.0f,
-			 0.0f,  0.75f, 0.2f, 0.0f, 1.0f, 0.0f, 1.0f
+			-0.75f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+			 0.0f,  0.0f,  0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+			-0.75f, 0.0f,  0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+			 0.0f,  0.75f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f
 		};
 
 		ulong indices[] {
@@ -59,16 +61,9 @@ using namespace Math;
 		};
 
 
-		Vec4<float> a(vertices[0], vertices[1], vertices[2], 0.0f);
-		a *= m_Projection;
 
-		glm::vec4 v(vertices[0], vertices[1], vertices[2], 0.0f);
-		//v *= test;
-
-
-
-		m_Shader = Shader::CreateFromSource("ColorShader", Application::GetAPI()->GetShaderFactory()->BasicLightShader(), bufferprop);
-
+		//m_Shader = Shader::CreateFromSource("ColorShader", Application::GetAPI()->GetShaderFactory()->BasicLightShader(), bufferprop);
+		m_Shader = Shader::CreateFromPath("2DTest", "res/Shader/2DTest.glsl", bufferprop);
 		std::shared_ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices), bufferprop);
 		std::shared_ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(ulong));
 
@@ -179,9 +174,9 @@ using namespace Math;
 
 
 		if (Input::IsKeyPressed(CROW_KEY_Q))
-			m_Model *= Mat4<float>::Rotate(90.0f * elapsed, Vec3(0.0f, 1.0f, 1.0f));
+			m_2DModel *= Mat3<float>::Rotate(90.0f * elapsed);
 		if (Input::IsKeyPressed(CROW_KEY_E))
-			m_Model *= Mat4<float>::Rotate(-90.0f * elapsed, Vec3(0.0f, 1.0f, 1.0f));
+			m_2DModel *= Mat3<float>::Rotate(-90.0f * elapsed);
 		/*glm::vec3 pos = m_Camera->GetCameraPos();
 		m_Camera->Update(elapsed);
 
@@ -209,10 +204,11 @@ using namespace Math;
 	{
 
 		m_Shader->Bind();
-		m_Shader->SetUniformStruct("u_Light", m_Light);
-		m_Shader->SetUniformValue("u_Projection", m_Projection);
-		m_Shader->SetUniformValue("u_Model", m_Model);
-		m_Shader->SetUniformValue("u_View", m_View);
+		m_Shader->SetUniformValue("u_Model", m_2DModel);
+		//m_Shader->SetUniformStruct("u_Light", m_Light);
+		//m_Shader->SetUniformValue("u_Projection", m_Projection);
+		//m_Shader->SetUniformValue("u_Model", m_Model);
+		//m_Shader->SetUniformValue("u_View", m_View);
 		m_ArrayBuffer->Bind();
 		Application::GetAPI()->DrawIndices(m_ArrayBuffer->GetCount());
 
@@ -231,7 +227,7 @@ class Game : public Crow::Application {
 	
 public:
 	Game()
-		: Application(WindowProperties("The Crows 2D", 720, 720), Crow::Platform::GraphicAPI::OPENGL, Platform::ApplicationAPI::WINDOWS)
+		: Application(WindowProperties("The Crows 2D", 1080, 720), Crow::Platform::GraphicAPI::OPENGL, Platform::ApplicationAPI::GLFW)
 	{
 		PushLayer(new Layer2D());
 	}

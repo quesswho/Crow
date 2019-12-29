@@ -38,6 +38,7 @@ private:
 	Crow::Math::Mat4<float> m_Model;
 	Crow::Math::Mat4<float> m_View;
 	Crow::Math::Mat4<float> m_Look;
+	Crow::Math::Mat3<float> m_2DModel;
 
 	Light* m_Light;
 };

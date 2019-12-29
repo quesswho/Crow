@@ -272,9 +272,9 @@ namespace Crow {
 		{
 			glUniformMatrix2fv(GetLocation(location), 1, GL_FALSE, &value[0][0]);
 		}
-		void OpenGLShader::SetUniformValue(const char* location, const glm::mat3x3& value)
+		void OpenGLShader::SetUniformValue(const char* location, const Math::Mat3<float>& value)
 		{
-			glUniformMatrix3fv(GetLocation(location), 1, GL_FALSE, &value[0][0]);
+			glUniformMatrix3fv(GetLocation(location), 1, GL_FALSE, &value.m_Elements[0]);
 		}
 		void OpenGLShader::SetUniformValue(const char* location, const Math::Mat4<float>& value)
 		{

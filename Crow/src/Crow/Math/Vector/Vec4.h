@@ -137,7 +137,7 @@ namespace Crow {
 			{
 				float mag = this->Magnitude();
 				if (mag > 0)
-					return *this * (1 / mag);
+					return *this * (1.0f / mag);
 
 				return *this; // Can't normalize a zero vector
 			}
@@ -147,15 +147,7 @@ namespace Crow {
 			{
 				float mag = this->Magnitude();
 				if (mag > 0)
-					*this *= (1 / mag);
-			}
-
-			static inline const Vec4 Normalize(const Vec4 vec)
-			{
-				float mag = vec.Magnitude();
-				if (mag > 0)
-					return vec * (1 / mag);
-				return vec;
+					*this *= (1.0f / mag);
 			}
 
 			// Limit magninute with int
@@ -213,12 +205,6 @@ namespace Crow {
 			{
 				return this->x * otherX + this->y * otherY + this->z * otherZ + this->w * otherW;
 			}
-
-			static float Dot(const Vec4& first, const Vec4& second)
-			{
-				return first->x * second->x + first->y * second->y + first->z * second->z + first->w * second->w;
-			}
-			
 
 			// Assignment //
 

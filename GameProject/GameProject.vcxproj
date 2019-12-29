@@ -106,6 +106,9 @@
       <Project>{A0C0837C-8CF7-840D-35E4-6A1021FA000F}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="res\Shader\2DTest.glsl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
