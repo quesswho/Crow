@@ -115,6 +115,16 @@ namespace Crow {
 		s_LayerManager->PopLayer(layer);
 	}
 
+	void Application::SetCursorPosition(Math::TVec2<int> pos)
+	{
+		s_Window->SetCursorPosition(pos);
+	}
+
+	void Application::SetCursorVisibility(bool visbility)
+	{
+		s_Window->SetCursorVisibility(visbility);
+	}
+
 	AbstractRenderAPI* Application::GetAPI()
 	{ 
 		return s_RenderAPI;

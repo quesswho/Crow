@@ -1,41 +1,42 @@
 #pragma once
-#include "Vec3.h"
+
 #include "../Matrix/Mat4.h"
+#include "Vec3.h"
 
 namespace Crow {
 	namespace Math {
 
 		template<typename T>
-		struct Mat4;
+		struct Mat4x4;
 
 		template<typename T = float>
-		struct Vec4
+		struct TVec4
 		{
-			Vec4()
+			TVec4()
 				: x((T)0), y((T)0), z((T)0), w((T)0)
 			{}
 
-			Vec4(T f)
+			TVec4(T f)
 				: x(f), y(f), z(f), w(f)
 			{}
 
-			Vec4(const Vec2<T>& vec)
-				: x(vev.x), y(vec.y), z((T)0), w((T)0)
+			TVec4(const TVec2<T>& vec)
+				: x(vec.x), y(vec.y), z((T)0), w((T)0)
 			{}
 
-			Vec4(const Vec2<T>& vec, T value, T second)
+			TVec4(const TVec2<T>& vec, T value, T second)
 				: x(vec.x), y(vec.y), z(value), w(second)
 			{}
 
-			Vec4(const Vec3<T>& vec)
+			TVec4(const TVec3<T>& vec)
 				: x(vec.x), y(vec.y), z((T)vec.z), w((T)0)
 			{}
 
-			Vec4(const Vec3<T>& vec, T value)
+			TVec4(const TVec3<T>& vec, T value)
 				: x(vec.x), y(vec.y), z(vec.z), w(value)
 			{}
 
-			Vec4(T first, T second, T third, T forth)
+			TVec4(T first, T second, T third, T forth)
 				: x(first), y(second), z(third), w(forth)
 			{}
 
@@ -133,7 +134,7 @@ namespace Crow {
 			}
 
 			// Return normalized vector
-			inline Vec4 Normalize() const
+			inline TVec4 Normalize() const
 			{
 				float mag = this->Magnitude();
 				if (mag > 0)
@@ -151,7 +152,7 @@ namespace Crow {
 			}
 
 			// Limit magninute with int
-			inline constexpr Vec4 Limit(int limit) const
+			inline constexpr TVec4 Limit(int limit) const
 			{
 				return this->Normalize() * limit;
 			}
@@ -163,7 +164,7 @@ namespace Crow {
 			}
 
 			// Limit magninute with double
-			inline constexpr Vec4 Limit(double limit) const
+			inline constexpr TVec4 Limit(double limit) const
 			{
 				return this->Normalize() * limit;
 			}
@@ -175,7 +176,7 @@ namespace Crow {
 			}
 
 			// Limit magninute with float
-			inline constexpr Vec4 Limit(float limit) const
+			inline constexpr TVec4 Limit(float limit) const
 			{
 				return this->Normalize() * limit;
 			}
@@ -187,7 +188,7 @@ namespace Crow {
 			}
 
 			// Get distance between this vector and other vector
-			inline float Distance(const Vec4& other) const
+			inline float Distance(const TVec4& other) const
 			{
 				return sqrt((this->x - other->x) * (this->x - other->x) +
 					(this->y - other->y) * (this->y - other->y) +
@@ -196,7 +197,7 @@ namespace Crow {
 			}
 
 			// Dot product 
-			inline float Dot(const Vec4& other) const
+			inline float Dot(const TVec4& other) const
 			{
 				return this->x * other.x + this->y * other.y + this->z * other.z + this->w * other.w;
 			}
@@ -208,7 +209,7 @@ namespace Crow {
 
 			// Assignment //
 
-			const Vec4& operator=(const int other)
+			const TVec4& operator=(const int other)
 			{
 				this->x = other;
 				this->y = other;
@@ -217,7 +218,7 @@ namespace Crow {
 				return *this;
 			}
 
-			const Vec4& operator=(const double other)
+			const TVec4& operator=(const double other)
 			{
 				this->x = other;
 				this->y = other;
@@ -226,7 +227,7 @@ namespace Crow {
 				return *this;
 			}
 
-			const Vec4& operator=(const float other)
+			const TVec4& operator=(const float other)
 			{
 				this->x = other;
 				this->y = other;
@@ -235,7 +236,7 @@ namespace Crow {
 				return *this;
 			}
 
-			const Vec4& operator=(const Vec4& other)
+			const TVec4& operator=(const TVec4& other)
 			{
 				this->x = other.x;
 				this->y = other.y;
@@ -247,7 +248,7 @@ namespace Crow {
 			// Addition //
 
 
-			constexpr Vec4& operator+=(const int other)
+			constexpr TVec4& operator+=(const int other)
 			{
 				this->x += other;
 				this->y += other;
@@ -256,10 +257,10 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Vec4 operator+(Vec4 left, const int right) { return left += right; }
+			friend TVec4 operator+(TVec4 left, const int right) { return left += right; }
 
 
-			constexpr Vec4& operator+=(const double other)
+			constexpr TVec4& operator+=(const double other)
 			{
 				this->x += other;
 				this->y += other;
@@ -268,10 +269,10 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Vec4 operator+(Vec4 left, const double right) { return left += right; }
+			friend TVec4 operator+(TVec4 left, const double right) { return left += right; }
 
 
-			constexpr Vec4& operator+=(const float other)
+			constexpr TVec4& operator+=(const float other)
 			{
 				this->x += other;
 				this->y += other;
@@ -280,10 +281,10 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Vec4 operator+(Vec4 left, const float right) { return left += right; }
+			friend TVec4 operator+(TVec4 left, const float right) { return left += right; }
 
 
-			constexpr Vec4& operator+=(const Vec4& other)
+			constexpr TVec4& operator+=(const TVec4& other)
 			{
 				this->x += other.x;
 				this->y += other.y;
@@ -292,11 +293,11 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Vec4 operator+(Vec4 left, const Vec4& right) { return left += right; }
+			friend TVec4 operator+(TVec4 left, const TVec4& right) { return left += right; }
 
 			// Subtraction //
 
-			constexpr Vec4& operator-=(const int other)
+			constexpr TVec4& operator-=(const int other)
 			{
 				this->x -= other;
 				this->y -= other;
@@ -305,10 +306,10 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Vec4 operator-(Vec4 left, const int right) { return left -= right; }
+			friend TVec4 operator-(TVec4 left, const int right) { return left -= right; }
 
 
-			constexpr Vec4& operator-=(const double other)
+			constexpr TVec4& operator-=(const double other)
 			{
 				this->x -= other;
 				this->y -= other;
@@ -317,10 +318,10 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Vec4 operator-(Vec4 left, const double right) { return left -= right; }
+			friend TVec4 operator-(TVec4 left, const double right) { return left -= right; }
 
 
-			constexpr Vec4& operator-=(const float other)
+			constexpr TVec4& operator-=(const float other)
 			{
 				this->x -= other;
 				this->y -= other;
@@ -329,10 +330,10 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Vec4 operator-(Vec4 left, const float right) { return left -= right; }
+			friend TVec4 operator-(TVec4 left, const float right) { return left -= right; }
 
 
-			constexpr Vec4& operator-=(const Vec4& other)
+			constexpr TVec4& operator-=(const TVec4& other)
 			{
 				this->x -= other.x;
 				this->y -= other.y;
@@ -341,11 +342,11 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Vec4 operator-(Vec4 left, const Vec4& right) { return left -= right; }
+			friend TVec4 operator-(TVec4 left, const TVec4& right) { return left -= right; }
 
 			// Multiplication //
 
-			constexpr Vec4& operator*=(const int other)
+			constexpr TVec4& operator*=(const int other)
 			{
 				this->x *= other;
 				this->y *= other;
@@ -354,10 +355,10 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Vec4 operator*(Vec4 left, const int right) { return left *= right; }
+			friend TVec4 operator*(TVec4 left, const int right) { return left *= right; }
 
 
-			constexpr Vec4& operator*=(const double other)
+			constexpr TVec4& operator*=(const double other)
 			{
 				this->x *= other;
 				this->y *= other;
@@ -366,10 +367,10 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Vec4 operator*(Vec4 left, const double right) { return left *= right; }
+			friend TVec4 operator*(TVec4 left, const double right) { return left *= right; }
 
 
-			const Vec4& operator*=(const float other)
+			const TVec4& operator*=(const float other)
 			{
 				this->x *= other;
 				this->y *= other;
@@ -378,10 +379,10 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Vec4 operator*(Vec4 left, const float right) { return left *= right; }
+			friend TVec4 operator*(TVec4 left, const float right) { return left *= right; }
 
 
-			constexpr Vec4& operator*=(const Vec4& other)
+			constexpr TVec4& operator*=(const TVec4& other)
 			{
 				this->x *= other.x;
 				this->y *= other.y;
@@ -390,11 +391,11 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Vec4 operator*(Vec4 left, const Vec4& right) { return left *= right; }
+			friend TVec4 operator*(TVec4 left, const TVec4& right) { return left *= right; }
 
-			constexpr Vec4& operator*=(const Mat4<T> other)
+			constexpr TVec4& operator*=(const Mat4x4<T> other)
 			{
-				Vec4<T> result;
+				TVec4<T> result;
 				result.x = (T)Dot(other.m_Elements[0], other.m_Elements[4], other.m_Elements[8], other.m_Elements[12]);
 				result.y = (T)Dot(other.m_Elements[1], other.m_Elements[5], other.m_Elements[9], other.m_Elements[13]);
 				result.z = (T)Dot(other.m_Elements[2], other.m_Elements[6], other.m_Elements[10], other.m_Elements[14]);
@@ -403,11 +404,11 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Vec4 operator*(Vec4 left, const Mat4<T>& right) { return left *= right; }
+			friend TVec4 operator*(TVec4 left, const Mat4x4<T>& right) { return left *= right; }
 
 			// Division //
 
-			constexpr Vec4& operator/=(const int other)
+			constexpr TVec4& operator/=(const int other)
 			{
 				this->x /= other;
 				this->y /= other;
@@ -416,10 +417,10 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Vec4 operator/(Vec4 left, const int right) { return left /= right; }
+			friend TVec4 operator/(TVec4 left, const int right) { return left /= right; }
 
 
-			constexpr Vec4& operator/=(const double other)
+			constexpr TVec4& operator/=(const double other)
 			{
 				this->x /= other;
 				this->y /= other;
@@ -428,10 +429,10 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Vec4 operator/(Vec4 left, const double right) { return left /= right; }
+			friend TVec4 operator/(TVec4 left, const double right) { return left /= right; }
 
 
-			constexpr Vec4& operator/=(const float other)
+			constexpr TVec4& operator/=(const float other)
 			{
 				this->x /= other;
 				this->y /= other;
@@ -440,10 +441,10 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Vec4 operator/(Vec4 left, const float right) { return left /= right; }
+			friend TVec4 operator/(TVec4 left, const float right) { return left /= right; }
 
 
-			constexpr Vec4& operator/=(const Vec4& other)
+			constexpr TVec4& operator/=(const TVec4& other)
 			{
 				this->x /= other.x;
 				this->y /= other.y;
@@ -452,11 +453,11 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Vec4 operator/(Vec4 left, const Vec4& right) { return left /= right; }
+			friend TVec4 operator/(TVec4 left, const TVec4& right) { return left /= right; }
 
 			// Modulus //
 
-			constexpr Vec4& operator%=(const int other)
+			constexpr TVec4& operator%=(const int other)
 			{
 				this->x %= other;
 				this->y %= other;
@@ -465,10 +466,10 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Vec4 operator%(Vec4 left, const int right) { return left %= right; }
+			friend TVec4 operator%(TVec4 left, const int right) { return left %= right; }
 
 
-			constexpr Vec4& operator%=(const double other)
+			constexpr TVec4& operator%=(const double other)
 			{
 				this->x %= other;
 				this->y %= other;
@@ -477,10 +478,10 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Vec4 operator%(Vec4 left, const double right) { return left %= right; }
+			friend TVec4 operator%(TVec4 left, const double right) { return left %= right; }
 
 
-			constexpr Vec4& operator%=(const float other)
+			constexpr TVec4& operator%=(const float other)
 			{
 				this->x %= other;
 				this->y %= other;
@@ -489,10 +490,10 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Vec4 operator%(Vec4 left, const float right) { return left %= right; }
+			friend TVec4 operator%(TVec4 left, const float right) { return left %= right; }
 
 
-			constexpr Vec4& operator%=(const Vec4& other)
+			constexpr TVec4& operator%=(const TVec4& other)
 			{
 				this->x %= other.x;
 				this->y %= other.y;
@@ -501,34 +502,34 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Vec4 operator%(Vec4 left, const Vec4& right) { return left %= right; }
+			friend TVec4 operator%(TVec4 left, const TVec4& right) { return left %= right; }
 
 			// Test //
 
-			const bool operator==(const Vec4& other) const
+			const bool operator==(const TVec4& other) const
 			{
 				return (this->x == other.x && this->y == other.y && this->z == other->z && this->w == other->w);
 			}
 
-			const bool operator!=(const Vec4& other) const
+			const bool operator!=(const TVec4& other) const
 			{
 				return !(this->x == other.x && this->y == other.y && this->z == other.z && this->w == other->w);
 			}
 
-			const bool operator<(const Vec4& other) const
+			const bool operator<(const TVec4& other) const
 			{
 				return (this->x < other.x && this->y < other.y && this->z < other.z && this->w < other.w);
 			}
-			const bool operator>(const Vec4& other) const
+			const bool operator>(const TVec4& other) const
 			{
 				return (this->x > other.x && this->y > other.y && this->z > other.z && this->w > other.w);
 			}
 
-			const bool operator<=(const Vec4& other) const
+			const bool operator<=(const TVec4& other) const
 			{
 				return (this->x <= other.x && this->y <= other.y && this->z <= other.z && this->w <= other.w);
 			}
-			const bool operator>=(const Vec4& other) const
+			const bool operator>=(const TVec4& other) const
 			{
 				return (this->x >= other.x && this->y >= other.y && this->z >= other.z && this->w >= other.w);
 			}

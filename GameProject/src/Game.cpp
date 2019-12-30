@@ -1,69 +1,75 @@
 #include "Game.h"
 
-#include "glm/vec3.hpp"
 #include "Crow/Graphics/ShaderFactory.h"
-#include <glm/ext/matrix_clip_space.hpp>
 
 using namespace Crow;
 using namespace Math;
 	Layer2D::Layer2D()
-		: m_Camera(new OrthographicCamera(glm::vec2(0.0f, 0.0f), 2.0f, 2.0f, 3.0f, 3.0f))
+		: m_Camera(new FirstPersonCamera(Vec3(0.0f, 0.0f, 0.0f), 1080.0f / 720.0f, 0.05f, 3.0f))
 	{
-		m_Projection = Mat4<float>::PerspectiveMatrix(45.0f, 720.0f / 720.0f, 0.01f, 100.0f);
-		//m_Projection = Mat4<float>::OrthographicMatrix(-0.5f, 0.5f, -0.5f, 0.5f, 0.01, 100.0f);
 
-		Vec4 teatatats = Vec4(10.0f, 21.1241f, 1053.2f, 0.0f);
-
-		//teatatats.NormalizeVector();
-
-		Vec4 teatatats2 = Normalize(teatatats);
-
-		teatatats = teatatats2.Normalize();
-
-		glm::mat4 testa = glm::lookAt(glm::vec3(0.0f, 0.0f, 30.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		m_View = Mat4<float>::LookAt(Vec3<float>(0.0f, -1.0f, 3.0f), Vec3<float>(0.0f, 0.0f, 0.0f));
-
-
-		m_2DModel = Mat3<float>::Scale(Vec2(1.0f, 2.0f));
-
-		m_Model *= Mat4<float>::Scale(Vec3(1.0f, 1.0f, 1.0f));
-		//m_Model *= Mat4<float>::Translate(Vec3(2.0f, 2.0f, 0.0f));
-		//m_View = Mat4<float>::Translate(Vec3(0.0f, 0.0f, -3.0f));
+		m_Model *= Mat4::Scale(Vec3(1.0f, 1.0f, 1.0f));
 
 		Application::GetAPI()->ClearColor(0.5f, 0.7f, 0.5f);
 		//Application::GetAPI()->EnableDepthTest();
 
-		//m_Renderer = std::make_unique<Renderer2D>();
-
 		BufferProperties bufferprop = { 
 			{ "POSITION", 3 },//, //vertices
-			{ "COLOR", 4 }  //uvs
+			//{ "UV", 2 }  //uvs
 		};
 
-		//ArrayBuffer* m_Buffer = ArrayBuffer::Create();
-
 		float vertices[] = {
-			-0.1f,  0.1f, 0.0f, 0.0f, 0.1f, 1.0f, 1.0f,
-			 0.1f, -0.1f, 0.0f, 0.0f, 0.1f, 1.0f, 1.0f,
-			-0.1f, -0.1f, 0.0f, 0.0f, 0.1f, 1.0f, 1.0f,
-			 0.1f,  0.1f, 0.0f, 0.0f, 0.1f, 1.0f, 1.0f,
-			 
-			 // Further away (green)
-			-0.75f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-			 0.0f,  0.0f,  0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-			-0.75f, 0.0f,  0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-			 0.0f,  0.75f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f
+			-0.5f, -0.5f, -0.5f,
+			 0.5f, -0.5f, -0.5f,
+			 0.5f,  0.5f, -0.5f,
+			 0.5f,  0.5f, -0.5f,
+			-0.5f,  0.5f, -0.5f,
+			-0.5f, -0.5f, -0.5f,
+
+			-0.5f, -0.5f,  0.5f,
+			 0.5f, -0.5f,  0.5f,
+			 0.5f,  0.5f,  0.5f,
+			 0.5f,  0.5f,  0.5f,
+			-0.5f,  0.5f,  0.5f,
+			-0.5f, -0.5f,  0.5f,
+
+			-0.5f,  0.5f,  0.5f,
+			-0.5f,  0.5f, -0.5f,
+			-0.5f, -0.5f, -0.5f,
+			-0.5f, -0.5f, -0.5f,
+			-0.5f, -0.5f,  0.5f,
+			-0.5f,  0.5f,  0.5f,
+
+			 0.5f,  0.5f,  0.5f,
+			 0.5f,  0.5f, -0.5f,
+			 0.5f, -0.5f, -0.5f,
+			 0.5f, -0.5f, -0.5f,
+			 0.5f, -0.5f,  0.5f,
+			 0.5f,  0.5f,  0.5f,
+
+			-0.5f, -0.5f, -0.5f,
+			 0.5f, -0.5f, -0.5f,
+			 0.5f, -0.5f,  0.5f,
+			 0.5f, -0.5f,  0.5f,
+			-0.5f, -0.5f,  0.5f,
+			-0.5f, -0.5f, -0.5f,
+
+			-0.5f,  0.5f, -0.5f,
+			 0.5f,  0.5f, -0.5f,
+			 0.5f,  0.5f,  0.5f,
+			 0.5f,  0.5f,  0.5f,
+			-0.5f,  0.5f,  0.5f,
+			-0.5f,  0.5f, -0.5f
 		};
 
 		ulong indices[] {
-			0,1,2, 0,3,1,
-			4,5,6, 4,7,5
+			0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35
 		};
 
 
 
-		//m_Shader = Shader::CreateFromSource("ColorShader", Application::GetAPI()->GetShaderFactory()->BasicLightShader(), bufferprop);
-		m_Shader = Shader::CreateFromPath("2DTest", "res/Shader/2DTest.glsl", bufferprop);
+		m_Shader = Shader::CreateFromSource("InterpolationShader", Application::GetAPI()->GetShaderFactory()->BasicLightShader(), bufferprop);
+
 		std::shared_ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices), bufferprop);
 		std::shared_ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(ulong));
 
@@ -71,52 +77,10 @@ using namespace Math;
 		m_ArrayBuffer = ArrayBuffer::Create(vertexBuffer, indexBuffer);
 
 		m_Light = new Light(glm::vec2(0.0f, 0.0f), glm::vec4(0.5f, 0.1f, 0.5f, 1.0f));
-	//	shader->Bind();
-		//shader->SetUniform3f("u_Color", glm::vec3(1.0f, 0.1f, 0.3f));
-
-		/*Texture* texture = Texture::Create("res/Texture/crow.png", TextureProperties(CROW_NEAREST_MIPMAP_NEAREST, CROW_NEAREST, CROW_CLAMP_TO_EDGE, CROW_CLAMP_TO_EDGE));
-		Texture* texture2 = Texture::Create("res/Texture/crow2.png", TextureProperties(CROW_NEAREST_MIPMAP_NEAREST, CROW_NEAREST, CROW_CLAMP_TO_EDGE, CROW_CLAMP_TO_EDGE));
-		Texture* playerTexture = Texture::Create("res/Texture/Player.png", TextureProperties(CROW_NEAREST_MIPMAP_NEAREST, CROW_NEAREST, CROW_CLAMP_TO_EDGE, CROW_CLAMP_TO_EDGE));
-
-		Shader* shader = Shader::CreateFromPath("Basic2", "res/Shader/Basic.glsl");
-
-		Shader* playerShader = Shader::CreateFromPath("Player", "res/Shader/Basic.glsl");
-
-		glm::mat4 translation = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-		translation *= glm::translate(translation, glm::vec3(1.0f, 0.0f, 0.0f));
-
-		ShaderManager::PushShader(shader);
-		ShaderManager::PushShader(playerShader);
-
-		m_Objects.push_back(new Object2D(m_Buffer, shader, { texture }));
-		m_Objects[0]->SetPosition(glm::vec3(0, 0, 0));
-
-		m_Objects[0]->SetCollision(glm::vec2(1.0f, 1.0f));
-		
-		for (int x = 0; x < 80; x++)
-		{
-			for (int y = 0; y < 80; y++)
-			{
-				m_BatchingObjects.push_back(new Batchable2D(vertices, sizeof(vertices), indices, sizeof(indices) / sizeof(uint), shader, texture2, glm::vec3(x+1.0f, y, 0.0f)));
-			}
-		}
-
-		m_Player = new Object2D(m_Buffer, playerShader, { playerTexture });
-		m_Player->AddPosition(glm::vec3(2.0f, 2.0f, 0.0f));
-		m_Player->SetCollision(glm::vec2(1.0f, 1.0f));
-		m_Camera->SetCameraPos(glm::vec3(2.0f, 0.0f, 0.0f));
-		m_Player->SetPosition(m_Camera->GetCameraPos());*/
 	}
 
 	Layer2D::~Layer2D()
-	{
-		//delete m_PSO;
-		/*for(const auto object : m_Objects)
-			delete object;
-		for (const auto batch : m_BatchingObjects)
-			delete batch;
-		delete m_Player;*/
-	}
+	{}
 
 	void Layer2D::OnEvent(Event& e)
 	{
@@ -125,19 +89,12 @@ using namespace Math;
 		switch (e.m_Type)
 		{
 		case MOUSEPOS: // key = x, action = y
-			//CR_GAME_INFO("Mouse Pos: {}, {}", key, action);
+			m_Camera->UpdateRotation();
 			break;
 		case KEY:
 			CR_GAME_INFO("Keyboard: {}", key);
 			if (key == CROW_KEY_ESCAPE && action == CROW_KEY_PRESS)
 				Crow::Application::Shutdown();
-
-			/*if (Input::IsKeyPressed(CROW_KEY_R))
-				m_Light->m_Pos = glm::vec3(0.0f, 0.0f, 0.0f);
-			if (Input::IsKeyPressed(CROW_KEY_G))
-				m_Light->m_Pos = glm::vec3(0.0f, 0.1f, 0.0f);
-			if (Input::IsKeyPressed(CROW_KEY_B))
-				m_Light->m_Pos = glm::vec3(0.0f, 0.2f, 0.0f);*/
 			
 			break;
 		case MOUSE:
@@ -159,68 +116,32 @@ using namespace Math;
 		if (Input::IsKeyPressed(CROW_KEY_RIGHT))
 			m_Light->m_Pos.x += elapsed * 1.0f;
 
-		if (Input::IsKeyPressed(CROW_KEY_W))
-			m_View *= Mat4<float>::Translate(Vec3(0.0f, 0.0f, elapsed * 1.0f));
-		if (Input::IsKeyPressed(CROW_KEY_S))
-			m_View *= Mat4<float>::Translate(Vec3(0.0f, 0.0f, elapsed * -1.0f));
-		if (Input::IsKeyPressed(CROW_KEY_A))
-			m_View *= Mat4<float>::Translate(Vec3(elapsed * 1.0f, 0.0f, 0.0f));
-		if (Input::IsKeyPressed(CROW_KEY_D))
-			m_View *= Mat4<float>::Translate(Vec3(elapsed * -1.0f, 0.0f, 0.0f));
-		if (Input::IsKeyPressed(CROW_KEY_SPACE))
-			m_View *= Mat4<float>::Translate(Vec3(0.0f, elapsed * -1.0f, 0.0f));
-		if (Input::IsKeyPressed(CROW_KEY_LEFT_CONTROL))
-			m_View *= Mat4<float>::Translate(Vec3(0.0f, elapsed * 1.0f, 0.0f));
-
-
 		if (Input::IsKeyPressed(CROW_KEY_Q))
-			m_2DModel *= Mat3<float>::Rotate(90.0f * elapsed);
+			m_Model *= Mat4::Rotate(90.0f * elapsed, Vec3(1.0f, 1.0f, 0.0f));
 		if (Input::IsKeyPressed(CROW_KEY_E))
-			m_2DModel *= Mat3<float>::Rotate(-90.0f * elapsed);
-		/*glm::vec3 pos = m_Camera->GetCameraPos();
+			m_Model *= Mat4::Rotate(-90.0f * elapsed, Vec3(1.0f, 1.0f, 0.0f));
+		if (Input::IsKeyPressed(CROW_KEY_R))
+			m_Camera->SetViewDir(Vec3(0.0f, 0.0f, 1.0f));
+
+
 		m_Camera->Update(elapsed);
-
-		if (m_Player->IsColliding(m_Objects[0]))
-			//m_Camera->SetCameraPos(pos);
-		//m_Camera->SetCameraPos(glm::vec3(m_Player->GetCorrection(m_Objects[0]), 0.0f));
-		m_Player->SetPosition(m_Camera->GetCameraPos());
-
-		for (auto object : m_Objects)
-		{
-			ShaderManager::GetShader("Basic2")->Bind();
-			ShaderManager::GetShader("Basic2")->SetUniformMat4("u_MVP", m_Camera->GetProjectionViewMatrix() * object->GetModelMatrix());
-			ShaderManager::GetShader("Player")->Bind();
-			ShaderManager::GetShader("Player")->SetUniformMat4("u_MVP", m_Camera->GetProjectionMatrix() * object->GetModelMatrix());
-		}
-
-		for (auto object : m_BatchingObjects)
-		{
-			object->m_Shader->Bind();
-			object->m_Shader->SetUniformMat4("u_MVP", m_Camera->GetProjectionViewMatrix());
-		}*/
 	}
 
 	void Layer2D::OnRender()
 	{
 
-		m_Shader->Bind();
-		m_Shader->SetUniformValue("u_Model", m_2DModel);
-		//m_Shader->SetUniformStruct("u_Light", m_Light);
-		//m_Shader->SetUniformValue("u_Projection", m_Projection);
-		//m_Shader->SetUniformValue("u_Model", m_Model);
-		//m_Shader->SetUniformValue("u_View", m_View);
 		m_ArrayBuffer->Bind();
+		m_Shader->Bind();
+		m_Shader->SetUniformStruct("u_Light", m_Light);
+		m_Shader->SetUniformValue("u_Projection", m_Camera->GetProjectionMatrix());
+		m_Shader->SetUniformValue("u_View", m_Camera->GetViewMatrix());
+		
+		m_Shader->SetUniformValue("u_Model", m_Model * Mat4::Translate(Vec3(-2.0f, 0.0f, 2.0f)));
 		Application::GetAPI()->DrawIndices(m_ArrayBuffer->GetCount());
 
-		/*m_Renderer->Begin();
-		for (auto batching : m_BatchingObjects)
-		{
-			m_Renderer->BatchSubmit(batching);
-		}
-		m_Renderer->Submit(m_Objects);
-		m_Renderer->Submit(m_Player);
-		m_Renderer->End();
-		m_Renderer->Flush();*/
+		m_Shader->SetUniformValue("u_Model", m_Model * Mat4::Translate(Vec3(2.0f, 0.8f, -2.0f)) * Mat4::Rotate(20.0f*10, Normalize(Vec3(0.5f, 0.8f, 0.2f))));
+
+		Application::GetAPI()->DrawIndices(m_ArrayBuffer->GetCount());
 	}
 
 class Game : public Crow::Application {

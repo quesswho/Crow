@@ -24,7 +24,7 @@ namespace Crow {
 		void WindowsAPICallbacks::key_callback(int flags, uint key, uint msg) // Calls when the user pressed a key on their keyboard
 		{
 			key = DecodeWindowsKey(key);
-			Input::KeyCallback(Math::Vec2<int>(key, (msg == WM_KEYDOWN || msg == WM_SYSKEYDOWN ? 1 : 0))); // Action value is calculated with if button is down and if it is in repeat
+			Input::KeyCallback(Math::TVec2<int>(key, (msg == WM_KEYDOWN || msg == WM_SYSKEYDOWN ? 1 : 0))); // Action value is calculated with if button is down and if it is in repeat
 		}
 
 		uint WindowsAPICallbacks::DecodeWindowsKey(uint key)
@@ -109,13 +109,13 @@ namespace Crow {
 				action = 0;
 				break;
 			}
-			Input::MouseCallback(Math::Vec2<int>(button, action));
+			Input::MouseCallback(Math::TVec2<int>(button, action));
 		}
 
 
 		void WindowsAPICallbacks::cursor_position_callback(int xpos, int ypos) // Calls when the user moves their mouse
 		{
-			Input::MousePosCallback(Math::Vec2<int>(xpos, ypos));
+			Input::MousePosCallback(Math::TVec2<int>(xpos, ypos));
 		}
 
 	}

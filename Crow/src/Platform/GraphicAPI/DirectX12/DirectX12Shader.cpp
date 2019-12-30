@@ -466,15 +466,15 @@ namespace Crow {
 		{
 			memcpy(m_UniformConstantBuffers[GetLocation(location)]->m_GPUAddress, &value, sizeof(value));
 		}
-		void DirectX12Shader::SetUniformValue(const char* location, const Crow::Math::Vec2<float>& value)
+		void DirectX12Shader::SetUniformValue(const char* location, const Crow::Math::TVec2<float>& value)
 		{
 			memcpy(m_UniformConstantBuffers[GetLocation(location)]->m_GPUAddress, &value, sizeof(value));
 		}
-		void DirectX12Shader::SetUniformValue(const char* location, const Crow::Math::Vec3<float>& value)
+		void DirectX12Shader::SetUniformValue(const char* location, const Crow::Math::TVec3<float>& value)
 		{
 			memcpy(m_UniformConstantBuffers[GetLocation(location)]->m_GPUAddress, &value, sizeof(value));
 		}
-		void DirectX12Shader::SetUniformValue(const char* location, const Crow::Math::Vec4<float>& value)
+		void DirectX12Shader::SetUniformValue(const char* location, const Crow::Math::TVec4<float>& value)
 		{
 			memcpy(m_UniformConstantBuffers[GetLocation(location)]->m_GPUAddress, &value, sizeof(value));
 		}
@@ -482,12 +482,12 @@ namespace Crow {
 		{
 			memcpy(m_UniformConstantBuffers[GetLocation(location)]->m_GPUAddress, &value, sizeof(value));
 		}
-		void DirectX12Shader::SetUniformValue(const char* location, const Math::Mat3<float>& value)
+		void DirectX12Shader::SetUniformValue(const char* location, const Math::Mat3& value)
 		{
 			memcpy(m_UniformConstantBuffers[GetLocation(location)]->m_GPUAddress, &value, sizeof(value));
 		}
 
-		void DirectX12Shader::SetUniformValue(const char* location, const Math::Mat4<float>& value)
+		void DirectX12Shader::SetUniformValue(const char* location, const Math::Mat4& value)
 		{
 			memcpy(m_UniformConstantBuffers[GetLocation(location)]->m_GPUAddress, &value, sizeof(value));
 		}

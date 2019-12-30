@@ -3,10 +3,8 @@
 #include "Crow/Graphics/Window.h"
 #include "Crow/Common.h"
 
-#ifdef CR_PLATFORM_WINDOWS
-	#include <Windows.h>
-	#include <windowsx.h>
-	EXTERN_C IMAGE_DOS_HEADER __ImageBase;
+#ifdef CR_PLATFORM_WINDOWS 
+#include "WindowsIncludes.h" 
 #endif
 
 namespace Crow {
@@ -23,7 +21,8 @@ namespace Crow {
 			virtual void Update() const override;
 
 			virtual void SetTitle(const char* title) override;
-
+			virtual void SetCursorPosition(Math::TVec2<int> pos) override;
+			virtual void SetCursorVisibility(bool visibility) override;
 			virtual void CreateDeviceContex() override;
 
 			void Focus() const;

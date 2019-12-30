@@ -1,26 +1,28 @@
 #pragma once
 
+#include <cstring>
+
 #include "Crow/Math/MathFunc.h"
-#include "Crow/Math/Vector/VectorMath.h"
+#include "Crow/Math/Matrix/Mat3.h"
+#include "Crow/Math/Vector/Vec4.h"
 
 namespace Crow {
-	namespace Math
-	{
+	namespace Math {
+
 
 		// Column Major 4x4 matrix
 		template<typename T = float>
-		struct Mat4 {
+		struct Mat4x4 {
 
 			union {
 				T m_Elements[16];
-				Vec4<T> m_Columns[4];
+				TVec4<T> m_Columns[4];
 			};
 
-			Mat4() { Identity(); }
+			Mat4x4() { Identity(); }
+			Mat4x4(float diagonal) { Identity(diagonal); }
 
-			Mat4(float diagonal) { Identity(diagonal); }
-
-			Mat4(const Vec4<T>& first, const Vec4<T>& second, const Vec4<T>& third, const Vec4<T>& forth)
+			Mat4x4(const TVec4<T>& first, const TVec4<T>& second, const TVec4<T>& third, const TVec4<T>& forth)
 			{
 				m_Elements[GetIndex(0, 0)] = first.x;
 				m_Elements[GetIndex(0, 1)] = first.y;
@@ -43,7 +45,7 @@ namespace Crow {
 				m_Elements[GetIndex(3, 3)] = forth.w;
 			}
 
-			Mat4(T first, T second, T third, T forth, T fifth, T sixth, T seventh, T eighth, T ninth, T tenth, T eleventh, T twelveth, T thirteenth, T fourteenth, T fifteenth, T sixteenth)
+			Mat4x4(T first, T second, T third, T forth, T fifth, T sixth, T seventh, T eighth, T ninth, T tenth, T eleventh, T twelveth, T thirteenth, T fourteenth, T fifteenth, T sixteenth)
 			{
 				m_Elements[GetIndex(0, 0)] = first;
 				m_Elements[GetIndex(0, 1)] = second;
@@ -89,7 +91,7 @@ namespace Crow {
 
 			// Addition
 
-			constexpr Mat4& operator+=(const float scalar)
+			constexpr Mat4x4& operator+=(const float scalar)
 			{
 				for (int i = 0; i < 16; i++)
 				{
@@ -98,9 +100,9 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Mat4 operator+(Mat4 left, const float right) { return left += right; }
+			friend Mat4x4 operator+(Mat4x4 left, const float right) { return left += right; }
 
-			constexpr Mat4& operator+=(const Mat4& other)
+			constexpr Mat4x4& operator+=(const Mat4x4& other)
 			{
 				for (int i = 0; i < 16; i++)
 				{
@@ -109,11 +111,11 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Mat4 operator+(Mat4 left, const Mat4& right) { return left += right; }
+			friend Mat4x4 operator+(Mat4x4 left, const Mat4x4& right) { return left += right; }
 
 			// Subtraction
 
-			constexpr Mat4& operator-=(const float scalar)
+			constexpr Mat4x4& operator-=(const float scalar)
 			{
 				for (int i = 0; i < 16; i++)
 				{
@@ -122,9 +124,9 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Mat4 operator-(Mat4 left, const float right) { return left -= right; }
+			friend Mat4x4 operator-(Mat4x4 left, const float right) { return left -= right; }
 
-			constexpr Mat4& operator-=(const Mat4& other)
+			constexpr Mat4x4& operator-=(const Mat4x4& other)
 			{
 				for (int i = 0; i < 16; i++)
 				{
@@ -133,11 +135,11 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Mat4 operator-(Mat4 left, const Mat4& right) { return left -= right; }
+			friend Mat4x4 operator-(Mat4x4 left, const Mat4x4& right) { return left -= right; }
 
 			// Multiplication
 			
-			constexpr Mat4& operator*=(const float scalar)
+			constexpr Mat4x4& operator*=(const float scalar)
 			{
 				for (int i = 0; i < 16; i++)
 					m_Elements[i] *= scalar;
@@ -145,26 +147,40 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Mat4 operator*(Mat4 left, const float right) { return left *= right; }
+			friend Mat4x4 operator*(Mat4x4 left, const float right) { return left *= right; }
 
-			constexpr Mat4& operator*=(const Mat4& other)
+
+			inline Mat4x4& operator*=(const Mat4x4& other)
 			{
-				int r = 0;
-				for (int i = 0; i < 16; i++)
-				{
-					r = i % 4;
-					m_Elements[i] = other.m_Columns[(int)i / 4].Dot(m_Elements[0 * 4 + r], m_Elements[1 * 4 + r], m_Elements[2 * 4 + r], m_Elements[3 * 4 + r]);
+				return Mat4x4(
+					other.m_Columns[0].Dot(m_Elements[GetIndex(0, 0)], m_Elements[GetIndex(1, 0)], m_Elements[GetIndex(2, 0)], m_Elements[GetIndex(3, 0)]),
+					other.m_Columns[0].Dot(m_Elements[GetIndex(0, 1)], m_Elements[GetIndex(1, 1)], m_Elements[GetIndex(2, 1)], m_Elements[GetIndex(3, 1)]),
+					other.m_Columns[0].Dot(m_Elements[GetIndex(0, 2)], m_Elements[GetIndex(1, 2)], m_Elements[GetIndex(2, 2)], m_Elements[GetIndex(3, 2)]),
+					other.m_Columns[0].Dot(m_Elements[GetIndex(0, 3)], m_Elements[GetIndex(1, 3)], m_Elements[GetIndex(2, 3)], m_Elements[GetIndex(3, 3)]),
+					
+					other.m_Columns[1].Dot(m_Elements[GetIndex(0, 0)], m_Elements[GetIndex(1, 0)], m_Elements[GetIndex(2, 0)], m_Elements[GetIndex(3, 0)]),
+					other.m_Columns[1].Dot(m_Elements[GetIndex(0, 1)], m_Elements[GetIndex(1, 1)], m_Elements[GetIndex(2, 1)], m_Elements[GetIndex(3, 1)]),
+					other.m_Columns[1].Dot(m_Elements[GetIndex(0, 2)], m_Elements[GetIndex(1, 2)], m_Elements[GetIndex(2, 2)], m_Elements[GetIndex(3, 2)]),
+					other.m_Columns[1].Dot(m_Elements[GetIndex(0, 3)], m_Elements[GetIndex(1, 3)], m_Elements[GetIndex(2, 3)], m_Elements[GetIndex(3, 3)]),
 
-				}
-				return *this;
+					other.m_Columns[2].Dot(m_Elements[GetIndex(0, 0)], m_Elements[GetIndex(1, 0)], m_Elements[GetIndex(2, 0)], m_Elements[GetIndex(3, 0)]),
+					other.m_Columns[2].Dot(m_Elements[GetIndex(0, 1)], m_Elements[GetIndex(1, 1)], m_Elements[GetIndex(2, 1)], m_Elements[GetIndex(3, 1)]),
+					other.m_Columns[2].Dot(m_Elements[GetIndex(0, 2)], m_Elements[GetIndex(1, 2)], m_Elements[GetIndex(2, 2)], m_Elements[GetIndex(3, 2)]),
+					other.m_Columns[2].Dot(m_Elements[GetIndex(0, 3)], m_Elements[GetIndex(1, 3)], m_Elements[GetIndex(2, 3)], m_Elements[GetIndex(3, 3)]),
+
+					other.m_Columns[3].Dot(m_Elements[GetIndex(0, 0)], m_Elements[GetIndex(1, 0)], m_Elements[GetIndex(2, 0)], m_Elements[GetIndex(3, 0)]),
+					other.m_Columns[3].Dot(m_Elements[GetIndex(0, 1)], m_Elements[GetIndex(1, 1)], m_Elements[GetIndex(2, 1)], m_Elements[GetIndex(3, 1)]),
+					other.m_Columns[3].Dot(m_Elements[GetIndex(0, 2)], m_Elements[GetIndex(1, 2)], m_Elements[GetIndex(2, 2)], m_Elements[GetIndex(3, 2)]),
+					other.m_Columns[3].Dot(m_Elements[GetIndex(0, 3)], m_Elements[GetIndex(1, 3)], m_Elements[GetIndex(2, 3)], m_Elements[GetIndex(3, 3)])
+					);
 			}
 
-			friend Mat4 operator*(Mat4 left, const Mat4& right) { return left *= right; }
+			friend Mat4x4 operator*(Mat4x4 left, const Mat4x4& right) { return left *= right; }
 
 
 			// Assignment
 
-			const Mat4& operator=(const Mat4& other)
+			const Mat4x4& operator=(const Mat4x4& other)
 			{
 				m_Elements[GetIndex(0, 0)] = other.m_Elements[GetIndex(0, 0)];
 				m_Elements[GetIndex(0, 1)] = other.m_Elements[GetIndex(0, 1)];
@@ -190,7 +206,7 @@ namespace Crow {
 
 			// Test
 
-			const bool operator==(const Mat4& other)
+			const bool operator==(const Mat4x4& other)
 			{
 				return (m_Elements[GetIndex(0, 0)] == other.m_Elements[GetIndex(0, 0)] &&
 					m_Elements[GetIndex(0, 1)] == other.m_Elements[GetIndex(0, 1)] &&
@@ -213,7 +229,7 @@ namespace Crow {
 					m_Elements[GetIndex(3, 3)] == other.m_Elements[GetIndex(3, 3)]);
 			}
 
-			const bool operator!=(const Mat4& other)
+			const bool operator!=(const Mat4x4& other)
 			{
 				return !(m_Elements[GetIndex(0, 0)] == other.m_Elements[GetIndex(0, 0)] &&
 					m_Elements[GetIndex(0, 1)] == other.m_Elements[GetIndex(0, 1)] &&
@@ -240,9 +256,9 @@ namespace Crow {
 			// Useful Matrices
 			///////
 
-			static constexpr Mat4 Translate(const Vec3<T>& translation)
+			static inline constexpr Mat4x4<T> Translate(const TVec3<T>& translation)
 			{
-				Mat4 result;
+				Mat4x4 result;
 
 				result.m_Elements[GetIndex(3, 0)] = translation.x;
 				result.m_Elements[GetIndex(3, 1)] = translation.y;
@@ -250,9 +266,9 @@ namespace Crow {
 				return result;
 			}
 
-			static constexpr Mat4 Scale(const Vec3<T>& scale)
+			static inline constexpr Mat4x4<T> Scale(const TVec3<T>& scale)
 			{
-				Mat4 result;
+				Mat4x4 result;
 
 				result.m_Elements[GetIndex(0, 0)] = scale.x;
 				result.m_Elements[GetIndex(1, 1)] = scale.y;
@@ -261,35 +277,34 @@ namespace Crow {
 			}
 
 			// Recommended to normalize axis
-			static inline constexpr Mat4 Rotate(const float degrees, const Vec3<T>& axis)
+			static inline constexpr Mat4x4<T> Rotate(const T& degrees, const TVec3<T>& axis)
 			{
-				Mat4 result;
+				Mat4x4 result;
 
 				const float r = ToRadians(degrees);
 
 				const float c = cos(r);
 				const float s = sin(r);
 
-				const Vec3<T> csAxis = axis * (1.0f - c);
-				axis.x
+				const TVec3<T> temp((T(1) - c) * axis);
 
-				result.m_Elements[GetIndex(0, 0)] = c + axis.x * csAxis.x;
-				result.m_Elements[GetIndex(0, 1)] = -axis.z * s + csAxis.x * axis.y;
-				result.m_Elements[GetIndex(0, 2)] = axis.y * s + csAxis.x * axis.z;
+				result.m_Elements[GetIndex(0, 0)] = c + axis.x * temp.x;
+				result.m_Elements[GetIndex(0, 1)] = s * axis.z + temp.x * axis.y;
+				result.m_Elements[GetIndex(0, 2)] = -s * axis.y + temp.x * axis.z ;
 				
-				result.m_Elements[GetIndex(1, 0)] = axis.z * s + csAxis.y * axis.x;
-				result.m_Elements[GetIndex(1, 1)] = c + axis.y * csAxis.y;
-				result.m_Elements[GetIndex(1, 2)] = -axis.x * s + csAxis.y * axis.z;
+				result.m_Elements[GetIndex(1, 0)] = -s * axis.z + temp.y * axis.x;
+				result.m_Elements[GetIndex(1, 1)] = c + axis.y * temp.y;
+				result.m_Elements[GetIndex(1, 2)] = s * axis.x + temp.y * axis.z;
 
-				result.m_Elements[GetIndex(2, 0)] = -axis.y * s + csAxis.z * axis.x;
-				result.m_Elements[GetIndex(2, 1)] = axis.x * s + csAxis.z * axis.y;
-				result.m_Elements[GetIndex(2, 2)] = c + axis.z * csAxis.z;
+				result.m_Elements[GetIndex(2, 0)] = s * axis.y + temp.z * axis.x;
+				result.m_Elements[GetIndex(2, 1)] = -s * axis.x + temp.z * axis.y;
+				result.m_Elements[GetIndex(2, 2)] = c + axis.z * temp.z;
 
 				return result;
 			}
 
 
-			static constexpr Mat4 OrthographicMatrix(float left, float right, float bottom, float top, float zNear, float zFar)
+			static inline constexpr Mat4x4<T> Orthographic(float left, float right, float bottom, float top, float zNear, float zFar)
 			{
 
 				/*	__												__
@@ -302,7 +317,7 @@ namespace Crow {
 
 				// Column major is the reason for the rotated and flipped code
 
-				return Mat4(
+				return Mat4x4(
 					2 / (right - left), 0, 0, 0, 
 					0, 2 / (top - bottom), 0, 0, 
 					0, 0, -2 / (zFar - zNear), 0,
@@ -311,10 +326,10 @@ namespace Crow {
 
 			
 			// Use degrees
-			static constexpr Mat4 PerspectiveMatrix(float fov, float aspectratio, float zNear, float zFar)
+			static inline constexpr Mat4x4<T> Perspective(float fov, float aspectratio, float zNear, float zFar)
 			{
 
-				float const tanHalfFov = tan(ToRadians(fov) / 2);
+				const float tanHalfFov = tan(ToRadians(fov) / 2);
 
 				/*	__														   __
 					| s,		 0,			0,					        0		|
@@ -327,41 +342,65 @@ namespace Crow {
 				// Column major is the reason for the rotated and flipped code
 
 
-				return Mat4(
+				return Mat4x4(
 					1 / (aspectratio * tanHalfFov), 0, 0, 0,
 					0, 1 / tanHalfFov, 0, 0,
 					0, 0, -(zFar + zNear) / (zFar - zNear), -1,
 					0, 0, -(2 * zFar*zNear) / (zFar - zNear), 0);
 			}
 
-			static const Mat4 LookAt(const Vec3<T>& from, const Vec3<T>& to)
+			static inline const Mat4x4 LookAt(const Vec3& eye, const Vec3& to)
+			{
+				Mat4x4 result;
+
+				static const Vec3 up(0.0f, 1.0f, 0.0f);
+
+				const Vec3 f = Normalize(to - eye);
+				const Vec3 r = Normalize(Cross(f, up));
+				const Vec3 u = Cross(r, f);
+
+
+				result.m_Elements[GetIndex(0, 0)] = r.x;
+				result.m_Elements[GetIndex(1, 0)] = r.y;
+				result.m_Elements[GetIndex(2, 0)] = r.z;
+				result.m_Elements[GetIndex(0, 1)] = u.x;
+				result.m_Elements[GetIndex(1, 1)] = u.y;
+				result.m_Elements[GetIndex(2, 1)] = u.z;
+				result.m_Elements[GetIndex(0, 2)] = -f.x;
+				result.m_Elements[GetIndex(1, 2)] = -f.y;
+				result.m_Elements[GetIndex(2, 2)] = -f.z;
+				result.m_Elements[GetIndex(3, 0)] = -eye.Dot(r);
+				result.m_Elements[GetIndex(3, 1)] = -eye.Dot(u);
+				result.m_Elements[GetIndex(3, 2)] = eye.Dot(f);
+				return result;
+			}
+
+			static inline const Mat4x4 LookAt(const Vec3& eye, const Vec3& to, const Vec3& up)
 			{
 				Mat4 result;
 
-				static const Vec3 tmp(0.0f, 1.0f, 0.0f);
+				const Vec3 f = Normalize(to - eye);
+				const Vec3 r = Normalize(Cross(f, up));
+				const Vec3 u = Cross(r, f);
 
-				Vec3 forward = Normalize(from - to);
-				Vec3 right = NegativeNormalize(Cross(forward, tmp));
-				Vec3 up = Cross(forward, right);
-
-
-				result.m_Elements[GetIndex(0, 0)] = right.x;
-				result.m_Elements[GetIndex(0, 1)] = right.y;
-				result.m_Elements[GetIndex(0, 2)] = right.z;
-				result.m_Elements[GetIndex(1, 0)] = up.x;
-				result.m_Elements[GetIndex(1, 1)] = up.y;
-				result.m_Elements[GetIndex(1, 2)] = up.z;
-				result.m_Elements[GetIndex(2, 0)] = forward.x;
-				result.m_Elements[GetIndex(2, 1)] = forward.y;
-				result.m_Elements[GetIndex(2, 2)] = forward.z;
-				result.m_Elements[GetIndex(3, 0)] = -from.Dot(right);
-				result.m_Elements[GetIndex(3, 1)] = -from.Dot(up);
-				result.m_Elements[GetIndex(3, 2)] = -from.Dot(forward);
+				result.m_Elements[GetIndex(0, 0)] = r.x;
+				result.m_Elements[GetIndex(1, 0)] = r.y;
+				result.m_Elements[GetIndex(2, 0)] = r.z;
+				result.m_Elements[GetIndex(0, 1)] = u.x;
+				result.m_Elements[GetIndex(1, 1)] = u.y;
+				result.m_Elements[GetIndex(2, 1)] = u.z;
+				result.m_Elements[GetIndex(0, 2)] = -f.x;
+				result.m_Elements[GetIndex(1, 2)] = -f.y;
+				result.m_Elements[GetIndex(2, 2)] = -f.z;
+				result.m_Elements[GetIndex(3, 0)] = -eye.Dot(r);
+				result.m_Elements[GetIndex(3, 1)] = -eye.Dot(u);
+				result.m_Elements[GetIndex(3, 2)] = eye.Dot(f);
 				return result;
 			}
 
 		private:
 			static constexpr inline int GetIndex(int column, int row) { return (column * 4) + row; }
 		};
+		typedef Mat4x4<float> Mat4;
 	}
 }

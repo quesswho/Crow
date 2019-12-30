@@ -29,16 +29,16 @@ private:
 	std::vector<Crow::Object2D*> m_Objects;
 	Crow::Object2D* m_Player;
 	std::vector<Crow::Batchable2D*> m_BatchingObjects;
-	Crow::OrthographicCamera* m_Camera;
+	Crow::FirstPersonCamera* m_Camera;
 
 	Crow::ArrayBuffer* m_ArrayBuffer;
 	Crow::Shader* m_Shader;
 
-	Crow::Math::Mat4<float> m_Projection;
-	Crow::Math::Mat4<float> m_Model;
-	Crow::Math::Mat4<float> m_View;
-	Crow::Math::Mat4<float> m_Look;
-	Crow::Math::Mat3<float> m_2DModel;
+	Crow::Math::Mat4 m_Projection;
+	Crow::Math::Mat4 m_Model;
+	Crow::Math::Mat4 m_View;
+	Crow::Math::Mat4 m_Look;
+	Crow::Math::Mat3 m_2DModel;
 
 	Light* m_Light;
 };

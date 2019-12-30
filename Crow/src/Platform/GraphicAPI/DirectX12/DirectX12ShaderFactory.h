@@ -6,6 +6,7 @@ namespace Crow {
 	namespace Platform {
 		class DirectX12ShaderFactory : public ShaderFactory {
 
+			virtual std::string InterpolationShader() override;
 			virtual std::string BasicShader() override;
 			virtual std::string ColorShader() override;
 			virtual std::string UniformColorShader() override;

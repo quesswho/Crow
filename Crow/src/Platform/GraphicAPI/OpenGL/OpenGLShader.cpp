@@ -256,15 +256,15 @@ namespace Crow {
 		{
 			glUniform1f(GetLocation(location), value);
 		}
-		void OpenGLShader::SetUniformValue(const char* location, const Crow::Math::Vec2<float>& value)
+		void OpenGLShader::SetUniformValue(const char* location, const Crow::Math::TVec2<float>& value)
 		{
 			glUniform2f(GetLocation(location), value.x, value.y);
 		}
-		void OpenGLShader::SetUniformValue(const char* location, const Crow::Math::Vec3<float>& value)
+		void OpenGLShader::SetUniformValue(const char* location, const Crow::Math::TVec3<float>& value)
 		{
 			glUniform3f(GetLocation(location), value.x, value.y, value.z);
 		}
-		void OpenGLShader::SetUniformValue(const char* location, const Crow::Math::Vec4<float>& value)
+		void OpenGLShader::SetUniformValue(const char* location, const Crow::Math::TVec4<float>& value)
 		{
 			glUniform4f(GetLocation(location), value.x, value.y, value.z, value.w);
 		}
@@ -272,23 +272,25 @@ namespace Crow {
 		{
 			glUniformMatrix2fv(GetLocation(location), 1, GL_FALSE, &value[0][0]);
 		}
-		void OpenGLShader::SetUniformValue(const char* location, const Math::Mat3<float>& value)
+		void OpenGLShader::SetUniformValue(const char* location, const Math::Mat3& value)
 		{
 			glUniformMatrix3fv(GetLocation(location), 1, GL_FALSE, &value.m_Elements[0]);
 		}
-		void OpenGLShader::SetUniformValue(const char* location, const Math::Mat4<float>& value)
+		void OpenGLShader::SetUniformValue(const char* location, const Math::Mat4& value)
 		{
 			glUniformMatrix4fv(GetLocation(location), 1, GL_FALSE, &value.m_Elements[0]);
+		}
+		void OpenGLShader::SetUniformValue(const char* location, const glm::mat4x4& value)
+		{
+			glUniformMatrix4fv(GetLocation(location), 1, GL_FALSE, &value[0][0]);
 		}
 
 		void OpenGLShader::SetUniformStruct(const char* location, void* data)
 		{
- 			if (m_UniformStructLocations.find(std::string(location)) != m_UniformStructLocations.end())
+ 			if (m_UniformStructLocations.find(location) != m_UniformStructLocations.end())
 			{
-				const ShaderUniformStruct shaderStruct = m_UniformStructs.at(m_UniformStructLocations.at(location));
-
 				uchar* bytes = reinterpret_cast<uchar*>(data);
-				for (Uniform uni : shaderStruct.m_Uniforms)
+				for (Uniform uni : m_UniformStructs[((int)m_UniformStructLocations.at(location))].m_Uniforms)
 				{
 					switch (uni.m_Type)
 					{

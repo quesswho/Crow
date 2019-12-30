@@ -7,7 +7,7 @@
 #include "Crow/graphics/Renderer/RenderAPI.h"
 #include "Crow/graphics/ShaderManager.h"
 #include "Crow/graphics/Texture.h"
-#include "Crow/graphics/Camera/OrthographicCamera.h"
-
+#include "Crow/Math/Camera/OrthographicCamera.h"
+#include "Crow/Math/Camera/FirstPersonCamera.h"
 // Math
 #include "Crow/Math/Maths.h"

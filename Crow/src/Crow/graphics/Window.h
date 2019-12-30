@@ -1,5 +1,6 @@
 #pragma once
 #include "Crow/Common.h"
+#include "Crow/Math/Vector/Vec2.h"
 
 namespace Crow {
 
@@ -37,6 +38,8 @@ namespace Crow {
 		virtual void CreateDeviceContex() = 0;
 
 		virtual void SetTitle(const char* title) = 0;
+		virtual void SetCursorPosition(Math::TVec2<int> pos) = 0;
+		virtual void SetCursorVisibility(bool visibility) = 0;
 
 		virtual void* GetHandle() const = 0;
 	};

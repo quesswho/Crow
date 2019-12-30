@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Vec4.h"
 #include "Vec2.h"
 #include "Vec3.h"
+#include "Vec4.h"
 
 namespace Crow {
 
 	namespace Math {
 		// Normalize a Vec3
-		static const Vec2<float> Normalize(const Vec2<float>& vec)
+		static inline const TVec2<float> Normalize(const TVec2<float>& vec)
 		{
 			float mag = vec.Magnitude();
 			if (mag > 0)
@@ -17,13 +17,13 @@ namespace Crow {
 		}
 
 		// Dot product 
-		static inline float Dot(const Vec2<float>& first, const Vec2<float>& second)
+		static inline float Dot(const TVec2<float>& first, const TVec2<float>& second)
 		{
 			return first.x * first.x + first.y * first.y;
 		}
 
 		// Normalize a Vec3
-		static const Vec3<float> Normalize(const Vec3<float>& vec)
+		static inline const TVec3<float> Normalize(const TVec3<float>& vec)
 		{
 			float mag = vec.Magnitude();
 			if (mag > 0)
@@ -32,13 +32,13 @@ namespace Crow {
 		}
 
 		// Dot product 
-		static inline float Dot(const Vec3<float>& first, const Vec3<float>& second)
+		static inline float Dot(const TVec3<float>& first, const TVec3<float>& second)
 		{
 			return first.x * second.x + first.y * second.y + first.z * second.z;
 		}
 
 		// Normalize and negate a Vec3
-		static inline const Vec3<float> NegativeNormalize(const Vec3<float>& vec)
+		static inline const TVec3<float> NegativeNormalize(const TVec3<float>& vec)
 		{
 			float mag = vec.Magnitude();
 			if (mag > 0)
@@ -47,13 +47,13 @@ namespace Crow {
 		}
 
 		// Cross product
-		static inline Vec3<float> Cross(const Vec3<float>& first, const Vec3<float>& second)
+		static inline TVec3<float> Cross(const TVec3<float>& first, const TVec3<float>& second)
 		{
-			return Vec3<float>(first.y * second.z - first.z * second.y, first.z * second.x - first.x * second.z, first.x * second.y - first.y * second.x);
+			return TVec3<float>(first.y * second.z - first.z * second.y, first.z * second.x - first.x * second.z, first.x * second.y - first.y * second.x);
 		}
 
 		// Normalize a Vec4
-		inline const Vec4<float> Normalize(const Vec4<float>& vec)
+		static inline const TVec4<float> Normalize(const TVec4<float>& vec)
 		{
 			float mag = vec.Magnitude();
 			if (mag > 0)
@@ -62,13 +62,13 @@ namespace Crow {
 		}
 
 		// Dot product of two Vec4
-		static float Dot(const Vec4<float>& first, const Vec4<float>& second)
+		static inline float Dot(const TVec4<float>& first, const TVec4<float>& second)
 		{
 			return first.x * second.x + first.y * second.y + first.z * second.z + first.w * second.w;
 		}
 
 		// Get distance between this vector and other vector
-		static inline float Distance(const Vec4<float>& first, const Vec4<float>& second)
+		static inline float Distance(const TVec4<float>& first, const TVec4<float>& second)
 		{
 			return sqrt(
 				(first.x - second.x) * (first.x - second.x) +

@@ -3,6 +3,10 @@
 namespace Crow {
 	namespace Platform {
 
+		static const char* s_InterpolationShader =
+#include "Shaders/Interpolation.glsl"
+			;
+
 		static const char* s_BasicShader =
 #include "Shaders/Basic.glsl"
 			;
@@ -23,6 +27,7 @@ namespace Crow {
 #include "Shaders/BasicLight.glsl"
 			;
 
+		std::string OpenGLShaderFactory::InterpolationShader() { return std::string(s_InterpolationShader); }
 		std::string OpenGLShaderFactory::BasicShader() { return std::string(s_BasicShader); }
 		std::string OpenGLShaderFactory::ColorShader() { return std::string(s_ColorShader); }
 		std::string OpenGLShaderFactory::UniformColorShader() { return std::string(s_UniformColorShader); }

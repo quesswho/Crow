@@ -4,17 +4,17 @@ namespace Crow {
 	namespace Math {
 
 		template<typename T = float>
-		struct Vec2
+		struct TVec2
 		{
-			Vec2()
+			TVec2()
 				: x((T)0), y((T)0)
 			{}
 
-			Vec2(T f)
+			TVec2(T f)
 				: x(f), y(f)
 			{}
 
-			Vec2(T first, T second)
+			TVec2(T first, T second)
 				: x(first), y(second)
 			{}
 
@@ -66,7 +66,7 @@ namespace Crow {
 			}
 
 			// Return normalized vector
-			inline Vec2 Normalize() const
+			inline TVec2 Normalize() const
 			{
 				float mag = this->Magnitude();
 				if (mag > 0)
@@ -84,7 +84,7 @@ namespace Crow {
 			}
 
 			// Limit magninute with int
-			inline Vec2 Limit(int limit) const
+			inline TVec2 Limit(int limit) const
 			{
 				return this->Normalize() * limit;
 			}
@@ -96,7 +96,7 @@ namespace Crow {
 			}
 
 			// Limit magninute with double
-			inline Vec2 Limit(double limit) const
+			inline TVec2 Limit(double limit) const
 			{
 				return this->Normalize() * limit;
 			}
@@ -108,7 +108,7 @@ namespace Crow {
 			}
 
 			// Limit magninute with float
-			inline Vec2 Limit(float limit) const
+			inline TVec2 Limit(float limit) const
 			{	
 				return this->Normalize() * limit;
 			}
@@ -120,14 +120,14 @@ namespace Crow {
 			}
 
 			// Get distance between this vector and other vector
-			inline float Distance(const Vec2& other) const
+			inline float Distance(const TVec2& other) const
 			{
 				return sqrt((this->x - other->x) * (this->x - other->x) + 
 					(this->y - other->y) * (this->y - other->y))
 			}
 
 			// Dot product 
-			inline float Dot(const Vec2& other) const
+			inline float Dot(const TVec2& other) const
 			{
 				return this->x * other.x + this->y * other.y;
 			}
@@ -139,13 +139,13 @@ namespace Crow {
 			}
 
 			// Get the angle between a vector in degrees
-			inline float Degrees(const Vec2& other) const
+			inline float Degrees(const TVec2& other) const
 			{
 				return ToDegrees(Radians(other));
 			}
 
 			// Get the angle between a vector in radians
-			inline float Radians(const Vec2& other) const
+			inline float Radians(const TVec2& other) const
 			{
 				return this->Normalize().Dot(other.Normalize());
 			}
@@ -158,28 +158,28 @@ namespace Crow {
 
 			// Assignment //
 
-			const Vec2& operator=(const int other)
+			const TVec2& operator=(const int other)
 			{
 				this->x = other;
 				this->y = other;
 				return *this;
 			}
 
-			const Vec2& operator=(const double other)
+			const TVec2& operator=(const double other)
 			{
 				this->x = other;
 				this->y = other;
 				return *this;
 			}
 
-			const Vec2& operator=(const float other)
+			const TVec2& operator=(const float other)
 			{
 				this->x = other;
 				this->y = other;
 				return *this;
 			}
 
-			const Vec2& operator=(const Vec2& other)
+			const TVec2& operator=(const TVec2& other)
 			{
 				this->x = other.x;
 				this->y = other.y;
@@ -189,238 +189,239 @@ namespace Crow {
 			// Addition //
 
 
-			constexpr Vec2& operator+=(const int other)
+			constexpr TVec2& operator+=(const int other)
 			{
 				this->x += other;
 				this->y += other;
 				return *this;
 			}
 
-			friend Vec2 operator+(Vec2 left, const int right) { return left += right; }
+			friend TVec2 operator+(TVec2 left, const int right) { return left += right; }
 
 
-			constexpr Vec2& operator+=(const double other)
+			constexpr TVec2& operator+=(const double other)
 			{
 				this->x += other;
 				this->y += other;
 				return *this;
 			}
 
-			friend Vec2 operator+(Vec2 left, const double right) { return left += right; }
+			friend TVec2 operator+(TVec2 left, const double right) { return left += right; }
 
 
-			constexpr Vec2& operator+=(const float other)
+			constexpr TVec2& operator+=(const float other)
 			{
 				this->x += other;
 				this->y += other;
 				return *this;
 			}
 
-			friend Vec2 operator+(Vec2 left, const float right) { return left += right; }
+			friend TVec2 operator+(TVec2 left, const float right) { return left += right; }
 
 
-			constexpr Vec2& operator+=(const Vec2& other)
+			constexpr TVec2& operator+=(const TVec2& other)
 			{
 				this->x += other.x;
 				this->y += other.y;
 				return *this;
 			}
 
-			friend Vec2 operator+(Vec2 left, const Vec2& right) { return left += right; }
+			friend TVec2 operator+(TVec2 left, const TVec2& right) { return left += right; }
 
 			// Subtraction //
 
-			constexpr Vec2& operator-=(const int other)
+			constexpr TVec2& operator-=(const int other)
 			{
 				this->x -= other;
 				this->y -= other;
 				return *this;
 			}
 
-			friend Vec2 operator-(Vec2 left, const int right) { return left -= right; }
+			friend TVec2 operator-(TVec2 left, const int right) { return left -= right; }
 
 
-			constexpr Vec2& operator-=(const double other)
+			constexpr TVec2& operator-=(const double other)
 			{
 				this->x -= other;
 				this->y -= other;
 				return *this;
 			}
 
-			friend Vec2 operator-(Vec2 left, const double right) { return left -= right; }
+			friend TVec2 operator-(TVec2 left, const double right) { return left -= right; }
 
 
-			constexpr Vec2& operator-=(const float other)
+			constexpr TVec2& operator-=(const float other)
 			{
 				this->x -= other;
 				this->y -= other;
 				return *this;
 			}
 
-			friend Vec2 operator-(Vec2 left, const float right) { return left -= right; }
+			friend TVec2 operator-(TVec2 left, const float right) { return left -= right; }
 
 
-			constexpr Vec2& operator-=(const Vec2& other)
+			constexpr TVec2& operator-=(const TVec2& other)
 			{
 				this->x -= other.x;
 				this->y -= other.y;
 				return *this;
 			}
 
-			friend Vec2 operator-(Vec2 left, const Vec2& right) { return left -= right; }
+			friend TVec2 operator-(TVec2 left, const TVec2& right) { return left -= right; }
 
 			// Multiplication //
 
-			constexpr Vec2& operator*=(const int other)
+			constexpr TVec2& operator*=(const int other)
 			{
 				this->x *= other;
 				this->y *= other;
 				return *this;
 			}
 
-			friend Vec2 operator*(Vec2 left, const int right) { return left *= right; }
+			friend TVec2 operator*(TVec2 left, const int right) { return left *= right; }
 
 
-			constexpr Vec2& operator*=(const double other)
+			constexpr TVec2& operator*=(const double other)
 			{
 				this->x *= other;
 				this->y *= other;
 				return *this;
 			}
 
-			friend Vec2 operator*(Vec2 left, const double right) { return left *= right; }
+			friend TVec2 operator*(TVec2 left, const double right) { return left *= right; }
 
 
-			const Vec2& operator*=(const float other)
+			const TVec2& operator*=(const float other)
 			{
 				this->x *= other;
 				this->y *= other;
 				return *this;
 			}
 
-			friend Vec2 operator*(Vec2 left, const float right) { return left *= right; }
+			friend TVec2 operator*(TVec2 left, const float right) { return left *= right; }
 
 
-			constexpr Vec2& operator*=(const Vec2& other)
+			constexpr TVec2& operator*=(const TVec2& other)
 			{
 				this->x *= other.x;
 				this->y *= other.y;
 				return *this;
 			}
 
-			friend Vec2 operator*(Vec2 left, const Vec2& right) { return left *= right; }
+			friend TVec2 operator*(TVec2 left, const TVec2& right) { return left *= right; }
 
 			// Division //
 
-			constexpr Vec2& operator/=(const int other)
+			constexpr TVec2& operator/=(const int other)
 			{
 				this->x /= other;
 				this->y /= other;
 				return *this;
 			}
 
-			friend Vec2 operator/(Vec2 left, const int right) { return left /= right; }
+			friend TVec2 operator/(TVec2 left, const int right) { return left /= right; }
 
 
-			constexpr Vec2& operator/=(const double other)
+			constexpr TVec2& operator/=(const double other)
 			{
 				this->x /= other;
 				this->y /= other;
 				return *this;
 			}
 
-			friend Vec2 operator/(Vec2 left, const double right) { return left /= right; }
+			friend TVec2 operator/(TVec2 left, const double right) { return left /= right; }
 
 
-			constexpr Vec2& operator/=(const float other)
+			constexpr TVec2& operator/=(const float other)
 			{
 				this->x /= other;
 				this->y /= other;
 				return *this;
 			}
 
-			friend Vec2 operator/(Vec2 left, const float right) { return left /= right; }
+			friend TVec2 operator/(TVec2 left, const float right) { return left /= right; }
 
 
-			constexpr Vec2& operator/=(const Vec2& other)
+			constexpr TVec2& operator/=(const TVec2& other)
 			{
 				this->x /= other.x;
 				this->y /= other.y;
 				return *this;
 			}
 
-			friend Vec2 operator/(Vec2 left, const Vec2& right) { return left /= right; }
+			friend TVec2 operator/(TVec2 left, const TVec2& right) { return left /= right; }
 
 			// Modulus //
 
-			constexpr Vec2& operator%=(const int other)
+			constexpr TVec2& operator%=(const int other)
 			{
 				this->x %= other;
 				this->y %= other;
 				return *this;
 			}
 
-			friend Vec2 operator%(Vec2 left, const int right) { return left %= right; } 
+			friend TVec2 operator%(TVec2 left, const int right) { return left %= right; } 
 
 
-			constexpr Vec2& operator%=(const double other)
+			constexpr TVec2& operator%=(const double other)
 			{
 				this->x %= other;
 				this->y %= other;
 				return *this;
 			}
 
-			friend Vec2 operator%(Vec2 left, const double right) { return left %= right; }
+			friend TVec2 operator%(TVec2 left, const double right) { return left %= right; }
 
 
-			constexpr Vec2& operator%=(const float other)
+			constexpr TVec2& operator%=(const float other)
 			{
 				this->x %= other;
 				this->y %= other;
 				return *this;
 			}
 
-			friend Vec2 operator%(Vec2 left, const float right) { return left %= right; }
+			friend TVec2 operator%(TVec2 left, const float right) { return left %= right; }
 
 
-			constexpr Vec2& operator%=(const Vec2& other)
+			constexpr TVec2& operator%=(const TVec2& other)
 			{
 				this->x %= other.x;
 				this->y %= other.y;
 				return *this;
 			}
 
-			friend Vec2 operator%(Vec2 left, const Vec2& right) { return left %= right; }
+			friend TVec2 operator%(TVec2 left, const TVec2& right) { return left %= right; }
 
 			// Test //
 
-			const bool operator==(const Vec2& other) const
+			const bool operator==(const TVec2& other) const
 			{
 				return (this->x == other.x && this->y == other.y);
 			}
 
-			const bool operator!=(const Vec2& other) const
+			const bool operator!=(const TVec2& other) const
 			{
 				return !(this->x == other.x && this->y == other.y);
 			}
 
-			const bool operator<(const Vec2& other) const
+			const bool operator<(const TVec2& other) const
 			{
 				return (this->x < other.x && this.y < other.y);
 			}
-			const bool operator>(const Vec2& other) const
+			const bool operator>(const TVec2& other) const
 			{
 				return (this->x > other.x && this.y > other.y);
 			}
 
-			const bool operator<=(const Vec2& other) const
+			const bool operator<=(const TVec2& other) const
 			{
 				return (this->x <= other.x && this.y <= other.y);
 			}
-			const bool operator>=(const Vec2& other) const
+			const bool operator>=(const TVec2& other) const
 			{
 				return (this->x >= other.x&& this.y >= other.y);
 			}
 		};
+		typedef TVec2<float> Vec2;
 	}
 }

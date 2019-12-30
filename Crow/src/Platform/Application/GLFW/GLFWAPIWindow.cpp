@@ -61,17 +61,28 @@ namespace Crow {
 
 		void GLFWAPIWindow::SetCallbacks() const
 		{
-			glfwSetErrorCallback(&Callbacks::error_callback);
-			glfwSetKeyCallback(m_Window, &Callbacks::key_callback);
-			glfwSetWindowSizeCallback(m_Window, &Callbacks::window_size_callback);
-			glfwSetMouseButtonCallback(m_Window, &Callbacks::mouse_button_callback);
-			glfwSetCursorPosCallback(m_Window, &Callbacks::cursor_position_callback);
+			glfwSetErrorCallback(&GLFWCallbacks::error_callback);
+			glfwSetKeyCallback(m_Window, &GLFWCallbacks::key_callback);
+			glfwSetWindowSizeCallback(m_Window, &GLFWCallbacks::window_size_callback);
+			glfwSetMouseButtonCallback(m_Window, &GLFWCallbacks::mouse_button_callback);
+			glfwSetCursorPosCallback(m_Window, &GLFWCallbacks::cursor_position_callback);
+			glfwSetCursorEnterCallback(m_Window, &GLFWCallbacks::window_focus_callback);
 		}
 
 		void GLFWAPIWindow::SetTitle(const char* title)
 		{
 			m_Properties.m_Title = title;
 			glfwSetWindowTitle(m_Window, title);
+		}
+
+		void GLFWAPIWindow::SetCursorPosition(Math::TVec2<int> pos)
+		{
+			glfwSetCursorPos(m_Window, (double)pos.x, (double)pos.y);
+		}
+
+		void GLFWAPIWindow::SetCursorVisibility(bool visibility)
+		{
+			glfwSetInputMode(m_Window, GLFW_CURSOR, visibility ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN);
 		}
 	}
 }

@@ -39,6 +39,9 @@ namespace Crow {
 		static int m_FramesPerSecond;
 
 		static WindowProperties s_WindowProperties;
+
+		static void SetCursorPosition(Math::TVec2<int> pos);
+		static void SetCursorVisibility(bool visbility);
 	private:
 		virtual void OnUpdate(float elapsed);
 	private:

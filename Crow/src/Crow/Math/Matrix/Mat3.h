@@ -1,23 +1,23 @@
-#include "Crow/Math/MathFunc.h"
+#pragma once
+
 #include "Crow/Math/Vector/Vec3.h"
 
 namespace Crow {
-	namespace Math
-	{
+	namespace Math {
 
 		// Column Major 3x3 matrix
 		template<typename T = float>
-		struct Mat3 {
+		struct Mat3x3 {
 
 			union {
 				T m_Elements[9];
-				Vec3<T> m_Columns[3];
+				TVec3<T> m_Columns[3];
 			};
 
-			Mat3() { Identity(); }
-			Mat3(float diagonal) { Identity(diagonal) }
+			Mat3x3() { Identity(); }
+			Mat3x3(float diagonal) { Identity(diagonal); }
 
-			Mat3(const Vec3<T>& first, const Vec3<T>& second, const Vec3<T>& third)
+			Mat3x3(const TVec3<T>& first, const TVec3<T>& second, const TVec3<T>& third)
 			{
 				m_Elements[GetIndex(0, 0)] = first.x;
 				m_Elements[GetIndex(0, 1)] = first.y;
@@ -32,7 +32,7 @@ namespace Crow {
 				m_Elements[GetIndex(2, 2)] = third.z;
 			}
 
-			Mat3(T first, T second, T third, T forth, T fifth, T sixth, T seventh, T eighth, T ninth)
+			Mat3x3(T first, T second, T third, T forth, T fifth, T sixth, T seventh, T eighth, T ninth)
 			{
 				m_Elements[GetIndex(0, 0)] = first;
 				m_Elements[GetIndex(0, 1)] = second;
@@ -67,7 +67,7 @@ namespace Crow {
 
 			// Addition
 
-			constexpr Mat3& operator+=(const float scalar)
+			constexpr Mat3x3& operator+=(const float scalar)
 			{
 				for (int i = 0; i < 9; i++)
 				{
@@ -76,9 +76,9 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Mat3 operator+(Mat3 left, const float right) { return left += right; }
+			friend Mat3x3 operator+(Mat3x3 left, const float right) { return left += right; }
 
-			constexpr Mat3& operator+=(const Mat3& other)
+			constexpr Mat3x3& operator+=(const Mat3x3& other)
 			{
 				for (int i = 0; i < 9; i++)
 				{
@@ -87,11 +87,11 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Mat3 operator+(Mat3 left, const Mat3& right) { return left += right; }
+			friend Mat3x3 operator+(Mat3x3 left, const Mat3x3& right) { return left += right; }
 
 			// Subtraction
 
-			constexpr Mat3& operator-=(const float scalar)
+			constexpr Mat3x3& operator-=(const float scalar)
 			{
 				for (int i = 0; i < 9 i++)
 				{
@@ -100,9 +100,9 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Mat3 operator-(Mat3 left, const float right) { return left -= right; }
+			friend Mat3x3 operator-(Mat3x3 left, const float right) { return left -= right; }
 
-			constexpr Mat3& operator-=(const Mat3& other)
+			constexpr Mat3x3& operator-=(const Mat3x3& other)
 			{
 				for (int i = 0; i < 9; i++)
 				{
@@ -111,11 +111,11 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Mat3 operator-(Mat3 left, const Mat3& right) { return left -= right; }
+			friend Mat3x3 operator-(Mat3x3 left, const Mat3x3& right) { return left -= right; }
 
 			// Multiplication
 
-			constexpr Mat3& operator*=(const float scalar)
+			constexpr Mat3x3& operator*=(const float scalar)
 			{
 				for (int i = 0; i < 9; i++)
 					m_Elements[i] *= scalar;
@@ -123,26 +123,31 @@ namespace Crow {
 				return *this;
 			}
 
-			friend Mat3 operator*(Mat3 left, const float right) { return left *= right; }
+			friend Mat3x3 operator*(Mat3x3 left, const float right) { return left *= right; }
 
-			constexpr Mat3& operator*=(const Mat3& other)
+			constexpr Mat3x3& operator*=(const Mat3x3& other)
 			{
-				int r = 0;
-				for (int i = 0; i < 9; i++)
-				{
-					r = i % 3;
-					m_Elements[i] = other.m_Columns[(int)i / 3].Dot(m_Elements[GetIndex(0, r)], m_Elements[GetIndex(1, r)], m_Elements[GetIndex(2, r)]);
+				return Mat3x3(
+					other.m_Columns[0].Dot(m_Elements[GetIndex(0, 0)], m_Elements[GetIndex(1, 0)], m_Elements[GetIndex(2, 0)]),
+					other.m_Columns[0].Dot(m_Elements[GetIndex(0, 1)], m_Elements[GetIndex(1, 1)], m_Elements[GetIndex(2, 1)]),
+					other.m_Columns[0].Dot(m_Elements[GetIndex(0, 2)], m_Elements[GetIndex(1, 2)], m_Elements[GetIndex(2, 2)]),
 
-				}
-				return *this;
+					other.m_Columns[1].Dot(m_Elements[GetIndex(0, 0)], m_Elements[GetIndex(1, 0)], m_Elements[GetIndex(2, 0)]),
+					other.m_Columns[1].Dot(m_Elements[GetIndex(0, 1)], m_Elements[GetIndex(1, 1)], m_Elements[GetIndex(2, 1)]),
+					other.m_Columns[1].Dot(m_Elements[GetIndex(0, 2)], m_Elements[GetIndex(1, 2)], m_Elements[GetIndex(2, 2)]),
+
+					other.m_Columns[2].Dot(m_Elements[GetIndex(0, 0)], m_Elements[GetIndex(1, 0)], m_Elements[GetIndex(2, 0)]),
+					other.m_Columns[2].Dot(m_Elements[GetIndex(0, 1)], m_Elements[GetIndex(1, 1)], m_Elements[GetIndex(2, 1)]),
+					other.m_Columns[2].Dot(m_Elements[GetIndex(0, 2)], m_Elements[GetIndex(1, 2)], m_Elements[GetIndex(2, 2)])
+				);
 			}
 
-			friend Mat3 operator*(Mat3 left, const Mat3& right) { return left *= right; }
+			friend Mat3x3 operator*(Mat3x3 left, const Mat3x3& right) { return left *= right; }
 
 
 			// Assignment
 
-			const Mat3& operator=(const Mat3& other)
+			const Mat3x3& operator=(const Mat3x3& other)
 			{
 				m_Elements[GetIndex(0, 0)] = other.m_Elements[GetIndex(0, 0)];
 				m_Elements[GetIndex(0, 1)] = other.m_Elements[GetIndex(0, 1)];
@@ -161,7 +166,7 @@ namespace Crow {
 
 			// Test
 
-			const bool operator==(const Mat3& other)
+			const bool operator==(const Mat3x3& other)
 			{
 				return (m_Elements[GetIndex(0, 0)] == other.m_Elements[GetIndex(0, 0)] &&
 					m_Elements[GetIndex(0, 1)] == other.m_Elements[GetIndex(0, 1)] &&
@@ -176,7 +181,7 @@ namespace Crow {
 					m_Elements[GetIndex(2, 2)] == other.m_Elements[GetIndex(2, 2)]);
 			}
 
-			const bool operator!=(const Mat3& other)
+			const bool operator!=(const Mat3x3& other)
 			{
 				return !(m_Elements[GetIndex(0, 0)] == other.m_Elements[GetIndex(0, 0)] &&
 					m_Elements[GetIndex(0, 1)] == other.m_Elements[GetIndex(0, 1)] &&
@@ -195,27 +200,27 @@ namespace Crow {
 			// Useful Matrices
 			///////
 
-			static constexpr Mat3 Translate(const Vec2<T>& translation)
+			static constexpr Mat3x3 Translate(const TVec2<T>& translation)
 			{
-				Mat3 result;
+				Mat3x3 result;
 
 				result.m_Elements[GetIndex(2, 0)] = translation.x;
 				result.m_Elements[GetIndex(2, 1)] = translation.y;
 				return result;
 			}
 
-			static constexpr Mat3 Scale(const Vec2<T>& scale)
+			static constexpr Mat3x3 Scale(const TVec2<T>& scale)
 			{
-				Mat3 result;
+				Mat3x3 result;
 
 				result.m_Elements[GetIndex(0, 0)] = scale.x;
 				result.m_Elements[GetIndex(1, 1)] = scale.y;
 				return result;
 			}
 
-			static constexpr Mat3 Rotate(const float degrees)
+			static constexpr Mat3x3 Rotate(const float degrees)
 			{
-				Mat3 result;
+				Mat3x3 result;
 
 				const float r = ToRadians(degrees);
 
@@ -233,5 +238,6 @@ namespace Crow {
 		private:
 			static constexpr inline int GetIndex(int column, int row) { return (column * 3) + row; }
 		};
+		typedef Mat3x3<float> Mat3;
 	}
 }

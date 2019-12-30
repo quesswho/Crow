@@ -49,4 +49,7 @@ typedef unsigned long ulong;
 	#pragma comment(lib, "dxgi.lib")
 	#pragma comment(lib, "d3dcompiler.lib")
 	#pragma comment(lib, "dxguid.lib")
+
+#define INCLUDE_WINDOWS #include "Crow/Platform/Application/Windows/WindowsIncludes.h"
+
 #endif

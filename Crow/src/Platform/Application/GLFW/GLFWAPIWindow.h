@@ -20,6 +20,8 @@ namespace Crow {
 			virtual void CreateDeviceContex() override;
 
 			virtual void SetTitle(const char* title) override;
+			virtual void SetCursorPosition(Math::TVec2<int> pos) override;
+			virtual void SetCursorVisibility(bool visibility) override;
 
 			virtual void* GetHandle() const override { return m_Window; }
 		private:

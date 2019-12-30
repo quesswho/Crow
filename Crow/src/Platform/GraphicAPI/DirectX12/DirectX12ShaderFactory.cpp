@@ -3,6 +3,10 @@
 namespace Crow {
 	namespace Platform {
 
+		static const char* s_InterpolationShader =
+#include "Shaders/Basic.hlsl" //TODO: add interpolation shader for dx
+			;
+
 		static const char* s_BasicShader =
 #include "Shaders/Basic.hlsl"
 			;
@@ -22,6 +26,7 @@ namespace Crow {
 #include "Shaders/BasicLight.hlsl"
 			;
 
+		std::string DirectX12ShaderFactory::InterpolationShader() { return std::string(s_InterpolationShader); }
 		std::string DirectX12ShaderFactory::BasicShader() { return std::string(s_BasicShader); }
 		std::string DirectX12ShaderFactory::ColorShader() { return std::string(s_ColorShader); }
 		std::string DirectX12ShaderFactory::UniformColorShader() { return std::string(s_CbColorShader); }

@@ -66,12 +66,13 @@ namespace Crow {
 
 			virtual void SetUniformValue(const char* location, const int value) override;
 			virtual void SetUniformValue(const char* location, const float value) override;
-			virtual void SetUniformValue(const char* location, const Math::Vec2<float>&  value) override;
-			virtual void SetUniformValue(const char* location, const Math::Vec3<float>& value) override;
-			virtual void SetUniformValue(const char* location, const Math::Vec4<float>& value) override;
+			virtual void SetUniformValue(const char* location, const Math::TVec2<float>&  value) override;
+			virtual void SetUniformValue(const char* location, const Math::TVec3<float>& value) override;
+			virtual void SetUniformValue(const char* location, const Math::TVec4<float>& value) override;
 			virtual void SetUniformValue(const char* location, const glm::mat2x2& value) override;
-			virtual void SetUniformValue(const char* location, const Math::Mat3<float>& value) override;
-			virtual void SetUniformValue(const char* location, const Math::Mat4<float>& value) override;
+			virtual void SetUniformValue(const char* location, const Math::Mat3& value) override;
+			virtual void SetUniformValue(const char* location, const Math::Mat4& value) override;
+			virtual void SetUniformValue(const char* location, const glm::mat4x4& value) override {}
 
 			virtual void SetUniformStruct(const char* location, void* data) override;
 

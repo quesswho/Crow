@@ -111,7 +111,10 @@ namespace Crow {
 				result = DefWindowProc(hwnd, msg, wParam, lParam);
 			} break;
 			case WM_SETFOCUS:
+				Input::s_Focused = true;
+				break;
 			case WM_KILLFOCUS:
+				Input::s_Focused = false;
 				break;
 			case WM_CLOSE:
 			case WM_DESTROY:
@@ -193,6 +196,20 @@ namespace Crow {
 		{
 			m_Properties.m_Title = title;
 			SetWindowTextA(m_Hwnd, m_Properties.m_Title);
+		}
+
+		void WindowsAPIWindow::SetCursorPosition(Math::TVec2<int> pos)
+		{
+			POINT pt;
+			pt.x = pos.x;
+			pt.y = pos.y;
+			ClientToScreen(m_Hwnd, &pt);
+			SetCursorPos(pt.x, pt.y);
+		}
+
+		void WindowsAPIWindow::SetCursorVisibility(bool visibility)
+		{
+			ShowCursor(visibility);
 		}
 
 		void WindowsAPIWindow::CreateDeviceContex()
