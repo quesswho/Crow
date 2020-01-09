@@ -1,7 +1,5 @@
 #include "DirectX12ArrayBuffer.h"
 
-#include <glad/glad.h>
-
 namespace Crow {
 	namespace Platform {
 

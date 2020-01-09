@@ -9,17 +9,10 @@ struct VS_OUTPUT
 
 float4 PSmain(VS_OUTPUT input) : SV_TARGET
 {
-    // return interpolated color
     return input.color;
 }
 
 #shader vertex
-
-struct VS_INPUT
-{
-    float3 pos : POSITION;
-    float4 color : COLOR;
-};
 
 struct VS_OUTPUT
 {
@@ -29,14 +22,14 @@ struct VS_OUTPUT
 
 cbuffer u_Color : register(b0)
 {
-	float3 UniformColor;
+	float4 UniformColor;
 };
 
-VS_OUTPUT VSmain(VS_INPUT input)
+VS_OUTPUT VSmain(float4 pos : POSITION)
 {
     VS_OUTPUT output;
-    output.pos = float4(input.pos, 1.0f);
-    output.color = float4(UniformColor.xyz, 1.0f);
+	output.pos = pos;
+    output.color = UniformColor;
     return output;
 }
 

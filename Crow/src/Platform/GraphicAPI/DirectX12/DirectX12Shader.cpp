@@ -82,7 +82,8 @@ namespace Crow {
 			FindConstantBuffer(stringVertexSource, stringFragmentSource);
 			CompileShader(stringVertexSource.c_str(), stringFragmentSource.c_str());
 			InitPSO();
-			DirectX12RenderAPI::MapUniform(this);
+			if(m_UniformConstantBuffers.size() < 0)
+				DirectX12RenderAPI::MapUniform(this);
 		}
 
 
@@ -125,6 +126,8 @@ namespace Crow {
 							size = 0;
 						}
 					}
+					else
+						reg = 0;
 
 					std::unordered_map<UniformType, std::string> uniforms;
 
@@ -184,6 +187,8 @@ namespace Crow {
 							size = 0;
 						}
 					}
+					else
+						reg = 0;
 
 					std::unordered_map<UniformType, std::string> uniforms;
 
@@ -478,7 +483,7 @@ namespace Crow {
 		{
 			memcpy(m_UniformConstantBuffers[GetLocation(location)]->m_GPUAddress, &value, sizeof(value));
 		}
-		void DirectX12Shader::SetUniformValue(const char* location, const glm::mat2x2& value)
+		void DirectX12Shader::SetUniformValue(const char* location, const Math::Mat2& value)
 		{
 			memcpy(m_UniformConstantBuffers[GetLocation(location)]->m_GPUAddress, &value, sizeof(value));
 		}

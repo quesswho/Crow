@@ -1,5 +1,4 @@
 R"(
-"
 #shader fragment
 
 struct VS_OUTPUT
@@ -8,7 +7,7 @@ struct VS_OUTPUT
     float4 color : COLOR;
 };
     
-float4 main(VS_OUTPUT input) : SV_TARGET
+float4 PSmain(VS_OUTPUT input) : SV_TARGET
 {
     // return interpolated color
     return input.color;
@@ -28,7 +27,7 @@ struct VS_OUTPUT
     float4 color : COLOR;
 };
 
-VS_OUTPUT main(VS_INPUT input)
+VS_OUTPUT VSmain(VS_INPUT input)
 {
     VS_OUTPUT output;
     output.pos = float4(input.pos, 1.0f);

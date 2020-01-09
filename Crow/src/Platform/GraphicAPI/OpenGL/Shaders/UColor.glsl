@@ -5,11 +5,11 @@ R"(
 
 out vec4 pixel;
 
-uniform vec4 u_Color;
+uniform vec3 u_Color;
 
 void main()
 {
-    pixel = u_Color;
+    pixel = vec4(u_Color.xyz, 1.0f);
 }
 
 #shader vertex

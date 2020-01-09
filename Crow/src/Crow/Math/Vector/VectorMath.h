@@ -7,7 +7,8 @@
 namespace Crow {
 
 	namespace Math {
-		// Normalize a Vec3
+
+		// Normalize a Vec2
 		static inline const TVec2<float> Normalize(const TVec2<float>& vec)
 		{
 			float mag = vec.Magnitude();
@@ -16,10 +17,18 @@ namespace Crow {
 			return vec;
 		}
 
-		// Dot product 
+		// Dot product of two Vec2
 		static inline float Dot(const TVec2<float>& first, const TVec2<float>& second)
 		{
 			return first.x * first.x + first.y * first.y;
+		}
+
+		// Get distance between two Vec2
+		static inline float Distance(const TVec2<float>& first, const TVec2<float>& second)
+		{
+			return sqrt(
+				(first.x - second.x) * (first.x - second.x) +
+				(first.y - second.y) * (first.y - second.y));
 		}
 
 		// Normalize a Vec3
@@ -31,7 +40,7 @@ namespace Crow {
 			return vec;
 		}
 
-		// Dot product 
+		// Dot product of two Vec3
 		static inline float Dot(const TVec3<float>& first, const TVec3<float>& second)
 		{
 			return first.x * second.x + first.y * second.y + first.z * second.z;
@@ -46,10 +55,19 @@ namespace Crow {
 			return vec;
 		}
 
-		// Cross product
+		// Cross product of two Vec3
 		static inline TVec3<float> Cross(const TVec3<float>& first, const TVec3<float>& second)
 		{
 			return TVec3<float>(first.y * second.z - first.z * second.y, first.z * second.x - first.x * second.z, first.x * second.y - first.y * second.x);
+		}
+
+		// Get distance between two Vec3
+		static inline float Distance(const TVec3<float>& first, const TVec3<float>& second)
+		{
+			return sqrt(
+				(first.x - second.x) * (first.x - second.x) +
+				(first.y - second.y) * (first.y - second.y) +
+				(first.z - second.z) * (first.z - second.z));
 		}
 
 		// Normalize a Vec4
@@ -67,7 +85,7 @@ namespace Crow {
 			return first.x * second.x + first.y * second.y + first.z * second.z + first.w * second.w;
 		}
 
-		// Get distance between this vector and other vector
+		// Get distance between two Vec4
 		static inline float Distance(const TVec4<float>& first, const TVec4<float>& second)
 		{
 			return sqrt(

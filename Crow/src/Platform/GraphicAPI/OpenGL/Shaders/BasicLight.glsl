@@ -17,9 +17,10 @@ in vec3 f_color;
 
 void main()
 {
-	float brightness = 1.0 / length(f_pos - u_Light.pos);
-	vec3 result = f_color * u_Light.color.rgb * brightness;
-    pixel = vec4(result, 1.0f);
+	//float brightness = 1.0 / length(f_pos - u_Light.pos);
+	//vec3 result = f_color * u_Light.color.rgb * brightness;
+   // pixel = vec4(result, 1.0f);
+   pixel = vec4(1.0f, 0.2f, 0.0f, 1.0f);
 }
 
 #shader vertex
@@ -28,9 +29,7 @@ void main()
 layout (location = 0) in vec3 a_Position;
 layout (location = 1) in vec4 a_Color;
 
-
-uniform mat4 u_Projection = mat4(1.0f);
-uniform mat4 u_View = mat4(1.0f);
+uniform mat4 u_VP = mat4(1.0f);
 uniform mat4 u_Model = mat4(1.0f);
 
 out vec2 f_pos;
@@ -39,7 +38,7 @@ out vec3 f_color;
 void main()
 {
 	
-    gl_Position = u_Projection * u_View * u_Model * vec4(a_Position.x, a_Position.y, a_Position.z, 1.0);
+    gl_Position = u_VP * u_Model * vec4(a_Position.x, a_Position.y, a_Position.z, 1.0);
 	f_pos = a_Position.xy;
 	f_color = a_Color.xyz;
 }

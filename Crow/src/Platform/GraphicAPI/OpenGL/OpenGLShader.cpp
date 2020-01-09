@@ -1,6 +1,5 @@
 #include "OpenGLShader.h"
 #include "Crow/FileUtils.h"
-#include <glm/glm.hpp>
 
 #include <glad/glad.h>
 #include <sstream>
@@ -268,9 +267,9 @@ namespace Crow {
 		{
 			glUniform4f(GetLocation(location), value.x, value.y, value.z, value.w);
 		}
-		void OpenGLShader::SetUniformValue(const char* location, const glm::mat2x2& value)
+		void OpenGLShader::SetUniformValue(const char* location, const Math::Mat2& value)
 		{
-			glUniformMatrix2fv(GetLocation(location), 1, GL_FALSE, &value[0][0]);
+			glUniformMatrix2fv(GetLocation(location), 1, GL_FALSE, &value.m_Elements[0]);
 		}
 		void OpenGLShader::SetUniformValue(const char* location, const Math::Mat3& value)
 		{
@@ -279,10 +278,6 @@ namespace Crow {
 		void OpenGLShader::SetUniformValue(const char* location, const Math::Mat4& value)
 		{
 			glUniformMatrix4fv(GetLocation(location), 1, GL_FALSE, &value.m_Elements[0]);
-		}
-		void OpenGLShader::SetUniformValue(const char* location, const glm::mat4x4& value)
-		{
-			glUniformMatrix4fv(GetLocation(location), 1, GL_FALSE, &value[0][0]);
 		}
 
 		void OpenGLShader::SetUniformStruct(const char* location, void* data)

@@ -84,37 +84,37 @@ namespace Crow {
 			}
 
 			// Limit magninute with int
-			inline TVec2 Limit(int limit) const
+			inline TVec2 Limit(const int limit) const
 			{
 				return this->Normalize() * limit;
 			}
 
 			// Limit this magninute with int
-			inline void LimitVector(int limit)
+			inline void LimitVector(const int limit)
 			{
 				*this = this->Normalize() * limit;
 			}
 
 			// Limit magninute with double
-			inline TVec2 Limit(double limit) const
+			inline TVec2 Limit(const double limit) const
 			{
 				return this->Normalize() * limit;
 			}
 
 			// Limit this magninute with double
-			inline void LimitVector(double limit)
+			inline void LimitVector(const double limit)
 			{
 				*this = this->Normalize() * limit;
 			}
 
 			// Limit magninute with float
-			inline TVec2 Limit(float limit) const
+			inline TVec2 Limit(const float limit) const
 			{	
 				return this->Normalize() * limit;
 			}
 
 			// Limit this magninute with float
-			inline void LimitVector(float limit)
+			inline void LimitVector(const float limit)
 			{
 				*this = this->Normalize() * limit;
 			}
@@ -130,6 +130,12 @@ namespace Crow {
 			inline float Dot(const TVec2& other) const
 			{
 				return this->x * other.x + this->y * other.y;
+			}
+
+			// Dot product 
+			inline float Dot(const T otherX, const T otherY) const
+			{
+				return this->x * otherX + this->y * otherY;
 			}
 
 			// Get the angle of the vector in degrees
@@ -154,6 +160,13 @@ namespace Crow {
 			inline float Radians() const
 			{
 				return atan2((float)this->y, (float)this->x);
+			}
+
+			// Unary operations
+
+			const TVec2& operator-() const
+			{
+				return TVec2(-this->x, -this->y);
 			}
 
 			// Assignment //
@@ -312,10 +325,11 @@ namespace Crow {
 
 			// Division //
 
-			constexpr TVec2& operator/=(const int other)
+			constexpr TVec2& operator/=(int other)
 			{
-				this->x /= other;
-				this->y /= other;
+				other = 1 / other;
+				this->x *= other;
+				this->y *= other;
 				return *this;
 			}
 
@@ -324,18 +338,20 @@ namespace Crow {
 
 			constexpr TVec2& operator/=(const double other)
 			{
-				this->x /= other;
-				this->y /= other;
+				other = 1 / other;
+				this->x *= other;
+				this->y *= other;
 				return *this;
 			}
 
-			friend TVec2 operator/(TVec2 left, const double right) { return left /= right; }
+			friend TVec2 operator/(TVec2 left, double right) { return left /= right; }
 
 
-			constexpr TVec2& operator/=(const float other)
+			constexpr TVec2& operator/=(float other)
 			{
-				this->x /= other;
-				this->y /= other;
+				other = 1 / other;
+				this->x *= other;
+				this->y *= other;
 				return *this;
 			}
 

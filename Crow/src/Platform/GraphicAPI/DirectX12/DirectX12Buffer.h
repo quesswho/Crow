@@ -25,7 +25,6 @@ namespace Crow {
 			virtual void Bind() const override;
 			virtual void Unbind() const override;
 		private:
-
 			const BufferProperties m_BufferProperties;
 			const uint m_Size;
 		};
@@ -48,7 +47,6 @@ namespace Crow {
 			virtual inline const uint GetCount() const override { return m_Count; }
 		private:
 			const uint m_Count;
-
 			const int m_Size;
 		};
 	}

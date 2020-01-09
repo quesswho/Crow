@@ -6,9 +6,10 @@
 #include "Crow/Math/Matrix/Mat3.h"
 #include "Crow/Math/Vector/Vec4.h"
 
+#include "Crow/Math/Maths.h"
+
 namespace Crow {
 	namespace Math {
-
 
 		// Column Major 4x4 matrix
 		template<typename T = float>
@@ -21,6 +22,8 @@ namespace Crow {
 
 			Mat4x4() { Identity(); }
 			Mat4x4(float diagonal) { Identity(diagonal); }
+
+			// No Left hand compensation
 
 			Mat4x4(const TVec4<T>& first, const TVec4<T>& second, const TVec4<T>& third, const TVec4<T>& forth)
 			{
@@ -45,6 +48,8 @@ namespace Crow {
 				m_Elements[GetIndex(3, 3)] = forth.w;
 			}
 
+
+			// No Left hand compensation
 			Mat4x4(T first, T second, T third, T forth, T fifth, T sixth, T seventh, T eighth, T ninth, T tenth, T eleventh, T twelveth, T thirteenth, T fourteenth, T fifteenth, T sixteenth)
 			{
 				m_Elements[GetIndex(0, 0)] = first;
@@ -68,7 +73,7 @@ namespace Crow {
 				m_Elements[GetIndex(3, 3)] = sixteenth;
 			}
 
-			inline void Identity()
+			inline void IdentityRH(float diagonal)
 			{
 				memset(m_Elements, 0, 16 * 4);
 
@@ -78,14 +83,22 @@ namespace Crow {
 				m_Elements[GetIndex(3, 3)] = (T)1;
 			}
 
-			inline void Identity(float diagonal)
+			inline void IdentityLH(float diagonal)
 			{
 				memset(m_Elements, 0, 16 * 4);
 
-				m_Elements[GetIndex(0, 0)] = (T)diagonal;
-				m_Elements[GetIndex(1, 1)] = (T)diagonal;
+				m_Elements[GetIndex(0, 0)] = -(T)diagonal;
+				m_Elements[GetIndex(1, 1)] = -(T)diagonal;
 				m_Elements[GetIndex(2, 2)] = (T)diagonal;
 				m_Elements[GetIndex(3, 3)] = (T)diagonal;
+			}
+
+			inline void Identity(float diagonal = 1.0f)
+			{
+				if (MATH_COORDINATE::s_MathCoordinateType == MATH_COORDINATE::MATH_COORDINATE_RIGHTHAND)
+					IdentityRH(diagonal);
+				else // s_MathCoordinateType == MATH_COORDINATE_LEFTHAND
+					IdentityLH(diagonal);
 			}
 
 
@@ -208,7 +221,8 @@ namespace Crow {
 
 			const bool operator==(const Mat4x4& other)
 			{
-				return (m_Elements[GetIndex(0, 0)] == other.m_Elements[GetIndex(0, 0)] &&
+				return (
+					m_Elements[GetIndex(0, 0)] == other.m_Elements[GetIndex(0, 0)] &&
 					m_Elements[GetIndex(0, 1)] == other.m_Elements[GetIndex(0, 1)] &&
 					m_Elements[GetIndex(0, 2)] == other.m_Elements[GetIndex(0, 2)] &&
 					m_Elements[GetIndex(0, 3)] == other.m_Elements[GetIndex(0, 3)] &&
@@ -231,7 +245,8 @@ namespace Crow {
 
 			const bool operator!=(const Mat4x4& other)
 			{
-				return !(m_Elements[GetIndex(0, 0)] == other.m_Elements[GetIndex(0, 0)] &&
+				return !(
+					m_Elements[GetIndex(0, 0)] == other.m_Elements[GetIndex(0, 0)] &&
 					m_Elements[GetIndex(0, 1)] == other.m_Elements[GetIndex(0, 1)] &&
 					m_Elements[GetIndex(0, 2)] == other.m_Elements[GetIndex(0, 2)] &&
 					m_Elements[GetIndex(0, 3)] == other.m_Elements[GetIndex(0, 3)] &&
@@ -256,7 +271,15 @@ namespace Crow {
 			// Useful Matrices
 			///////
 
-			static inline constexpr Mat4x4<T> Translate(const TVec3<T>& translation)
+			static const Mat4x4 Transpose(const Mat4x4 mat) {
+				return Mat4x4(
+					mat.m_Elements[GetIndex(0, 0)], mat.m_Elements[GetIndex(1, 0)], mat.m_Elements[GetIndex(2, 0)], mat.m_Elements[GetIndex(3, 0)],
+					mat.m_Elements[GetIndex(0, 1)], mat.m_Elements[GetIndex(1, 1)], mat.m_Elements[GetIndex(2, 1)], mat.m_Elements[GetIndex(3, 1)],
+					mat.m_Elements[GetIndex(0, 2)], mat.m_Elements[GetIndex(1, 2)], mat.m_Elements[GetIndex(2, 2)], mat.m_Elements[GetIndex(3, 2)],
+					mat.m_Elements[GetIndex(0, 3)], mat.m_Elements[GetIndex(1, 3)], mat.m_Elements[GetIndex(2, 3)], mat.m_Elements[GetIndex(3, 3)]);
+			}
+
+			static inline constexpr Mat4x4<T> TranslateRH(const TVec3<T>& translation)
 			{
 				Mat4x4 result;
 
@@ -266,7 +289,25 @@ namespace Crow {
 				return result;
 			}
 
-			static inline constexpr Mat4x4<T> Scale(const TVec3<T>& scale)
+			static inline constexpr Mat4x4<T> TranslateLH(const TVec3<T>& translation)
+			{
+				Mat4x4 result;
+
+				result.m_Elements[GetIndex(0, 3)] = translation.x;
+				result.m_Elements[GetIndex(1, 3)] = -translation.y;
+				result.m_Elements[GetIndex(2, 3)] = translation.z;
+				return result;
+			}
+
+			static inline constexpr Mat4x4<T> Translate(const TVec3<T>& translation)
+			{
+				if (MATH_COORDINATE::s_MathCoordinateType == MATH_COORDINATE::MATH_COORDINATE_RIGHTHAND)
+					return TranslateRH(translation);
+				else // s_MathCoordinateType == MATH_COORDINATE_LEFTHAND
+					return TranslateLH(translation);
+			}
+
+			static inline constexpr Mat4x4<T> ScaleRH(const TVec3<T>& scale)
 			{
 				Mat4x4 result;
 
@@ -274,6 +315,24 @@ namespace Crow {
 				result.m_Elements[GetIndex(1, 1)] = scale.y;
 				result.m_Elements[GetIndex(2, 2)] = scale.z;
 				return result;
+			}
+
+			static inline constexpr Mat4x4<T> ScaleLH(const TVec3<T>& scale)
+			{
+				Mat4x4 result;
+
+				result.m_Elements[GetIndex(0, 0)] = scale.x;
+				result.m_Elements[GetIndex(1, 1)] = -scale.y;
+				result.m_Elements[GetIndex(2, 2)] = scale.z;
+				return result;
+			}
+
+			static inline constexpr Mat4x4<T> Scale(const TVec3<T>& scale)
+			{
+				if (MATH_COORDINATE::s_MathCoordinateType == MATH_COORDINATE::MATH_COORDINATE_RIGHTHAND)
+					return ScaleRH(scale);
+				else // s_MathCoordinateType == MATH_COORDINATE_LEFTHAND
+					return ScaleLH(scale);
 			}
 
 			// Recommended to normalize axis
@@ -304,7 +363,7 @@ namespace Crow {
 			}
 
 
-			static inline constexpr Mat4x4<T> Orthographic(float left, float right, float bottom, float top, float zNear, float zFar)
+			static inline constexpr Mat4x4<T> OrthographicRH(float left, float right, float bottom, float top, float zNear, float zFar)
 			{
 
 				/*	__												__
@@ -315,8 +374,6 @@ namespace Crow {
 					¯¯												¯¯
 				*/
 
-				// Column major is the reason for the rotated and flipped code
-
 				return Mat4x4(
 					2 / (right - left), 0, 0, 0, 
 					0, 2 / (top - bottom), 0, 0, 
@@ -324,9 +381,34 @@ namespace Crow {
 					-(right + left) / (right - left), -(top + bottom) / (top - bottom), -(zFar + zNear) / (zFar - zNear), 1);
 			}
 
+			static inline constexpr Mat4x4<T> OrthographicLH(float left, float right, float bottom, float top, float zNear, float zFar)
+			{
+
+				/*	__												__
+					| 2 / (r-l), 0,			0,			-(r+l)/(r-l) |
+					| 0,		 2 / (t-b), 0,			-(t+b)/(t-b) |
+					| 0,		 0,			-2 / (f-n), -(f+n)/(f-n) |
+					| 0,		 0,			0,			1			 |
+					¯¯												¯¯
+				*/
+
+				return Mat4x4(
+					2 / (right - left), 0, 0, 0,
+					0, 2 / (top - bottom), 0, 0,
+					0, 0, 2 / (zFar - zNear), 0,
+					-(right + left) / (right - left), -(top + bottom) / (top - bottom), -(zFar + zNear) / (zFar - zNear), 1);
+			}
+
+			static inline constexpr Mat4x4<T> Orthographic(float left, float right, float bottom, float top, float zNear, float zFar)
+			{
+				if (MATH_COORDINATE::s_MathCoordinateType == MATH_COORDINATE::MATH_COORDINATE_RIGHTHAND)
+					return OrthographicRH(left, right, bottom, top, zNear, zFar);
+				else // s_MathCoordinateType == MATH_COORDINATE_LEFTHAND
+					return OrthographicLH(left, right, bottom, top, zNear, zFar);
+			}
 			
 			// Use degrees
-			static inline constexpr Mat4x4<T> Perspective(float fov, float aspectratio, float zNear, float zFar)
+			static inline constexpr Mat4x4<T> PerspectiveRH(float fov, float aspectratio, float zNear, float zFar)
 			{
 
 				const float tanHalfFov = tan(ToRadians(fov) / 2);
@@ -339,8 +421,6 @@ namespace Crow {
 					¯¯														   ¯¯
 				*/
 
-				// Column major is the reason for the rotated and flipped code
-
 
 				return Mat4x4(
 					1 / (aspectratio * tanHalfFov), 0, 0, 0,
@@ -349,33 +429,29 @@ namespace Crow {
 					0, 0, -(2 * zFar*zNear) / (zFar - zNear), 0);
 			}
 
-			static inline const Mat4x4 LookAt(const Vec3& eye, const Vec3& to)
+			static inline constexpr Mat4x4<T> PerspectiveLH(float fov, float aspectratio, float zNear, float zFar)
 			{
-				Mat4x4 result;
 
-				static const Vec3 up(0.0f, 1.0f, 0.0f);
+				const float rad = ToRadians(fov);
+				const float h = cos(0.5*rad) / sin(0.5 * rad);
+				const float w = h / aspectratio;
 
-				const Vec3 f = Normalize(to - eye);
-				const Vec3 r = Normalize(Cross(f, up));
-				const Vec3 u = Cross(r, f);
-
-
-				result.m_Elements[GetIndex(0, 0)] = r.x;
-				result.m_Elements[GetIndex(1, 0)] = r.y;
-				result.m_Elements[GetIndex(2, 0)] = r.z;
-				result.m_Elements[GetIndex(0, 1)] = u.x;
-				result.m_Elements[GetIndex(1, 1)] = u.y;
-				result.m_Elements[GetIndex(2, 1)] = u.z;
-				result.m_Elements[GetIndex(0, 2)] = -f.x;
-				result.m_Elements[GetIndex(1, 2)] = -f.y;
-				result.m_Elements[GetIndex(2, 2)] = -f.z;
-				result.m_Elements[GetIndex(3, 0)] = -eye.Dot(r);
-				result.m_Elements[GetIndex(3, 1)] = -eye.Dot(u);
-				result.m_Elements[GetIndex(3, 2)] = eye.Dot(f);
-				return result;
+				return Mat4x4(
+					w, 0, 0, 0,
+					0, h, 0, 0,
+					0, 0, zFar / (zFar - zNear), -(zFar * zNear) / (zFar - zNear),
+					0, 0, 1, 0);
 			}
 
-			static inline const Mat4x4 LookAt(const Vec3& eye, const Vec3& to, const Vec3& up)
+			static inline const Mat4x4 Perspective(float fov, float aspectratio, float zNear, float zFar)
+			{
+				if (MATH_COORDINATE::s_MathCoordinateType == MATH_COORDINATE::MATH_COORDINATE_RIGHTHAND)
+					return PerspectiveRH(fov, aspectratio, zNear, zFar);
+				else // s_MathCoordinateType == MATH_COORDINATE_LEFTHAND
+					return PerspectiveLH(fov, aspectratio, zNear, zFar);
+			}
+
+			static inline const Mat4x4 LookAtRH(const Vec3& eye, const Vec3& to, const Vec3& up)
 			{
 				Mat4 result;
 
@@ -396,6 +472,95 @@ namespace Crow {
 				result.m_Elements[GetIndex(3, 1)] = -eye.Dot(u);
 				result.m_Elements[GetIndex(3, 2)] = eye.Dot(f);
 				return result;
+			}
+
+			static inline const Mat4x4 LookAtLH(Vec3 eye, const Vec3& to, const Vec3& up)
+			{
+				Mat4 result;
+
+				const Vec3 f = Normalize(to - eye).FlipY();
+				const Vec3 r = Normalize(Cross(f, up));
+				const Vec3 u = Cross(f, r);
+
+				const Vec3 p = eye.FlipY();
+
+				result.m_Elements[GetIndex(0, 0)] = r.x;
+				result.m_Elements[GetIndex(0, 1)] = r.y;
+				result.m_Elements[GetIndex(0, 2)] = r.z;
+				result.m_Elements[GetIndex(1, 0)] = u.x;
+				result.m_Elements[GetIndex(1, 1)] = u.y;
+				result.m_Elements[GetIndex(1, 2)] = u.z;
+				result.m_Elements[GetIndex(2, 0)] = f.x;
+				result.m_Elements[GetIndex(2, 1)] = f.y;
+				result.m_Elements[GetIndex(2, 2)] = f.z;
+				result.m_Elements[GetIndex(0, 3)] = -p.Dot(r);
+				result.m_Elements[GetIndex(1, 3)] = -p.Dot(u);
+				result.m_Elements[GetIndex(2, 3)] = -p.Dot(f);
+				return result;
+			}
+
+			static inline const Mat4x4 LookAt(const Vec3& eye, const Vec3& to, const Vec3& up)
+			{
+				if (MATH_COORDINATE::s_MathCoordinateType == MATH_COORDINATE::MATH_COORDINATE_RIGHTHAND)
+					return LookAtRH(eye, to, up);
+				else // s_MathCoordinateType == MATH_COORDINATE_LEFTHAND
+					return LookAtLH(eye, to, up);
+			}
+
+			static inline const Mat4x4 LookDirRH(const Vec3& pos, const Vec3& dir, const Vec3& up)
+			{
+				Mat4 result;
+
+				const Vec3 r = Normalize(Cross(dir, up));
+				const Vec3 u = Cross(r, dir);
+
+				result.m_Elements[GetIndex(0, 0)] = r.x;
+				result.m_Elements[GetIndex(1, 0)] = r.y;
+				result.m_Elements[GetIndex(2, 0)] = r.z;
+				result.m_Elements[GetIndex(0, 1)] = u.x;
+				result.m_Elements[GetIndex(1, 1)] = u.y;
+				result.m_Elements[GetIndex(2, 1)] = u.z;
+				result.m_Elements[GetIndex(0, 2)] = -dir.x;
+				result.m_Elements[GetIndex(1, 2)] = -dir.y;
+				result.m_Elements[GetIndex(2, 2)] = -dir.z;
+				result.m_Elements[GetIndex(3, 0)] = -pos.Dot(r);
+				result.m_Elements[GetIndex(3, 1)] = -pos.Dot(u);
+				result.m_Elements[GetIndex(3, 2)] = pos.Dot(dir);
+				return result;
+				return result;
+			}
+
+			static inline const Mat4x4 LookDirLH(const Vec3& pos, const Vec3& dir, const Vec3& up)
+			{
+				Mat4 result;
+				
+				const Vec3 f = dir.FlipY();
+				const Vec3 r = Normalize(Cross(f, up));
+				const Vec3 u = Cross(f, r);
+
+				const Vec3 p = pos.FlipY();
+
+				result.m_Elements[GetIndex(0, 0)] = r.x;
+				result.m_Elements[GetIndex(0, 1)] = r.y;
+				result.m_Elements[GetIndex(0, 2)] = r.z;
+				result.m_Elements[GetIndex(1, 0)] = u.x;
+				result.m_Elements[GetIndex(1, 1)] = u.y;
+				result.m_Elements[GetIndex(1, 2)] = u.z;
+				result.m_Elements[GetIndex(2, 0)] = f.x;
+				result.m_Elements[GetIndex(2, 1)] = f.y;
+				result.m_Elements[GetIndex(2, 2)] = f.z;
+				result.m_Elements[GetIndex(0, 3)] = -p.Dot(r);
+				result.m_Elements[GetIndex(1, 3)] = -p.Dot(u);
+				result.m_Elements[GetIndex(2, 3)] = -p.Dot(f);
+				return result;
+			}
+
+			static inline const Mat4x4 LookDir(const Vec3& eye, const Vec3& to, const Vec3& up)
+			{
+				if (MATH_COORDINATE::s_MathCoordinateType == MATH_COORDINATE::MATH_COORDINATE_RIGHTHAND)
+					return LookDirRH(eye, to, up);
+				else // s_MathCoordinateType == MATH_COORDINATE_LEFTHAND
+					return LookDirLH(eye, to, up);
 			}
 
 		private:

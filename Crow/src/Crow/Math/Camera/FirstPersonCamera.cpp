@@ -2,20 +2,19 @@
 #include "Crow/Event/Input.h"
 #include "Crow/Application.h"
 #include "Crow/Common.h"
-#include <glm/gtc/matrix_transform.hpp>
 
 namespace Crow {
 	namespace Math {
 
 
 		FirstPersonCamera::FirstPersonCamera(Vec3& pos, Vec3& viewDir, float aspectRatio, float sensitivity, float speed)
-			: m_CameraPos(pos), m_ViewDir(viewDir), m_Yaw(-90.0f), m_Pitch(0.0f), m_Sensitivity(sensitivity), m_Speed(speed), m_Forward(0.5f, 0.0f, 0.0f), m_Right(1.0f, 0.0f, 0.0f), m_WorldUp(Vec3(0.0f, 1.0f, 0.0f))
+			: m_CameraPos(pos), m_ViewDir(viewDir), m_Yaw(90.0f), m_Pitch(0.0f), m_Sensitivity(sensitivity), m_Speed(speed), m_Forward(0.0f, 0.0f, 0.0f), m_Right(1.0f, 0.0f, 0.0f), m_WorldUp(Vec3(0.0f, 1.0f, 0.0f))
 		{
-			m_ProjectionMatrix = Mat4::Perspective(45.0f, aspectRatio, 0.1f, 100.0f);
-
+			m_ProjectionMatrix = Mat4::Perspective(45.0f, aspectRatio, 0.001f, 100.0f);
 			m_LastMousePos = TVec2<int>(Application::s_WindowProperties.m_Width / 2, Application::s_WindowProperties.m_Height / 2);
 			Application::SetCursorPosition(m_LastMousePos);
 			Application::SetCursorVisibility(false);
+			CalculateProjectionViewMatrix();
 		}
 
 		void FirstPersonCamera::Update(float elapsed)
@@ -34,7 +33,7 @@ namespace Crow {
 			if (Input::IsKeyPressed(CROW_KEY_LEFT_CONTROL))
 				m_CameraPos -= m_Up * m_Speed * elapsed;
 
-			CalculateViewMatrix();
+			CalculateProjectionViewMatrix();
 		}
 
 		void FirstPersonCamera::UpdateRotation()
@@ -58,19 +57,21 @@ namespace Crow {
 				if (m_Pitch < -89.0f)
 					m_Pitch = -89.0f;
 
-
-				CalculateViewMatrix();
+				CalculateProjectionViewMatrix();
 			}
 		}
 
-		void FirstPersonCamera::CalculateViewMatrix()
+		void FirstPersonCamera::CalculateProjectionViewMatrix()
 		{
 			m_Forward = Normalize(Vec3(cos(ToRadians(m_Yaw)), 0.0f, sin(ToRadians(m_Yaw))));
 			m_ViewDir = Normalize(Vec3(cos(ToRadians(m_Yaw)) * cos(ToRadians(m_Pitch)), sin(ToRadians(m_Pitch)), sin(ToRadians(m_Yaw)) * cos(ToRadians(m_Pitch))));
 			m_Right = Normalize(Cross(m_Forward, m_WorldUp));
 			m_Up = Normalize(Cross(m_Right, m_Forward));
-
 			m_ViewMatrix = Mat4::LookAt(m_CameraPos, m_CameraPos + m_ViewDir, m_Up);
+			if (MATH_COORDINATE::s_MathCoordinateType == MATH_COORDINATE::MATH_COORDINATE_RIGHTHAND)
+				m_CameraMatrix = m_ProjectionMatrix * m_ViewMatrix; // Opengl
+			else
+				m_CameraMatrix = m_ViewMatrix * m_ProjectionMatrix; // DirectX
 		}
 	}
 }

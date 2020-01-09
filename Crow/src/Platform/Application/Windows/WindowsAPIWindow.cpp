@@ -177,7 +177,7 @@ namespace Crow {
 			}
 			CheckMouseMoved();
 
-			SwapBuffers(m_Hdc);
+			if(PlatformAPI::s_GraphicAPI == GraphicAPI::OPENGL) SwapBuffers(m_Hdc);
 		}
 
 		void WindowsAPIWindow::CheckMouseMoved() const

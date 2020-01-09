@@ -4,7 +4,10 @@
 #include "Crow/Common.h"
 
 #ifdef CR_PLATFORM_WINDOWS 
-#include "WindowsIncludes.h" 
+#include <Windows.h>
+#include <windowsx.h>
+EXTERN_C IMAGE_DOS_HEADER __ImageBase;
+
 #endif
 
 namespace Crow {

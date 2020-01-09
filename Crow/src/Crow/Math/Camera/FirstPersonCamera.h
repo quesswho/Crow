@@ -9,6 +9,7 @@ namespace Crow {
 		private:
 			Mat4 m_ViewMatrix;
 			Mat4 m_ProjectionMatrix;
+			Mat4 m_CameraMatrix;
 
 			Vec3 m_CameraPos;
 			Vec3 m_ViewDir;
@@ -36,19 +37,21 @@ namespace Crow {
 			void UpdateRotation();
 
 
-			const Mat4& GetViewMatrix() const { return m_ViewMatrix; }
+			inline const Mat4& GetViewMatrix() const { return m_ViewMatrix; }
 
-			const Mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
-			void SetProjectionMatrix(const Mat4& projection) noexcept { m_ProjectionMatrix = projection; }
+			inline const Mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
+			void SetProjectionMatrix(const Mat4& projection) noexcept { m_ProjectionMatrix = projection; CalculateProjectionViewMatrix(); }
 
-			const Vec3& GetCameraPos() const { return m_CameraPos; }
-			void SetCameraPos(const Vec3& pos) noexcept { m_CameraPos = pos; CalculateViewMatrix(); }
+			inline const Vec3& GetCameraPos() const { return m_CameraPos; }
+			void SetCameraPos(const Vec3& pos) noexcept { m_CameraPos = pos; CalculateProjectionViewMatrix(); }
 
-			const Vec3& GetViewDir() const { return m_ViewDir; }
-			void SetViewDir(const Vec3& pos) noexcept { m_ViewDir = pos; CalculateViewMatrix(); }
+			inline const Vec3& GetViewDir() const { return m_ViewDir; }
+			void SetViewDir(const Vec3& pos) noexcept { m_ViewDir = pos; CalculateProjectionViewMatrix(); }
+
+			inline const Mat4& GetCameraMatrix() const { return m_CameraMatrix; }
 
 		private:
-			inline void CalculateViewMatrix();
+			inline void CalculateProjectionViewMatrix();
 		};
 	}
 }

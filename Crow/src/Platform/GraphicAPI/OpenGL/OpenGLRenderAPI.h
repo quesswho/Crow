@@ -22,7 +22,7 @@ namespace Crow {
 			virtual bool InitAPI(const WindowProperties&, void*) const override;
 			virtual void EndInit() const override {}
 
-			virtual void Begin() const override { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
+			virtual void Begin() const override { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); }
 			virtual void End() const override {}
 
 			virtual inline void ClearColor(float r, float g, float b) const override { glClearColor(r, g, b, 0.0f); }
@@ -31,6 +31,7 @@ namespace Crow {
 
 			virtual inline void EnableAlpha() const override { glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glEnable(GL_BLEND); }
 			virtual inline void EnableDepthTest() const override { glEnable(GL_DEPTH_TEST); }
+			virtual inline void EnableStencilTest() const override { glEnable(GL_STENCIL_TEST); }
 
 			virtual inline const char* GetAPIName() const override { return "OpenGL"; }
 			virtual inline ShaderFactory* GetShaderFactory() const override { return m_ShaderFactory; }

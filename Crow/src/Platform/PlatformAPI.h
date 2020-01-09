@@ -15,18 +15,24 @@
 #include "GraphicAPI/OpenGL/OpenGLShader.h"
 #include "GraphicAPI/OpenGL/OpenGLTexture.h"
 
-// DIRECTX
+// DIRECTX 12
 #include "GraphicAPI/DirectX12/DirectX12RenderAPI.h"
 #include "GraphicAPI/DirectX12/DirectX12ArrayBuffer.h"
 #include "GraphicAPI/DirectX12/DirectX12Buffer.h"
 #include "GraphicAPI/DirectX12/DirectX12Shader.h"
+
+// DIRECTX 11
+#include "GraphicAPI/DirectX11/DirectX11RenderAPI.h"
+#include "GraphicAPI/DirectX11/DirectX11Buffer.h"
+#include "GraphicAPI/DirectX11/DirectX11ArrayBuffer.h"
+#include "GraphicAPI/DirectX11/DirectX11Shader.h"
 
 namespace Crow {
 	namespace Platform {
 
 		enum class GraphicAPI {
 			OPENGL,
-			//DIRECTX11,
+			DIRECTX11,
 			DIRECTX12 // WIP don't use
 		};
 
@@ -66,7 +72,8 @@ namespace Crow {
 			// Graphics APIs
 			static void OpenGLInit();
 			static void DirectX12Init();
-			
+			static void DirectX11Init();
+
 			static bool CheckWindowsError();
 		};
 	}

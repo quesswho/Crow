@@ -168,7 +168,8 @@ namespace Crow {
 
 			const bool operator==(const Mat3x3& other)
 			{
-				return (m_Elements[GetIndex(0, 0)] == other.m_Elements[GetIndex(0, 0)] &&
+				return (
+					m_Elements[GetIndex(0, 0)] == other.m_Elements[GetIndex(0, 0)] &&
 					m_Elements[GetIndex(0, 1)] == other.m_Elements[GetIndex(0, 1)] &&
 					m_Elements[GetIndex(0, 2)] == other.m_Elements[GetIndex(0, 2)] &&
 
@@ -183,7 +184,8 @@ namespace Crow {
 
 			const bool operator!=(const Mat3x3& other)
 			{
-				return !(m_Elements[GetIndex(0, 0)] == other.m_Elements[GetIndex(0, 0)] &&
+				return !(
+					m_Elements[GetIndex(0, 0)] == other.m_Elements[GetIndex(0, 0)] &&
 					m_Elements[GetIndex(0, 1)] == other.m_Elements[GetIndex(0, 1)] &&
 					m_Elements[GetIndex(0, 2)] == other.m_Elements[GetIndex(0, 2)] &&
 
@@ -199,6 +201,13 @@ namespace Crow {
 			///////
 			// Useful Matrices
 			///////
+
+			static const Mat3x3 Transpose(const Mat3x3 mat) {
+				return Mat3x3(
+					mat.m_Elements[GetIndex(0, 0)], mat.m_Elements[GetIndex(1, 0)], mat.m_Elements[GetIndex(2, 0)],
+					mat.m_Elements[GetIndex(0, 1)], mat.m_Elements[GetIndex(1, 1)], mat.m_Elements[GetIndex(2, 1)],
+					mat.m_Elements[GetIndex(0, 2)], mat.m_Elements[GetIndex(1, 2)], mat.m_Elements[GetIndex(2, 2)]);
+			}
 
 			static constexpr Mat3x3 Translate(const TVec2<T>& translation)
 			{

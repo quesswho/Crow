@@ -4,7 +4,7 @@ namespace Crow {
 	namespace Platform {
 
 		static const char* s_InterpolationShader =
-#include "Shaders/Basic.hlsl" //TODO: add interpolation shader for dx
+#include "Shaders/Interpolation.hlsl"
 			;
 
 		static const char* s_BasicShader =

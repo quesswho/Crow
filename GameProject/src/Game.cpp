@@ -5,13 +5,13 @@
 using namespace Crow;
 using namespace Math;
 	Layer2D::Layer2D()
-		: m_Camera(new FirstPersonCamera(Vec3(0.0f, 0.0f, 0.0f), 1080.0f / 720.0f, 0.05f, 3.0f))
+		: m_Camera(new FirstPersonCamera(Vec3(0.0f, 1.0f, -3.0f), 1080.0f / 720.0f, 0.05f, 3.0f))
 	{
 
 		m_Model *= Mat4::Scale(Vec3(1.0f, 1.0f, 1.0f));
 
 		Application::GetAPI()->ClearColor(0.5f, 0.7f, 0.5f);
-		//Application::GetAPI()->EnableDepthTest();
+		Application::GetAPI()->EnableDepthTest();
 
 		BufferProperties bufferprop = { 
 			{ "POSITION", 3 },//, //vertices
@@ -22,60 +22,44 @@ using namespace Math;
 			-0.5f, -0.5f, -0.5f,
 			 0.5f, -0.5f, -0.5f,
 			 0.5f,  0.5f, -0.5f,
-			 0.5f,  0.5f, -0.5f,
 			-0.5f,  0.5f, -0.5f,
-			-0.5f, -0.5f, -0.5f,
 
 			-0.5f, -0.5f,  0.5f,
 			 0.5f, -0.5f,  0.5f,
 			 0.5f,  0.5f,  0.5f,
-			 0.5f,  0.5f,  0.5f,
 			-0.5f,  0.5f,  0.5f,
-			-0.5f, -0.5f,  0.5f,
-
-			-0.5f,  0.5f,  0.5f,
-			-0.5f,  0.5f, -0.5f,
-			-0.5f, -0.5f, -0.5f,
-			-0.5f, -0.5f, -0.5f,
-			-0.5f, -0.5f,  0.5f,
-			-0.5f,  0.5f,  0.5f,
-
-			 0.5f,  0.5f,  0.5f,
-			 0.5f,  0.5f, -0.5f,
-			 0.5f, -0.5f, -0.5f,
-			 0.5f, -0.5f, -0.5f,
-			 0.5f, -0.5f,  0.5f,
-			 0.5f,  0.5f,  0.5f,
-
-			-0.5f, -0.5f, -0.5f,
-			 0.5f, -0.5f, -0.5f,
-			 0.5f, -0.5f,  0.5f,
-			 0.5f, -0.5f,  0.5f,
-			-0.5f, -0.5f,  0.5f,
-			-0.5f, -0.5f, -0.5f,
-
-			-0.5f,  0.5f, -0.5f,
-			 0.5f,  0.5f, -0.5f,
-			 0.5f,  0.5f,  0.5f,
-			 0.5f,  0.5f,  0.5f,
-			-0.5f,  0.5f,  0.5f,
-			-0.5f,  0.5f, -0.5f
 		};
 
 		ulong indices[] {
-			0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35
+			0,1,2,
+			0,2,3,
+			
+			7,6,4,
+			5,4,6,
+
+			1,0,4,
+			1,4,5,
+
+			2,6,3,
+			3,6,7,
+
+			2,1,5,
+			2,5,6,
+
+			3,7,0,
+			0,7,4
 		};
 
 
 
-		m_Shader = Shader::CreateFromSource("InterpolationShader", Application::GetAPI()->GetShaderFactory()->BasicLightShader(), bufferprop);
+		m_Shader = Shader::CreateFromSource("BasicLightShader", Application::GetAPI()->GetShaderFactory()->BasicLightShader(), bufferprop);
 
 		std::shared_ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices), bufferprop);
 		std::shared_ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(ulong));
 
 
 		m_ArrayBuffer = ArrayBuffer::Create(vertexBuffer, indexBuffer);
-
+		
 		m_Light = new Light(glm::vec2(0.0f, 0.0f), glm::vec4(0.5f, 0.1f, 0.5f, 1.0f));
 	}
 
@@ -129,26 +113,23 @@ using namespace Math;
 
 	void Layer2D::OnRender()
 	{
-
-		m_ArrayBuffer->Bind();
 		m_Shader->Bind();
-		m_Shader->SetUniformStruct("u_Light", m_Light);
-		m_Shader->SetUniformValue("u_Projection", m_Camera->GetProjectionMatrix());
-		m_Shader->SetUniformValue("u_View", m_Camera->GetViewMatrix());
+		m_ArrayBuffer->Bind();
+		m_Shader->SetUniformValue("u_VP",  m_Camera->GetCameraMatrix());
+		//m_Shader->SetUniformStruct("u_Light", m_Light);
 		
-		m_Shader->SetUniformValue("u_Model", m_Model * Mat4::Translate(Vec3(-2.0f, 0.0f, 2.0f)));
+		m_Shader->SetUniformValue("u_Model", m_Model * Mat4::Translate(Vec3(1.0f, 3.0f, 5.0f)));
+		
 		Application::GetAPI()->DrawIndices(m_ArrayBuffer->GetCount());
 
-		m_Shader->SetUniformValue("u_Model", m_Model * Mat4::Translate(Vec3(2.0f, 0.8f, -2.0f)) * Mat4::Rotate(20.0f*10, Normalize(Vec3(0.5f, 0.8f, 0.2f))));
-
-		Application::GetAPI()->DrawIndices(m_ArrayBuffer->GetCount());
+		//Application::GetAPI()->DrawIndices(m_ArrayBuffer->GetCount());
 	}
 
 class Game : public Crow::Application {
 	
 public:
 	Game()
-		: Application(WindowProperties("The Crows 2D", 1080, 720), Crow::Platform::GraphicAPI::OPENGL, Platform::ApplicationAPI::GLFW)
+		: Application(WindowProperties("The Crows 2D", 1080, 720), Crow::Platform::GraphicAPI::DIRECTX11, Platform::ApplicationAPI::WINDOWS)
 	{
 		PushLayer(new Layer2D());
 	}

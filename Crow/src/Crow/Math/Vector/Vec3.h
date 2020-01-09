@@ -91,6 +91,21 @@ namespace Crow {
 				this->z = (T)0;
 			}
 
+			inline TVec3 FlipX() const
+			{
+				return TVec3(-x, y, z);
+			}
+
+			inline TVec3 FlipY() const
+			{
+				return TVec3(x, -y, z);
+			}
+
+			inline TVec3 FlipZ() const
+			{
+				return TVec3(x, y, -z);
+			}
+
 			// Vector math //
 
 			// Return the magnitude of the vector
@@ -118,37 +133,37 @@ namespace Crow {
 			}
 
 			// Limit magninute with int
-			inline constexpr TVec3 Limit(int limit) const
+			inline constexpr TVec3 Limit(const int limit) const
 			{
 				return this->Normalize() * limit;
 			}
 
 			// Limit this magninute with int
-			inline void LimitVector(int limit)
+			inline void LimitVector(const int limit)
 			{
 				*this = this->Normalize() * limit;
 			}
 
 			// Limit magninute with double
-			inline TVec3 Limit(double limit) const
+			inline TVec3 Limit(const double limit) const
 			{
 				return this->Normalize() * limit;
 			}
 
 			// Limit this magninute with double
-			inline void LimitVector(double limit)
+			inline void LimitVector(const double limit)
 			{
 				*this = this->Normalize() * limit;
 			}
 
 			// Limit magninute with float
-			inline TVec3 Limit(float limit) const
+			inline TVec3 Limit(const float limit) const
 			{
 				return this->Normalize() * limit;
 			}
 
 			// Limit this magninute with float
-			inline void LimitVector(float limit)
+			inline void LimitVector(const float limit)
 			{
 				*this = this->Normalize() * limit;
 			}
@@ -168,9 +183,9 @@ namespace Crow {
 			}
 
 			// Dot product 
-			inline float Dot(float x, float y, float z) const
+			inline float Dot(const T otherX, const T otherY, const T otherZ) const
 			{
-				return this->x * x + this->y * y + this->z * z;
+				return this->x * otherX + this->y * otherY + this->z * otherZ;
 			}
 
 
@@ -178,6 +193,13 @@ namespace Crow {
 			inline TVec3 Cross(const TVec3& other) const
 			{
 				return TVec3(this->y * other.z - this->z * other.y, this->z * other.x - this->x * other.z, this->x * other.y - this->y * other.x);
+			}
+
+			// Unary operations
+
+			const TVec3& operator-() const
+			{
+				return TVec3(-this->x, -this->y, -this->z);
 			}
 
 			// Assignment //
@@ -352,33 +374,36 @@ namespace Crow {
 
 			// Division //
 
-			constexpr TVec3& operator/=(const int other)
+			constexpr TVec3& operator/=(int other)
 			{
-				this->x /= other;
-				this->y /= other;
-				this->z /= other;
+				other = 1 / other;
+				this->x *= other;
+				this->y *= other;
+				this->z *= other;
 				return *this;
 			}
 
 			friend TVec3 operator/(TVec3 left, const int right) { return left /= right; }
 
 
-			constexpr TVec3& operator/=(const double other)
+			constexpr TVec3& operator/=(double other)
 			{
-				this->x /= other;
-				this->y /= other;
-				this->z /= other;
+				other = 1 / other;
+				this->x *= other;
+				this->y *= other;
+				this->z *= other;
 				return *this;
 			}
 
 			friend TVec3 operator/(TVec3 left, const double right) { return left /= right; }
 
 
-			constexpr TVec3& operator/=(const float other)
+			constexpr TVec3& operator/=(float other)
 			{
-				this->x /= other;
-				this->y /= other;
-				this->z /= other;
+				other = 1 / other;
+				this->x *= other;
+				this->y *= other;
+				this->z *= other;
 				return *this;
 			}
 

@@ -43,8 +43,8 @@ namespace Crow {
 
 		DirectX12RenderAPI::DirectX12RenderAPI()
 		{
-			s_ClearColor = new float[3];
 			m_ShaderFactory = new DirectX12ShaderFactory();
+			s_ClearColor = new float[3];
 			s_DepthTest = false;
 			s_StencilTest = false;
 			s_Initializing = false;
@@ -69,7 +69,7 @@ namespace Crow {
 			s_CommandAllocator->Release();
 			s_Fence->Release();
 
-			s_MainDescriptorHeap->Release();
+			if(s_MainDescriptorHeap) s_MainDescriptorHeap->Release();
 
 			for (int i = 0; i < s_FrameBufferCount; ++i)
 			{
@@ -99,7 +99,6 @@ namespace Crow {
 
 			IDXGIAdapter1* adapter;
 
-
 			int adapterIndex = 0;
 			bool adapterFound = false;
 
@@ -120,6 +119,13 @@ namespace Crow {
 				if (hr >= 0) // Check if adapter can be used
 				{
 					adapterFound = true;
+
+					// Get card name
+					char adapterdesc[128];
+					char aaa = ' ';
+					WideCharToMultiByte(CP_ACP, 0, desc.Description, -1, adapterdesc, 128, &aaa, NULL);
+					s_CardName = std::string(adapterdesc);
+
 					break;
 				}
 
@@ -139,16 +145,6 @@ namespace Crow {
 				CR_CORE_FATAL("Failed to initialize Directx 12!");
 				return false;
 			}
-
-			auto adapterdescW = DXGI_ADAPTER_DESC1();
-			adapter->GetDesc1(&adapterdescW);
-			
-			char adapterdesc[128];
-			char aaa = ' ';
-			WideCharToMultiByte(CP_ACP, 0, adapterdescW.Description, -1, adapterdesc, 128, &aaa, NULL);
-
-			s_CardName = std::string(adapterdesc);
-
 
 			D3D12_COMMAND_QUEUE_DESC cqDesc = {};
 			cqDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
@@ -288,6 +284,31 @@ namespace Crow {
 			return true;
 		}
 
+		void DirectX12RenderAPI::EndInit() const
+		{
+			InitConstantBuffers();
+			s_CommandList->Close();
+			ID3D12CommandList* commandLists[] = { s_CommandList };
+			s_CommandQueue->ExecuteCommandLists(_countof(commandLists), commandLists);
+
+			s_FenceValue++;
+			s_CommandQueue->Signal(s_Fence, s_FenceValue);
+
+
+			// Set buffer data
+			for (VertexBuffer* vBuffer : s_VertexBuffers)
+			{
+				vBuffer->SetBuffer();
+			}
+
+			for (IndexBuffer* iBuffer : s_IndexBuffers)
+			{
+				iBuffer->SetBuffer();
+			}
+
+			s_Initializing = false;
+		}
+
 		void DirectX12RenderAPI::Begin() const
 		{
 			WaitForPreviousFrame();
@@ -373,6 +394,19 @@ namespace Crow {
 			}
 		}
 
+		void DirectX12RenderAPI::EnableStencilTest() const
+		{
+			if (s_Initializing)
+			{
+				s_StencilTest = true;
+				UpdateDepthStencilDescription();
+			}
+			else
+			{
+				CR_CORE_WARNING("Cannot enable Stencil Test after initialization!");
+			}
+		}
+
 		std::string DirectX12RenderAPI::GetGraphicsInfo() const
 		{
 			return s_CardName;
@@ -393,30 +427,6 @@ namespace Crow {
 			s_FenceValue++;
 		}
 
-		void DirectX12RenderAPI::EndInit() const
-		{
-			InitConstantBuffers();
-			s_CommandList->Close();
-			ID3D12CommandList* commandLists[] = { s_CommandList };
-			s_CommandQueue->ExecuteCommandLists(_countof(commandLists), commandLists);
-
-			s_FenceValue++;
-			s_CommandQueue->Signal(s_Fence, s_FenceValue);
-
-
-			// Set buffer data
-			for (VertexBuffer* vBuffer : s_VertexBuffers)
-			{
-				vBuffer->SetBuffer();
-			}
-
-			for (IndexBuffer* iBuffer : s_IndexBuffers)
-			{
-				iBuffer->SetBuffer();
-			}
-
-			s_Initializing = false;
-		}
 
 		void DirectX12RenderAPI::InitConstantBuffers()
 		{
@@ -424,6 +434,8 @@ namespace Crow {
 
 			uint descriptorsCount = 0;
 			for (int i = 0; i < s_MappingShader.size(); i++)
+			{
+
 				descriptorsCount += (uint)static_cast<DirectX12Shader*>(s_MappingShader[i])->GetCBufferCount();
 
 				D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
@@ -438,12 +450,13 @@ namespace Crow {
 
 				for (Shader* shader : s_MappingShader) // Doing this at the end because thats when all shaders should be created
 					shader->CreateConstantBuffers();
+			}
 		}
 
 		void DirectX12RenderAPI::UpdateDepthStencilDescription()
 		{
 
-			const D3D12_DEPTH_STENCILOP_DESC defaultStencilOp = // a stencil operation structure, again does not really matter since stencil testing is turned off
+			const D3D12_DEPTH_STENCILOP_DESC defaultStencilOp =
 			{ 
 				D3D12_STENCIL_OP_KEEP, 
 				D3D12_STENCIL_OP_KEEP,

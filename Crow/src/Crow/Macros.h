@@ -46,10 +46,8 @@ typedef unsigned long ulong;
 	#define CR_WINDOWSERROR()	// Will print error if OS is not windows
 	
 	#pragma comment(lib, "d3d12.lib")
+	#pragma comment(lib, "d3d11.lib")
 	#pragma comment(lib, "dxgi.lib")
 	#pragma comment(lib, "d3dcompiler.lib")
 	#pragma comment(lib, "dxguid.lib")
-
-#define INCLUDE_WINDOWS #include "Crow/Platform/Application/Windows/WindowsIncludes.h"
-
 #endif

@@ -32,6 +32,7 @@ namespace Crow {
 			virtual inline void DrawIndices(uint count) const override;
 			virtual inline void EnableAlpha() const override;
 			virtual inline void EnableDepthTest() const override;
+			virtual inline void EnableStencilTest() const override;
 
 			virtual inline const char* GetAPIName() const override { return "DirectX 12"; }
 			virtual inline ShaderFactory* GetShaderFactory() const override { return m_ShaderFactory; }
