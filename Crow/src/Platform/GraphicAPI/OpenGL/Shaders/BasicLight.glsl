@@ -13,21 +13,19 @@ struct Light {
 uniform Light u_Light;
 
 in vec2 f_pos;
-in vec3 f_color;
 
 void main()
 {
 	//float brightness = 1.0 / length(f_pos - u_Light.pos);
 	//vec3 result = f_color * u_Light.color.rgb * brightness;
    // pixel = vec4(result, 1.0f);
-   pixel = vec4(1.0f, 0.2f, 0.0f, 1.0f);
+   pixel = vec4(f_pos.x, f_pos.y, 0.0f, 1.0f);
 }
 
 #shader vertex
 
 #version 330 core
 layout (location = 0) in vec3 a_Position;
-layout (location = 1) in vec4 a_Color;
 
 uniform mat4 u_VP = mat4(1.0f);
 uniform mat4 u_Model = mat4(1.0f);
@@ -40,6 +38,5 @@ void main()
 	
     gl_Position = u_VP * u_Model * vec4(a_Position.x, a_Position.y, a_Position.z, 1.0);
 	f_pos = a_Position.xy;
-	f_color = a_Color.xyz;
 }
 )"

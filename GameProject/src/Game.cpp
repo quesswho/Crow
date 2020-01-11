@@ -14,20 +14,20 @@ using namespace Math;
 		Application::GetAPI()->EnableDepthTest();
 
 		BufferProperties bufferprop = { 
-			{ "POSITION", 3 },//, //vertices
-			//{ "UV", 2 }  //uvs
+			{ "POSITION", 3 }, //vertices
+			{ "TEXCOORD", 2 }  //uvs
 		};
 
 		float vertices[] = {
-			-0.5f, -0.5f, -0.5f,
-			 0.5f, -0.5f, -0.5f,
-			 0.5f,  0.5f, -0.5f,
-			-0.5f,  0.5f, -0.5f,
+			-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+			 0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
+			 0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
+			-0.5f,  0.5f, -0.5f, 0.0f, 1.0f,
 
-			-0.5f, -0.5f,  0.5f,
-			 0.5f, -0.5f,  0.5f,
-			 0.5f,  0.5f,  0.5f,
-			-0.5f,  0.5f,  0.5f,
+			-0.5f, -0.5f,  0.5f, 1.0f, 0.0f,
+			 0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
+			 0.5f,  0.5f,  0.5f, 0.0f, 1.0f,
+			-0.5f,  0.5f,  0.5f, 1.0f, 1.0f
 		};
 
 		ulong indices[] {
@@ -52,10 +52,12 @@ using namespace Math;
 
 
 
-		m_Shader = Shader::CreateFromSource("BasicLightShader", Application::GetAPI()->GetShaderFactory()->BasicLightShader(), bufferprop);
+		m_Shader = Shader::CreateFromSource("BasicLightShader", Application::GetAPI()->GetShaderFactory()->TextureShader(), bufferprop);
 
 		std::shared_ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices), bufferprop);
 		std::shared_ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(ulong));
+
+		m_Texture = Texture::Create("res/Texture/crow2.png", TextureProperties());
 
 
 		m_ArrayBuffer = ArrayBuffer::Create(vertexBuffer, indexBuffer);
@@ -115,11 +117,13 @@ using namespace Math;
 	{
 		m_Shader->Bind();
 		m_ArrayBuffer->Bind();
+
 		m_Shader->SetUniformValue("u_VP",  m_Camera->GetCameraMatrix());
 		//m_Shader->SetUniformStruct("u_Light", m_Light);
-		
+		//m_Shader->SetUniformValue("u_Texture", 0);
 		m_Shader->SetUniformValue("u_Model", m_Model * Mat4::Translate(Vec3(1.0f, 3.0f, 5.0f)));
 		
+		m_Texture->Bind();
 		Application::GetAPI()->DrawIndices(m_ArrayBuffer->GetCount());
 
 		//Application::GetAPI()->DrawIndices(m_ArrayBuffer->GetCount());

@@ -26,6 +26,7 @@
 #include "GraphicAPI/DirectX11/DirectX11Buffer.h"
 #include "GraphicAPI/DirectX11/DirectX11ArrayBuffer.h"
 #include "GraphicAPI/DirectX11/DirectX11Shader.h"
+#include "GraphicAPI/DirectX11/DirectX11Texture.h"
 
 namespace Crow {
 	namespace Platform {

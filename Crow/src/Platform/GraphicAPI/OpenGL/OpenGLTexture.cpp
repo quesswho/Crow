@@ -29,6 +29,11 @@ namespace Crow {
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, props.m_MinFilter);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, props.m_MagFilter);
 
+			if (props.m_WrapS == CROW_CLAMP_TO_BORDER || props.m_WrapT == CROW_CLAMP_TO_BORDER)
+			{
+				float borderColor[] = { 1.0f, 0.4f, 0.8f, 1.0f };
+				glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+			}
 			int  channels;
 			stbi_set_flip_vertically_on_load(true);
 			uchar* data = stbi_load(m_Path, &m_Width, &m_Height, &channels, 0);
@@ -45,7 +50,7 @@ namespace Crow {
 					internalFormat = GL_RGBA;
 					break;
 				default:
-					CR_CORE_FATAL("File format not supported!"); // TODO: Handle this with an error texture
+					CR_CORE_ERROR("File format not supported! {}", channels); // TODO: Handle this with an error texture
 				}
 
 				glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_Width, m_Height, 0, internalFormat, GL_UNSIGNED_BYTE, data);
@@ -53,7 +58,7 @@ namespace Crow {
 			}
 			else
 			{
-				CR_CORE_FATAL("Could not load texture: {}", m_Path); // TODO: Handle this with an error texture
+				CR_CORE_ERROR("Could not load texture: {}", m_Path); // TODO: Handle this with an error texture
 			}
 			stbi_image_free(data);
 		}

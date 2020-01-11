@@ -157,7 +157,8 @@ namespace Crow {
 			depthStencilDesc.MiscFlags = 0;
 
 			s_Device->CreateTexture2D(&depthStencilDesc, NULL, &s_DepthStencilBuffer);
-			s_Device->CreateDepthStencilView(s_DepthStencilBuffer, NULL, &s_DepthStencilView);
+			if(s_DepthStencilBuffer > 0)
+				s_Device->CreateDepthStencilView(s_DepthStencilBuffer, NULL, &s_DepthStencilView);
 
 			D3D11_RASTERIZER_DESC rasterDesc;
 

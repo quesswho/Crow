@@ -10,6 +10,7 @@
 #define CROW_REPEAT 0x2901
 #define CROW_MIRRORED_REPEAT 0x8370
 #define CROW_CLAMP_TO_EDGE 0x812F
+#define CROW_CLAMP_TO_BORDER 0x812D
 
 #include "Crow/Common.h"
 
@@ -18,7 +19,7 @@ namespace Crow {
 	struct TextureProperties {
 		const int m_MagFilter, m_MinFilter, m_WrapS, m_WrapT;
 
-		TextureProperties(const int magFilter = CROW_NEAREST_MIPMAP_LINEAR, const int minFilter = CROW_LINEAR)
+		TextureProperties(const int magFilter = CROW_LINEAR, const int minFilter = CROW_LINEAR_MIPMAP_LINEAR)
 			: m_MagFilter(magFilter), m_MinFilter(minFilter), m_WrapS(CROW_REPEAT), m_WrapT(CROW_REPEAT)
 		{}
 

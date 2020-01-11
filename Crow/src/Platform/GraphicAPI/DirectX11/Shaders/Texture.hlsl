@@ -1,33 +1,53 @@
 R"(
-"
 #shader fragment
 
-#version 330 core
+Texture2D texture0;
+SamplerState sampleState;
 
-out vec4 pixel;
-
-in vec2 f_TexCoord;
-
-uniform sampler2D u_Texture;
-
-void PSmain()
+struct VS_OUTPUT
 {
-    pixel = texture(u_Texture, vec2(f_TexCoord.x, f_TexCoord.y));
+    float4 pos : SV_POSITION;
+	float2 uv : TEXCOORD;
+};
+
+
+float4 PSmain(VS_OUTPUT input) : SV_TARGET
+{
+	float4 result = texture0.Sample(sampleState, input.uv);
+	return result;
 }
 
 #shader vertex
 
-#version 330 core
-layout (location = 0) in vec3 a_Position;
-layout (location = 1) in vec2 a_TexCoord;
-
-out vec2 f_TexCoord;
-
-uniform mat4 u_MVP = mat4(1.0f);
-
-void VSmain()
+struct VS_INPUT
 {
-	f_TexCoord = a_TexCoord;
-    gl_Position = u_MVP * vec4(a_Position.x, a_Position.y, a_Position.z, 1.0);
+    float3 pos : POSITION;
+	float2 uv : TEXCOORD;
+};
+
+struct VS_OUTPUT
+{
+    float4 pos : SV_POSITION;
+	float2 uv : TEXCOORD;
+};
+
+cbuffer u_VP : register(b0)
+{
+    float4x4 vp;
 }
+
+cbuffer u_Model : register(b1)
+{
+    float4x4 model;
+}
+
+VS_OUTPUT VSmain(VS_INPUT input)
+{
+    VS_OUTPUT output;
+    output.pos = mul(mul(float4(input.pos, 1.0f), model), vp);
+    output.uv = input.uv;
+
+    return output;
+}
+
 )"

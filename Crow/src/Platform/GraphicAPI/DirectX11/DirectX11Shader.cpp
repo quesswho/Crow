@@ -278,7 +278,7 @@ namespace Crow {
 					BufferElement element = m_ShaderInput.m_Elements[i];
 					inputLayout[i] = { element.GetName(), 0, ConvertToDXGIFormat(element.GetComponentCount()), 0, (uint)element.GetOffset() * 4, D3D11_INPUT_PER_VERTEX_DATA, 0 };
 				}
-				DirectX11RenderAPI::GetDevice()->CreateInputLayout(inputLayout, m_ShaderInput.m_Elements.size(), m_CompiledVertexShader->GetBufferPointer(), m_CompiledVertexShader->GetBufferSize(), &m_VertexInputLayout);
+				HRESULT hr = DirectX11RenderAPI::GetDevice()->CreateInputLayout(inputLayout, m_ShaderInput.m_Elements.size(), m_CompiledVertexShader->GetBufferPointer(), m_CompiledVertexShader->GetBufferSize(), &m_VertexInputLayout);
 			}
 
 			// Constant Buffers

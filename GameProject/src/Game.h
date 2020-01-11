@@ -33,6 +33,7 @@ private:
 
 	Crow::ArrayBuffer* m_ArrayBuffer;
 	Crow::Shader* m_Shader;
+	Crow::Texture* m_Texture;
 
 	Crow::Math::Mat4 m_Projection;
 	Crow::Math::Mat4 m_Model;

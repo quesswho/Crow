@@ -10,7 +10,13 @@ namespace Crow {
 
 		bool OpenGLRenderAPI::InitAPI(const WindowProperties&, void*) const
 		{ 
-			return gladLoadGL();
+			bool result = gladLoadGL();
+
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_BACK);
+			glFrontFace(GL_CW);
+
+			return result;
 		}
 
 		std::string OpenGLRenderAPI::GetGraphicsInfo() const

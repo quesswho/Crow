@@ -512,6 +512,7 @@
     <ClInclude Include="src\Platform\GraphicAPI\DirectX11\DirectX11RenderAPI.h" />
     <ClInclude Include="src\Platform\GraphicAPI\DirectX11\DirectX11Shader.h" />
     <ClInclude Include="src\Platform\GraphicAPI\DirectX11\DirectX11ShaderFactory.h" />
+    <ClInclude Include="src\Platform\GraphicAPI\DirectX11\DirectX11Texture.h" />
     <ClInclude Include="src\Platform\GraphicAPI\DirectX12\DirectX12ArrayBuffer.h" />
     <ClInclude Include="src\Platform\GraphicAPI\DirectX12\DirectX12Buffer.h" />
     <ClInclude Include="src\Platform\GraphicAPI\DirectX12\DirectX12RenderAPI.h" />
@@ -555,6 +556,7 @@
     <ClCompile Include="src\Platform\GraphicAPI\DirectX11\DirectX11RenderAPI.cpp" />
     <ClCompile Include="src\Platform\GraphicAPI\DirectX11\DirectX11Shader.cpp" />
     <ClCompile Include="src\Platform\GraphicAPI\DirectX11\DirectX11ShaderFactory.cpp" />
+    <ClCompile Include="src\Platform\GraphicAPI\DirectX11\DirectX11Texture.cpp" />
     <ClCompile Include="src\Platform\GraphicAPI\DirectX12\DirectX12ArrayBuffer.cpp" />
     <ClCompile Include="src\Platform\GraphicAPI\DirectX12\DirectX12Buffer.cpp" />
     <ClCompile Include="src\Platform\GraphicAPI\DirectX12\DirectX12RenderAPI.cpp" />

@@ -97,9 +97,8 @@ namespace Crow {
 
 			CreateShaderFromPath = &DirectX11Shader::CreateDirectX11ShaderFromPath;
 			CreateShaderFromSource = &DirectX11Shader::CreateDirectX11ShaderFromSource;
-			// TODO: Finish DX11
 
-			CreateTexture = &OpenGLTexture::CreateOpenGLTexture;
+			CreateTexture = &DirectX11Texture::CreateDirectX11Texture;
 
 			Math::MATH_COORDINATE::s_MathCoordinateType = Math::MATH_COORDINATE::MATH_COORDINATE_LEFTHAND;
 		}

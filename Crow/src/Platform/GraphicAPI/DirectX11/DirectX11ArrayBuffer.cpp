@@ -12,7 +12,6 @@ namespace Crow {
 
 		void DirectX11ArrayBuffer::Bind() const
 		{
-
 			m_VertexBuffer->Bind();
 			m_IndexBuffer->Bind();
 		}
