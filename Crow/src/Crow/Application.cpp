@@ -1,10 +1,12 @@
 #include "Application.h"
+
 #include "graphics/Renderer/RenderAPI.h"
-#include "Log.h"
 #include "graphics/ShaderManager.h"
+#include "Platform/PlatformAPI.h"
+#include "Log.h"
+
 #include <stdio.h>
 #include <string>
-#include "Platform/PlatformAPI.h"
 
 namespace Crow {
 
@@ -15,6 +17,7 @@ namespace Crow {
 	AbstractRenderAPI* Application::s_RenderAPI;
 	Window* Application::s_Window;
 	WindowProperties Application::s_WindowProperties;
+	FT_Library Application::s_FreeTypeLibrary;
 
 	Application::Application(WindowProperties winProp, Platform::GraphicAPI graphicApi, Platform::ApplicationAPI appApi)
 	{
@@ -40,8 +43,14 @@ namespace Crow {
 		Input::Init();
 
 		s_LayerManager = std::make_unique<LayerManager>();
-
 		m_Timer = std::make_unique<Timer>();
+
+
+		if (FT_Init_FreeType(&s_FreeTypeLibrary))
+		{
+			CR_CORE_ERROR("Failed to initialize FreeType");
+		}
+
 		CR_CORE_INFO("Application has initialized successfully!");
 	}
 
@@ -49,6 +58,7 @@ namespace Crow {
 	{
 		delete s_RenderAPI;
 		delete s_Window;
+		FT_Done_FreeType(s_FreeTypeLibrary);
 		Shutdown();
 	}
 
@@ -63,6 +73,7 @@ namespace Crow {
 
 		int frames = 0;
 		double elapsed = 0;
+		double tick = 0;
 		while (!s_Closed)
 		{
 			m_Timer->Start();
@@ -71,16 +82,20 @@ namespace Crow {
 			///////////
 			m_Timer->End();
 			elapsed += m_Timer->GetElapsedTimeInSeconds();
-			if (elapsed > 1.0) // If it has been 1 second
+			tick += m_Timer->GetElapsedTimeInSeconds();
+			if (tick > 0.1) // If it has been 1/10 second
 			{
-				m_FramesPerSecond = frames;
-				s_Window->SetTitle(std::string(s_WindowProperties.m_Title).append(" : ").append(std::to_string(m_FramesPerSecond)).append(" FPS").c_str());
+				m_FramesPerSecond = frames * tick * 100;
 				frames = 0;
-				elapsed = 0;
+				tick = 0;
 			}
-			else {
+			else
 				frames++;
-				continue;
+
+			if (elapsed > 1.0)
+			{
+				s_Window->SetTitle(std::string(s_WindowProperties.m_Title).append(" : ").append(std::to_string(m_FramesPerSecond)).append(" FPS").c_str());
+				elapsed = 0;
 			}
 		}
 	}

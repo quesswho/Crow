@@ -1,7 +1,7 @@
 R"(
 #shader fragment
 
-Texture2D texture0;
+Texture2D texture0 : register(t0);
 SamplerState sampleState;
 
 struct VS_OUTPUT

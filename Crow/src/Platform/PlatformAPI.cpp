@@ -68,6 +68,8 @@ namespace Crow {
 
 			CreateTexture = &OpenGLTexture::CreateOpenGLTexture;
 
+			CreateTTFont = &OpenGLFont::CreateOpenGLFont;
+
 			Math::MATH_COORDINATE::s_MathCoordinateType = Math::MATH_COORDINATE::MATH_COORDINATE_RIGHTHAND;
 		}
 
@@ -83,6 +85,7 @@ namespace Crow {
 			CreateShaderFromSource = &DirectX12Shader::CreateDirectX12ShaderFromSource;
 
 			CreateTexture = &OpenGLTexture::CreateOpenGLTexture;						//TODO: replace with D3D12 class
+			CreateTTFont = &OpenGLFont::CreateOpenGLFont;
 
 			Math::MATH_COORDINATE::s_MathCoordinateType = Math::MATH_COORDINATE::MATH_COORDINATE_LEFTHAND;
 		}
@@ -99,6 +102,8 @@ namespace Crow {
 			CreateShaderFromSource = &DirectX11Shader::CreateDirectX11ShaderFromSource;
 
 			CreateTexture = &DirectX11Texture::CreateDirectX11Texture;
+
+			CreateTTFont = &DirectX11Font::CreateDirectX11Font;
 
 			Math::MATH_COORDINATE::s_MathCoordinateType = Math::MATH_COORDINATE::MATH_COORDINATE_LEFTHAND;
 		}

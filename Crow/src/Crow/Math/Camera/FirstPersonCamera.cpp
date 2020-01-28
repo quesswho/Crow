@@ -15,6 +15,7 @@ namespace Crow {
 			Application::SetCursorPosition(m_LastMousePos);
 			Application::SetCursorVisibility(false);
 			CalculateProjectionViewMatrix();
+			m_MouseRect = TVec4<int>(Application::s_WindowProperties.m_Width / 4, (int)Application::s_WindowProperties.m_Width * (3.0 / 4.0), Application::s_WindowProperties.m_Height / 4, (int)Application::s_WindowProperties.m_Height * (3.0 / 4.0));
 		}
 
 		void FirstPersonCamera::Update(float elapsed)
@@ -43,7 +44,15 @@ namespace Crow {
 
 				float movementX = (float) Input::GetMousePosition().x - m_LastMousePos.x;
 				float movementY = (float) m_LastMousePos.y - Input::GetMousePosition().y;
-				Application::SetCursorPosition(m_LastMousePos);
+
+				if (m_LastMousePos.x < m_MouseRect.x || m_LastMousePos.x > m_MouseRect.y || m_LastMousePos.y < m_MouseRect.z || m_LastMousePos.y > m_MouseRect.w)
+				{
+					m_LastMousePos = TVec2<int>(Application::s_WindowProperties.m_Width / 2, Application::s_WindowProperties.m_Height / 2);
+					Application::SetCursorPosition(m_LastMousePos);
+				}
+				else
+					m_LastMousePos = Input::GetMousePosition();
+
 
 
 				movementX *= m_Sensitivity;
@@ -67,7 +76,7 @@ namespace Crow {
 			m_ViewDir = Normalize(Vec3(cos(ToRadians(m_Yaw)) * cos(ToRadians(m_Pitch)), sin(ToRadians(m_Pitch)), sin(ToRadians(m_Yaw)) * cos(ToRadians(m_Pitch))));
 			m_Right = Normalize(Cross(m_Forward, m_WorldUp));
 			m_Up = Normalize(Cross(m_Right, m_Forward));
-			m_ViewMatrix = Mat4::LookAt(m_CameraPos, m_CameraPos + m_ViewDir, m_Up);
+			m_ViewMatrix = Mat4::LookDir(m_CameraPos, m_ViewDir, m_Up);
 			if (MATH_COORDINATE::s_MathCoordinateType == MATH_COORDINATE::MATH_COORDINATE_RIGHTHAND)
 				m_CameraMatrix = m_ProjectionMatrix * m_ViewMatrix; // Opengl
 			else

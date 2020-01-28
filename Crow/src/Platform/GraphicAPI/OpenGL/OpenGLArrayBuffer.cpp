@@ -19,7 +19,7 @@ namespace Crow {
 				for (const auto& element : prop)
 				{
 					glEnableVertexAttribArray(element.GetIndex());
-					glVertexAttribPointer(element.GetIndex(), element.GetComponentCount(), GL_FLOAT, GL_FALSE, prop.m_Stride * sizeof(GL_FLOAT), (const void*)(element.GetOffset() * sizeof(GL_FLOAT)));
+					glVertexAttribPointer(element.GetIndex(), element.GetComponentCount(), GL_FLOAT, GL_FALSE, prop.m_Stride * sizeof(float), (const void*)(element.GetOffset() * sizeof(float)));
 				}
 			}
 			else {

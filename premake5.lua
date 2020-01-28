@@ -18,6 +18,7 @@ workspace "Crow"
 	group "Dependencies"
 		include "Crow/lib/glfw"
 		include "Crow/lib/glad"
+		include "Crow/lib/freetype2"
 
 	group ""
 	project "Crow"
@@ -38,7 +39,7 @@ workspace "Crow"
 			"%{prj.name}/lib/glm/glm/**.hpp",
 			"%{prj.name}/lib/glm/glm/**.inl",
 			"%{prj.name}/lib/stb_image/**.*",
-			"%{prj.name}/lib/d3dx12/d3dx12.h"
+			"%{prj.name}/lib/d3dx12/d3dx12.h",
 		}
 
 		includedirs { 
@@ -49,9 +50,11 @@ workspace "Crow"
 			"%{prj.name}/lib/spdlog/include",
 			"%{prj.name}/lib/glfw/include",
 			"%{prj.name}/lib/glad/include",
+			"%{prj.name}/lib/freetype2/include",
 			"%{prj.name}/lib/glm",
 			"%{prj.name}/lib/stb_image/",
 			"%{prj.name}/lib/d3dx12/"
+			
 		}
 
 		defines
@@ -62,9 +65,10 @@ workspace "Crow"
 		links {
 			"GLFW",
 			"glad",
+			"freetype2",
 			"opengl32.lib"
 		}
-
+	
 		filter "system:windows"
 			systemversion "latest"
 
@@ -103,12 +107,15 @@ workspace "Crow"
 			"Crow/lib/spdlog/include",
 			"Crow/lib/glfw/include",
 			"Crow/lib/glad/include",
+			"Crow/lib/freetype2/include",
 			"Crow/lib/glm",
 			"Crow/lib/stb_image/",
 			"Crow/lib/d3dx12/"
 		}
 
-		links { "Crow" }
+		links { 
+			"Crow"
+		}
 
 		filter "system:windows"
 			cppdialect "C++17"
@@ -116,7 +123,8 @@ workspace "Crow"
 			systemversion "latest"
 
 			defines {
-				"CR_PLATFORM_WINDOWS"
+				"CR_PLATFORM_WINDOWS",
+				"FT2_BUILD_LIBRARY"
 			}
 
 		filter "configurations:Debug"

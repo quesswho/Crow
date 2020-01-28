@@ -377,7 +377,7 @@ namespace Crow {
 			s_CommandList->DrawIndexedInstanced(count, 1, 0, 0, 0);
 		}
 
-		void DirectX12RenderAPI::EnableAlpha() const
+		void DirectX12RenderAPI::EnableBlending() const
 		{
 		}
 

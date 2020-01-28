@@ -18,7 +18,7 @@ namespace Crow {
 
 			D3D11_SUBRESOURCE_DATA vertexData = {};
 			ZeroMemory(&vertexData, sizeof(vertexData));
-			HRESULT hr;
+
 			vertexData.pSysMem = reinterpret_cast<BYTE*>(vertices);
 			DirectX11RenderAPI::GetDevice()->CreateBuffer(&bufferDesc, &vertexData, &m_VertexBuffer);
 

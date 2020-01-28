@@ -4,6 +4,7 @@
 
 using namespace Crow;
 using namespace Math;
+
 	Layer2D::Layer2D()
 		: m_Camera(new FirstPersonCamera(Vec3(0.0f, 1.0f, -3.0f), 1080.0f / 720.0f, 0.05f, 3.0f))
 	{
@@ -12,6 +13,7 @@ using namespace Math;
 
 		Application::GetAPI()->ClearColor(0.5f, 0.7f, 0.5f);
 		Application::GetAPI()->EnableDepthTest();
+		Application::GetAPI()->EnableBlending();
 
 		BufferProperties bufferprop = { 
 			{ "POSITION", 3 }, //vertices
@@ -59,10 +61,13 @@ using namespace Math;
 
 		m_Texture = Texture::Create("res/Texture/crow2.png", TextureProperties());
 
+		m_OpenSansFont = Font::Create("res/Font/OpenSans.ttf");
 
 		m_ArrayBuffer = ArrayBuffer::Create(vertexBuffer, indexBuffer);
 		
 		m_Light = new Light(glm::vec2(0.0f, 0.0f), glm::vec4(0.5f, 0.1f, 0.5f, 1.0f));
+
+
 	}
 
 	Layer2D::~Layer2D()
@@ -109,24 +114,23 @@ using namespace Math;
 		if (Input::IsKeyPressed(CROW_KEY_R))
 			m_Camera->SetViewDir(Vec3(0.0f, 0.0f, 1.0f));
 
-
 		m_Camera->Update(elapsed);
 	}
 
 	void Layer2D::OnRender()
 	{
-		m_Shader->Bind();
-		m_ArrayBuffer->Bind();
 
+		m_Shader->Bind();
 		m_Shader->SetUniformValue("u_VP",  m_Camera->GetCameraMatrix());
 		//m_Shader->SetUniformStruct("u_Light", m_Light);
 		//m_Shader->SetUniformValue("u_Texture", 0);
 		m_Shader->SetUniformValue("u_Model", m_Model * Mat4::Translate(Vec3(1.0f, 3.0f, 5.0f)));
 		
 		m_Texture->Bind();
+		m_ArrayBuffer->Bind();
 		Application::GetAPI()->DrawIndices(m_ArrayBuffer->GetCount());
 
-		//Application::GetAPI()->DrawIndices(m_ArrayBuffer->GetCount());
+		m_OpenSansFont->DrawDynamic(std::string("FPS: ").append(std::to_string(Application::m_FramesPerSecond)).c_str(), Vec2(20.0f, 20.0f), 1);
 	}
 
 class Game : public Crow::Application {

@@ -29,7 +29,7 @@ namespace Crow {
 			virtual inline void SetViewPort(uint width, uint height) const override { glViewport(0, 0, width, height); }
 			virtual inline void DrawIndices(uint count) const override { glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0); }
 
-			virtual inline void EnableAlpha() const override { glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glEnable(GL_BLEND); }
+			virtual inline void EnableBlending() const override { glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glEnable(GL_BLEND); }
 			virtual inline void EnableDepthTest() const override { glEnable(GL_DEPTH_TEST); }
 			virtual inline void EnableStencilTest() const override { glEnable(GL_STENCIL_TEST); }
 

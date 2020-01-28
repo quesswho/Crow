@@ -9,7 +9,7 @@ namespace Crow {
 	Renderer2D::Renderer2D() 
 		: m_Size(0), m_Count(0), m_BatchShader(0), m_BatchTexture(0)
 	{
-		Application::GetAPI()->EnableAlpha();
+		Application::GetAPI()->EnableBlending();
 	}
 
 	Renderer2D::~Renderer2D()

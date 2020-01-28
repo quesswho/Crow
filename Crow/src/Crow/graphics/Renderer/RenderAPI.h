@@ -22,7 +22,7 @@ namespace Crow {
 		virtual inline void ClearColor(float r, float g, float b) const = 0;
 		virtual inline void SetViewPort(uint width, uint height) const = 0;
 		virtual inline void DrawIndices(uint count) const = 0;
-		virtual inline void EnableAlpha() const = 0;
+		virtual inline void EnableBlending() const = 0;
 		virtual inline void EnableDepthTest() const = 0;
 		virtual inline void EnableStencilTest() const = 0;
 

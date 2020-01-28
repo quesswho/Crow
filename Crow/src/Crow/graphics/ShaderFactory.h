@@ -12,5 +12,7 @@ namespace Crow {
 		virtual std::string UniformColorShader() = 0;
 		virtual std::string TextureShader() = 0;
 		virtual std::string BasicLightShader() = 0;
+
+		virtual std::string BasicFontShader() = 0;
 	};
 }

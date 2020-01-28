@@ -26,11 +26,16 @@ namespace Crow {
 #include "Shaders/BasicLight.hlsl"
 			;
 
+		static const char* s_BasicFontShader =
+#include "Shaders/Font/BasicColorFont.hlsl"
+			;
+
 		std::string DirectX11ShaderFactory::InterpolationShader() { return std::string(s_InterpolationShader); }
 		std::string DirectX11ShaderFactory::BasicShader() { return std::string(s_BasicShader); }
 		std::string DirectX11ShaderFactory::ColorShader() { return std::string(s_ColorShader); }
 		std::string DirectX11ShaderFactory::UniformColorShader() { return std::string(s_CbColorShader); }
 		std::string DirectX11ShaderFactory::TextureShader() { return std::string(s_TextureShader); }
 		std::string DirectX11ShaderFactory::BasicLightShader() { return std::string(s_BasicLightShader); }
+		std::string DirectX11ShaderFactory::BasicFontShader() { return std::string(s_BasicFontShader); }
 	}
 }

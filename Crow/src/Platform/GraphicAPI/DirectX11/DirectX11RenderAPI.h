@@ -26,7 +26,7 @@ namespace Crow {
 			virtual inline void ClearColor(float r, float g, float b) const override;
 			virtual inline void SetViewPort(uint width, uint height) const override;
 			virtual inline void DrawIndices(uint count) const override;
-			virtual inline void EnableAlpha() const override;
+			virtual inline void EnableBlending() const override;
 			virtual inline void EnableDepthTest() const override;
 			virtual inline void EnableStencilTest() const override;
 
@@ -46,6 +46,7 @@ namespace Crow {
 			static ID3D11RenderTargetView* s_RenderTargetView;
 
 			static ID3D11RasterizerState* s_RasterState;
+			static ID3D11BlendState* s_BlendState;
 			static ID3D11DepthStencilView* s_DepthStencilView;
 			static ID3D11Texture2D* s_DepthStencilBuffer;
 			static D3D11_VIEWPORT s_ViewPort;
@@ -54,8 +55,10 @@ namespace Crow {
 
 			static std::string s_CardName;
 
-			static D3D11_CLEAR_FLAG m_DepthMode;
-			static D3D11_CLEAR_FLAG m_StencilMode;
+			static D3D11_CLEAR_FLAG s_DepthMode;
+			static D3D11_CLEAR_FLAG s_StencilMode;
+
+			static bool s_EnableBlending;
 		};
 	}
 }

@@ -14,6 +14,7 @@
 #include "GraphicAPI/OpenGL/OpenGLBuffer.h"
 #include "GraphicAPI/OpenGL/OpenGLShader.h"
 #include "GraphicAPI/OpenGL/OpenGLTexture.h"
+#include "GraphicAPI/OpenGL/OpenGLFont.h"
 
 // DIRECTX 12
 #include "GraphicAPI/DirectX12/DirectX12RenderAPI.h"
@@ -27,6 +28,7 @@
 #include "GraphicAPI/DirectX11/DirectX11ArrayBuffer.h"
 #include "GraphicAPI/DirectX11/DirectX11Shader.h"
 #include "GraphicAPI/DirectX11/DirectX11Texture.h"
+#include "GraphicAPI/DirectX11/DirectX11Font.h"
 
 namespace Crow {
 	namespace Platform {
@@ -62,6 +64,9 @@ namespace Crow {
 			static inline Shader* (*CreateShaderFromSource)(const char* name, std::string& source, const BufferProperties& shaderInput);
 
 			static inline Texture* (*CreateTexture)(const char* path, const TextureProperties& props);
+
+			static inline Font* (*CreateTTFont)(const char* path); // Create Truetype Font
+			static inline Font* (*CreateTTSFont)(const char* path, Shader* shader); // Create Truetype Font with custom Shader
 
 			static inline AbstractRenderAPI* (*CreateRenderAPI)();
 

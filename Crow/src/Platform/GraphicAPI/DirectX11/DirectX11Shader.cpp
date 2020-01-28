@@ -48,7 +48,7 @@ namespace Crow {
 				if (firstLine)
 				{
 					firstLine = false;
-					if (line == "\"") continue;							// Get rid of quotation mark in beginning to allow highlightning
+					if (line == "\"") continue;	// Get rid of quotation mark in beginning to allow highlightning
 				}
 
 				if (line == "#shader fragment")
@@ -278,7 +278,7 @@ namespace Crow {
 					BufferElement element = m_ShaderInput.m_Elements[i];
 					inputLayout[i] = { element.GetName(), 0, ConvertToDXGIFormat(element.GetComponentCount()), 0, (uint)element.GetOffset() * 4, D3D11_INPUT_PER_VERTEX_DATA, 0 };
 				}
-				HRESULT hr = DirectX11RenderAPI::GetDevice()->CreateInputLayout(inputLayout, m_ShaderInput.m_Elements.size(), m_CompiledVertexShader->GetBufferPointer(), m_CompiledVertexShader->GetBufferSize(), &m_VertexInputLayout);
+				DirectX11RenderAPI::GetDevice()->CreateInputLayout(inputLayout, m_ShaderInput.m_Elements.size(), m_CompiledVertexShader->GetBufferPointer(), m_CompiledVertexShader->GetBufferSize(), &m_VertexInputLayout);
 			}
 
 			// Constant Buffers

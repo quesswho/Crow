@@ -16,6 +16,9 @@ project "glad"
 		"include"
 	}
 	
+	filter "system:windows"
+			staticruntime "On"
+	
 	filter "configurations:Debug"
 		runtime "Debug"
 		symbols "on"

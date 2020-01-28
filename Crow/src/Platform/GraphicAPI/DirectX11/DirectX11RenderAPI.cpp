@@ -9,6 +9,7 @@ namespace Crow {
 		ID3D11RenderTargetView* DirectX11RenderAPI::s_RenderTargetView;
 
 		ID3D11RasterizerState* DirectX11RenderAPI::s_RasterState;
+		ID3D11BlendState* DirectX11RenderAPI::s_BlendState;
 		ID3D11DepthStencilView* DirectX11RenderAPI::s_DepthStencilView;
 		ID3D11Texture2D* DirectX11RenderAPI::s_DepthStencilBuffer;
 		D3D11_VIEWPORT DirectX11RenderAPI::s_ViewPort;
@@ -17,13 +18,16 @@ namespace Crow {
 
 		std::string DirectX11RenderAPI::s_CardName;
 
-		D3D11_CLEAR_FLAG DirectX11RenderAPI::m_DepthMode;
-		D3D11_CLEAR_FLAG DirectX11RenderAPI::m_StencilMode;
+		D3D11_CLEAR_FLAG DirectX11RenderAPI::s_DepthMode;
+		D3D11_CLEAR_FLAG DirectX11RenderAPI::s_StencilMode;
+
+		bool DirectX11RenderAPI::s_EnableBlending;
 
 		DirectX11RenderAPI::DirectX11RenderAPI()
 		{
 			m_ShaderFactory = new DirectX11ShaderFactory();
 			s_ClearColor = new float[3];
+			s_EnableBlending = false;
 		}
 
 		DirectX11RenderAPI::~DirectX11RenderAPI()
@@ -183,12 +187,35 @@ namespace Crow {
 		}
 
 		void DirectX11RenderAPI::EndInit() const
-		{}
+		{
+
+			D3D11_RENDER_TARGET_BLEND_DESC rtbd;
+			ZeroMemory(&rtbd, sizeof(rtbd));
+
+			rtbd.BlendEnable = s_EnableBlending;
+			rtbd.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+			rtbd.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+			rtbd.BlendOp = D3D11_BLEND_OP_ADD;
+			rtbd.SrcBlendAlpha = D3D11_BLEND_ONE;
+			rtbd.DestBlendAlpha = D3D11_BLEND_ZERO;
+			rtbd.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+			rtbd.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+			D3D11_BLEND_DESC blendDesc;
+			ZeroMemory(&blendDesc, sizeof(D3D11_BLEND_DESC));
+
+			blendDesc.AlphaToCoverageEnable = false;
+			blendDesc.RenderTarget[0] = rtbd;
+
+			s_Device->CreateBlendState(&blendDesc, &s_BlendState);
+
+			s_DeviceContext->OMSetBlendState(s_BlendState, 0, 0xffffffff);
+		}
 
 		void DirectX11RenderAPI::Begin() const
 		{
 			s_DeviceContext->ClearRenderTargetView(s_RenderTargetView, s_ClearColor);
-			s_DeviceContext->ClearDepthStencilView(s_DepthStencilView, m_DepthMode | m_StencilMode, 1.0f, 0);
+			s_DeviceContext->ClearDepthStencilView(s_DepthStencilView, s_DepthMode | s_StencilMode, 1.0f, 0);
 			s_DeviceContext->RSSetViewports(1, &s_ViewPort);
 		}
 
@@ -220,17 +247,19 @@ namespace Crow {
 			s_DeviceContext->DrawIndexedInstanced(count, 1, 0, 0, 0);
 		}
 
-		void DirectX11RenderAPI::EnableAlpha() const
-		{}
+		void DirectX11RenderAPI::EnableBlending() const
+		{
+			s_EnableBlending = true;
+		}
 
 		void DirectX11RenderAPI::EnableDepthTest() const
 		{
-			m_DepthMode = (D3D11_CLEAR_DEPTH);
+			s_DepthMode = (D3D11_CLEAR_DEPTH);
 		}
 
 		void DirectX11RenderAPI::EnableStencilTest() const
 		{
-			m_StencilMode = (D3D11_CLEAR_STENCIL);
+			s_StencilMode = (D3D11_CLEAR_STENCIL);
 		}
 
 		std::string DirectX11RenderAPI::GetGraphicsInfo() const

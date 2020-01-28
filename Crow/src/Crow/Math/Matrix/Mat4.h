@@ -362,6 +362,31 @@ namespace Crow {
 				return result;
 			}
 
+			static inline constexpr Mat4x4<T> Orthographic(float left, float right, float bottom, float top)
+			{
+				if (MATH_COORDINATE::s_MathCoordinateType == MATH_COORDINATE::MATH_COORDINATE_RIGHTHAND)
+					return OrthographicRH(left, right, bottom, top);
+				else // s_MathCoordinateType == MATH_COORDINATE_LEFTHAND
+					return OrthographicLH(left, right, bottom, top);
+			}
+
+			static inline constexpr Mat4x4<T> OrthographicRH(float left, float right, float bottom, float top)
+			{
+				return Mat4x4(
+					2 / (right - left), 0, 0, 0,
+					0, 2 / (top - bottom), 0, 0,
+					0, 0, -1, 0,
+					-(right + left) / (right - left), -(top + bottom) / (top - bottom), 0, 1);
+			}
+
+			static inline constexpr Mat4x4<T> OrthographicLH(float left, float right, float bottom, float top)
+			{
+				return Mat4x4(
+					2 / (right - left), 0, 0, -(right + left) / (right - left),
+					0, 2 / (top - bottom), 0, -(top + bottom) / (top - bottom),
+					0, 0, 1, 0,
+					0, 0, 0, 1);
+			}
 
 			static inline constexpr Mat4x4<T> OrthographicRH(float left, float right, float bottom, float top, float zNear, float zFar)
 			{
@@ -387,16 +412,16 @@ namespace Crow {
 				/*	__												__
 					| 2 / (r-l), 0,			0,			-(r+l)/(r-l) |
 					| 0,		 2 / (t-b), 0,			-(t+b)/(t-b) |
-					| 0,		 0,			-2 / (f-n), -(f+n)/(f-n) |
+					| 0,		 0,			2 / (f-n), -(f+n)/(f-n) |
 					| 0,		 0,			0,			1			 |
 					¯¯												¯¯
 				*/
 
 				return Mat4x4(
-					2 / (right - left), 0, 0, 0,
-					0, 2 / (top - bottom), 0, 0,
-					0, 0, 2 / (zFar - zNear), 0,
-					-(right + left) / (right - left), -(top + bottom) / (top - bottom), -(zFar + zNear) / (zFar - zNear), 1);
+					2 / (right - left), 0, 0, -(right + left) / (right - left),
+					0, 2 / (top - bottom), 0, -(top + bottom) / (top - bottom),
+					0, 0, 2 / (zFar - zNear), -(zFar + zNear) / (zFar - zNear),
+					0, 0, 0, 1);
 			}
 
 			static inline constexpr Mat4x4<T> Orthographic(float left, float right, float bottom, float top, float zNear, float zFar)
@@ -511,7 +536,7 @@ namespace Crow {
 			{
 				Mat4 result;
 
-				const Vec3 r = Normalize(Cross(dir, up));
+				const Vec3 r = Cross(dir, up); 
 				const Vec3 u = Cross(r, dir);
 
 				result.m_Elements[GetIndex(0, 0)] = r.x;
@@ -535,7 +560,7 @@ namespace Crow {
 				Mat4 result;
 				
 				const Vec3 f = dir.FlipY();
-				const Vec3 r = Normalize(Cross(f, up));
+				const Vec3 r = Cross(f, up);
 				const Vec3 u = Cross(f, r);
 
 				const Vec3 p = pos.FlipY();

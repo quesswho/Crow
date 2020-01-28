@@ -27,13 +27,14 @@ public:
 	std::unique_ptr<Crow::Renderer2D> m_Renderer;
 private:
 	std::vector<Crow::Object2D*> m_Objects;
-	Crow::Object2D* m_Player;
 	std::vector<Crow::Batchable2D*> m_BatchingObjects;
 	Crow::FirstPersonCamera* m_Camera;
 
 	Crow::ArrayBuffer* m_ArrayBuffer;
 	Crow::Shader* m_Shader;
 	Crow::Texture* m_Texture;
+	
+	Crow::Font* m_OpenSansFont;
 
 	Crow::Math::Mat4 m_Projection;
 	Crow::Math::Mat4 m_Model;

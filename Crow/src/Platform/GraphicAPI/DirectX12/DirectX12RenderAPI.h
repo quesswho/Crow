@@ -30,7 +30,7 @@ namespace Crow {
 			virtual inline void ClearColor(float r, float g, float b) const override;
 			virtual inline void SetViewPort(uint width, uint height) const override;
 			virtual inline void DrawIndices(uint count) const override;
-			virtual inline void EnableAlpha() const override;
+			virtual inline void EnableBlending() const override;
 			virtual inline void EnableDepthTest() const override;
 			virtual inline void EnableStencilTest() const override;
 

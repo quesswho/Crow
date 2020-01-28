@@ -23,6 +23,8 @@ namespace Crow {
 			float m_Sensitivity;
 
 			TVec2<int> m_LastMousePos;
+			TVec4<int> m_MouseRect;
+
 		public:
 			FirstPersonCamera(Vec3& pos, Vec3& viewDir, float aspectRatio, float sensitivity, float speed);
 

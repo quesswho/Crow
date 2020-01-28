@@ -33,8 +33,6 @@ typedef unsigned long ulong;
 	#define CR_GAME_FATAL(...)
 #endif
 
-
-
 #if !defined(CR_PLATFORM_WINDOWS)
 	#if defined(CR_DEBUG)
 		#define CR_WINDOWSERROR() CR_CORE_FATAL("Cannot use a Windows application on a non Windows OS!");	// Will print error if OS is not windows

@@ -1,5 +1,5 @@
 R"(
-"
+
 #shader fragment
 
 struct VS_OUTPUT
