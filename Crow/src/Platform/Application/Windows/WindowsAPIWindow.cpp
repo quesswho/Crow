@@ -175,21 +175,8 @@ namespace Crow {
 				TranslateMessage(&message);
 				DispatchMessage(&message);
 			}
-			CheckMouseMoved();
 
 			if(PlatformAPI::s_GraphicAPI == GraphicAPI::OPENGL) SwapBuffers(m_Hdc);
-		}
-
-		void WindowsAPIWindow::CheckMouseMoved() const
-		{
-			POINT mouse;
-			GetCursorPos(&mouse);
-			ScreenToClient(m_Hwnd, &mouse);
-			auto vec = Input::GetMousePosition();
-			if (vec.x != mouse.x && vec.y != mouse.y)
-			{
-				WindowsAPICallbacks::cursor_position_callback(mouse.x, mouse.y);
-			}
 		}
 
 		void WindowsAPIWindow::SetTitle(const char* title)

@@ -52,8 +52,6 @@ using namespace Math;
 			0,7,4
 		};
 
-
-
 		m_Shader = Shader::CreateFromSource("BasicLightShader", Application::GetAPI()->GetShaderFactory()->TextureShader(), bufferprop);
 
 		std::shared_ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices), bufferprop);
@@ -66,8 +64,6 @@ using namespace Math;
 		m_ArrayBuffer = ArrayBuffer::Create(vertexBuffer, indexBuffer);
 		
 		m_Light = new Light(glm::vec2(0.0f, 0.0f), glm::vec4(0.5f, 0.1f, 0.5f, 1.0f));
-
-
 	}
 
 	Layer2D::~Layer2D()

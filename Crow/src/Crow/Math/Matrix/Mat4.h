@@ -504,7 +504,7 @@ namespace Crow {
 				Mat4 result;
 
 				const Vec3 f = Normalize(to - eye).FlipY();
-				const Vec3 r = Normalize(Cross(f, up));
+				const Vec3 r = Normalize(Normalize(Cross(f, up)));
 				const Vec3 u = Cross(f, r);
 
 				const Vec3 p = eye.FlipY();
@@ -536,7 +536,7 @@ namespace Crow {
 			{
 				Mat4 result;
 
-				const Vec3 r = Cross(dir, up); 
+				const Vec3 r = Normalize(Cross(dir, up));
 				const Vec3 u = Cross(r, dir);
 
 				result.m_Elements[GetIndex(0, 0)] = r.x;
@@ -560,7 +560,7 @@ namespace Crow {
 				Mat4 result;
 				
 				const Vec3 f = dir.FlipY();
-				const Vec3 r = Cross(f, up);
+				const Vec3 r = Normalize(Cross(f, up));
 				const Vec3 u = Cross(f, r);
 
 				const Vec3 p = pos.FlipY();

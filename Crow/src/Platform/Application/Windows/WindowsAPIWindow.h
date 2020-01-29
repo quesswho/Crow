@@ -32,7 +32,6 @@ namespace Crow {
 
 			virtual void* GetHandle() const override { return m_Hwnd; }
 		private:
-			void CheckMouseMoved() const;
 
 			void Init();
 
