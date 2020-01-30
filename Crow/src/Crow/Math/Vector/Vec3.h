@@ -31,9 +31,9 @@ namespace Crow {
 				: x(first), y(second), z(third)
 			{}
 
-			union { T x; T r; T u; };
-			union { T y; T g; T v; };
-			union { T z; T b; T w; };
+			union { T x; T r; };
+			union { T y; T g; };
+			union { T z; T b; };
 
 			inline void Zero()
 			{

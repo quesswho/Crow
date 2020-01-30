@@ -85,7 +85,7 @@ namespace Crow {
 			tick += m_Timer->GetElapsedTimeInSeconds();
 			if (tick > 0.1) // If it has been 1/10 second
 			{
-				m_FramesPerSecond = frames * tick * 100;
+				m_FramesPerSecond = ((int)frames * tick * 100);
 				frames = 0;
 				tick = 0;
 			}

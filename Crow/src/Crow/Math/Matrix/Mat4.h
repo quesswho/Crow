@@ -101,6 +101,7 @@ namespace Crow {
 					IdentityLH(diagonal);
 			}
 
+			inline T operator[](int i) const { this->m_Elements[i]; }
 
 			// Addition
 
@@ -165,6 +166,35 @@ namespace Crow {
 
 			inline Mat4x4& operator*=(const Mat4x4& other)
 			{
+				/*Mat4x4 result;
+
+				const TVec4 row0 = TVec4(m_Elements[GetIndex(0, 0)], m_Elements[GetIndex(1, 0)], m_Elements[GetIndex(2, 0)], m_Elements[GetIndex(3, 0)]);
+				const TVec4 row1 = TVec4(m_Elements[GetIndex(0, 1)], m_Elements[GetIndex(1, 1)], m_Elements[GetIndex(2, 1)], m_Elements[GetIndex(3, 1)]);
+				const TVec4 row2 = TVec4(m_Elements[GetIndex(0, 2)], m_Elements[GetIndex(1, 2)], m_Elements[GetIndex(2, 2)], m_Elements[GetIndex(3, 2)]);
+				const TVec4 row3 = TVec4(m_Elements[GetIndex(0, 3)], m_Elements[GetIndex(1, 3)], m_Elements[GetIndex(2, 3)], m_Elements[GetIndex(3, 3)]);
+
+				result.m_Elements[0] = other.m_Columns[0].Dot(row0);
+				result.m_Elements[1] = other.m_Columns[0].Dot(row1);
+				result.m_Elements[2] = other.m_Columns[0].Dot(row2);
+				result.m_Elements[3] = other.m_Columns[0].Dot(row3);
+
+				result.m_Elements[4] = other.m_Columns[0].Dot(row0);
+				result.m_Elements[5] = other.m_Columns[0].Dot(row1);
+				result.m_Elements[6] = other.m_Columns[0].Dot(row2);
+				result.m_Elements[7] = other.m_Columns[0].Dot(row3);
+
+				result.m_Elements[8] = other.m_Columns[0].Dot(row0);
+				result.m_Elements[9] = other.m_Columns[0].Dot(row1);
+				result.m_Elements[10] = other.m_Columns[0].Dot(row2);
+				result.m_Elements[11] = other.m_Columns[0].Dot(row3);
+
+				result.m_Elements[12] = other.m_Columns[0].Dot(row0);
+				result.m_Elements[13] = other.m_Columns[0].Dot(row1);
+				result.m_Elements[14] = other.m_Columns[0].Dot(row2);
+				result.m_Elements[15] = other.m_Columns[0].Dot(row3);
+
+				return result;*/
+
 				return Mat4x4(
 					other.m_Columns[0].Dot(m_Elements[GetIndex(0, 0)], m_Elements[GetIndex(1, 0)], m_Elements[GetIndex(2, 0)], m_Elements[GetIndex(3, 0)]),
 					other.m_Columns[0].Dot(m_Elements[GetIndex(0, 1)], m_Elements[GetIndex(1, 1)], m_Elements[GetIndex(2, 1)], m_Elements[GetIndex(3, 1)]),
@@ -458,7 +488,7 @@ namespace Crow {
 			{
 
 				const float rad = ToRadians(fov);
-				const float h = cos(0.5*rad) / sin(0.5 * rad);
+				const float h = cos(0.5f * rad) / sin(0.5f * rad);
 				const float w = h / aspectratio;
 
 				return Mat4x4(
@@ -504,7 +534,7 @@ namespace Crow {
 				Mat4 result;
 
 				const Vec3 f = Normalize(to - eye).FlipY();
-				const Vec3 r = Normalize(Normalize(Cross(f, up)));
+				const Vec3 r = Normalize(Cross(f, up));
 				const Vec3 u = Cross(f, r);
 
 				const Vec3 p = eye.FlipY();
@@ -557,14 +587,14 @@ namespace Crow {
 
 			static inline const Mat4x4 LookDirLH(const Vec3& pos, const Vec3& dir, const Vec3& up)
 			{
+
 				Mat4 result;
-				
+
 				const Vec3 f = dir.FlipY();
 				const Vec3 r = Normalize(Cross(f, up));
 				const Vec3 u = Cross(f, r);
 
 				const Vec3 p = pos.FlipY();
-
 				result.m_Elements[GetIndex(0, 0)] = r.x;
 				result.m_Elements[GetIndex(0, 1)] = r.y;
 				result.m_Elements[GetIndex(0, 2)] = r.z;
@@ -578,6 +608,25 @@ namespace Crow {
 				result.m_Elements[GetIndex(1, 3)] = -p.Dot(u);
 				result.m_Elements[GetIndex(2, 3)] = -p.Dot(f);
 				return result;
+
+				/*Mat4 result;
+				
+				const Vec3 r = Normalize(Vec3(-dir.y * up.z - dir.z * up.y, dir.z * up.x - dir.x * up.z, dir.x * up.y + dir.y * up.x));
+				const Vec3 u = Vec3(-dir.y * r.z - dir.z * r.y, dir.z * r.x - dir.x * r.z, dir.x * r.y + dir.y * r.x);
+				
+				result.m_Elements[GetIndex(0, 0)] = r.x;
+				result.m_Elements[GetIndex(0, 1)] = r.y;
+				result.m_Elements[GetIndex(0, 2)] = r.z;
+				result.m_Elements[GetIndex(1, 0)] = u.x;
+				result.m_Elements[GetIndex(1, 1)] = u.y;
+				result.m_Elements[GetIndex(1, 2)] = u.z;
+				result.m_Elements[GetIndex(2, 0)] = dir.x;
+				result.m_Elements[GetIndex(2, 1)] = -dir.y;
+				result.m_Elements[GetIndex(2, 2)] = dir.z;
+				result.m_Elements[GetIndex(0, 3)] = -(pos.x * r.x + -pos.y * r.y + pos.z * r.z); // Modified dot product to flip Y
+				result.m_Elements[GetIndex(1, 3)] = -(pos.x * u.x + -pos.y * u.y + pos.z * u.z);
+				result.m_Elements[GetIndex(2, 3)] = -(pos.x * dir.x + pos.y * dir.y + pos.z * dir.z);
+				return result;*/
 			}
 
 			static inline const Mat4x4 LookDir(const Vec3& eye, const Vec3& to, const Vec3& up)

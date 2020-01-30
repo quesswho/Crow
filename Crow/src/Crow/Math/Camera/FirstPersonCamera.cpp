@@ -15,7 +15,7 @@ namespace Crow {
 			Application::SetCursorPosition(m_LastMousePos);
 			Application::SetCursorVisibility(false);
 			CalculateProjectionViewMatrix();
-			m_MouseRect = TVec4<int>(Application::s_WindowProperties.m_Width / 4, (int)Application::s_WindowProperties.m_Width * (3.0 / 4.0), Application::s_WindowProperties.m_Height / 4, (int)Application::s_WindowProperties.m_Height * (3.0 / 4.0));
+			m_MouseRect = TVec4<int>(Application::s_WindowProperties.m_Width / 4, Application::s_WindowProperties.m_Width * (3.0 / 4.0), Application::s_WindowProperties.m_Height / 4, Application::s_WindowProperties.m_Height * (int)(3.0 / 4.0));
 		}
 
 		void FirstPersonCamera::Update(float elapsed)
@@ -61,8 +61,8 @@ namespace Crow {
 				m_Yaw = std::fmod((m_Yaw + movementX), 360.0f); // Prevent yaw from reaching high numbers
 				m_Pitch += movementY;
 
-				if (m_Pitch > 89.0f)
-					m_Pitch = 89.0f;
+				if (m_Pitch > 89.9f)
+					m_Pitch = 89.9f;
 				if (m_Pitch < -89.0f)
 					m_Pitch = -89.0f;
 
@@ -76,11 +76,16 @@ namespace Crow {
 			m_ViewDir = Normalize(Vec3(cos(ToRadians(m_Yaw)) * cos(ToRadians(m_Pitch)), sin(ToRadians(m_Pitch)), sin(ToRadians(m_Yaw)) * cos(ToRadians(m_Pitch))));
 			m_Right = Normalize(Cross(m_Forward, m_WorldUp));
 			m_Up = Normalize(Cross(m_Right, m_Forward));
-			m_ViewMatrix = Mat4::LookDir(m_CameraPos, m_ViewDir, m_Up);
 			if (MATH_COORDINATE::s_MathCoordinateType == MATH_COORDINATE::MATH_COORDINATE_RIGHTHAND)
-				m_CameraMatrix = m_ProjectionMatrix * m_ViewMatrix; // Opengl
+			{ // Opengl
+				m_ViewMatrix = Mat4::LookDirRH(m_CameraPos, m_ViewDir, m_Up);
+				m_CameraMatrix = m_ProjectionMatrix * m_ViewMatrix;
+			}
 			else
-				m_CameraMatrix = m_ViewMatrix * m_ProjectionMatrix; // DirectX
+			{ // Directx
+				m_ViewMatrix = Mat4::LookDirLH(m_CameraPos, m_ViewDir, m_Up);
+				m_CameraMatrix = m_ViewMatrix * m_ProjectionMatrix;
+			}
 		}
 	}
 }
