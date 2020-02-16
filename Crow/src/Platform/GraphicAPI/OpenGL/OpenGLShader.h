@@ -84,6 +84,8 @@ namespace Crow {
 			virtual void SetUniformValue(const char* location, const Math::Mat4& value) override;
 
 			virtual void SetUniformStruct(const char* location, void* data) override;
+
+			inline uint GetHandle() const { return m_ShaderID; }
 		private:
 			static int StringToUniformTypeSize(std::string_view string);
 			static UniformType StringToUniformType(std::string_view string);

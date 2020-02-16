@@ -113,6 +113,19 @@ namespace Crow {
 
 			constexpr Mat2x2& operator*=(const Mat2x2& other)
 			{
+				Mat3x3 result;
+
+				const TVec2 row0 = TVec2(m_Elements[GetIndex(0, 0)], m_Elements[GetIndex(1, 0)]);
+				const TVec2 row1 = TVec2(m_Elements[GetIndex(0, 1)], m_Elements[GetIndex(1, 1)]);
+
+				result.m_Elements[0] = other.m_Columns[0].Dot(row0);
+				result.m_Elements[1] = other.m_Columns[0].Dot(row1);
+
+				result.m_Elements[3] = other.m_Columns[1].Dot(row0);
+				result.m_Elements[4] = other.m_Columns[1].Dot(row1);
+
+				return result;
+
 				return Mat2x2(
 					other.m_Columns[0].Dot(m_Elements[GetIndex(0, 0)], m_Elements[GetIndex(1, 0)]),
 					other.m_Columns[0].Dot(m_Elements[GetIndex(0, 1)], m_Elements[GetIndex(1, 1)]),

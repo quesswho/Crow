@@ -1,7 +1,4 @@
 #include "Log.h"
-#include "spdlog/sinks/stdout_sinks.h"
-
-#include <type_traits>
 
 namespace Crow {
 

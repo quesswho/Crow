@@ -43,11 +43,8 @@ namespace Crow {
 
 			FT_Set_Pixel_Sizes(face, 0, 48);
 
-			// Use 1 byte packing
-
 			for (uchar c = 0; c < 255; c++)
 			{
-
 
 				if (FT_Load_Char(face, c, FT_LOAD_RENDER))
 				{
@@ -87,7 +84,7 @@ namespace Crow {
 				}
 
 				m_Characters[c].m_Offset = face->glyph->advance.x;
-				m_Characters[c].m_Size = Math::TVec2<int>(face->glyph->bitmap.width, face->glyph->bitmap.rows);
+				m_Characters[c].m_Size = Math::TVec2<uint>(face->glyph->bitmap.width, face->glyph->bitmap.rows);
 				m_Characters[c].m_TextureOffset = Math::TVec2<int>(face->glyph->bitmap_left, face->glyph->bitmap_top);
 			}
 
@@ -157,7 +154,7 @@ namespace Crow {
 		{
 			DirectX11RenderAPI::GetDeviceContext()->IASetIndexBuffer(m_IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 			m_Shader->Bind();
-			m_Shader->SetUniformValue("u_Projection", Math::Mat4::Orthographic(0.0f, Application::s_WindowProperties.m_Width, 0.0f, Application::s_WindowProperties.m_Height));
+			m_Shader->SetUniformValue("u_Projection", Math::Mat4::Orthographic(0.0f, (float) Application::s_WindowProperties.m_Width, 0.0f, (float) Application::s_WindowProperties.m_Height));
 			m_Shader->SetUniformValue("u_Color", Math::Vec4(1.0f, 0.0f, 0.0f, 1.0f));
 			
 
@@ -179,8 +176,8 @@ namespace Crow {
 				float x = pos.x + ch.m_TextureOffset.x * size;
 				float y = pos.y - (ch.m_Size.y - ch.m_TextureOffset.y) * size;
 
-				float w = ch.m_Size.x * size;
-				float h = ch.m_Size.y * size;
+				float w = (float) ch.m_Size.x * size;
+				float h = (float) ch.m_Size.y * size;
 
 				float vertices[] = {
 					x + w, y + h,   1.0f, 0.0f,

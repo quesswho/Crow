@@ -48,7 +48,10 @@ namespace Crow {
 			void SetCameraPos(const Vec3& pos) noexcept { m_CameraPos = pos; CalculateProjectionViewMatrix(); }
 
 			inline const Vec3& GetViewDir() const { return m_ViewDir; }
-			void SetViewDir(const Vec3& pos) noexcept { m_ViewDir = pos; CalculateProjectionViewMatrix(); }
+			void SetViewDir(const Vec3& dir) noexcept { m_ViewDir = dir; CalculateProjectionViewMatrix(); }
+
+			// Yaw, Pitch
+			void SetRotation(const Vec2& rotation) noexcept { m_Yaw = rotation.x; m_Pitch = rotation.y; }
 
 			inline const Mat4& GetCameraMatrix() const { return m_CameraMatrix; }
 

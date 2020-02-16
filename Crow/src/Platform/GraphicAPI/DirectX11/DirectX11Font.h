@@ -7,8 +7,11 @@ namespace Crow {
 	namespace Platform {
 
 		struct DirectX11Character {
+			DirectX11Character()
+				: m_Texture(0), m_Offset(0)
+			{}
 			ID3D11ShaderResourceView* m_Texture;
-			Math::TVec2<int> m_Size;
+			Math::TVec2<uint> m_Size;
 			Math::TVec2<int> m_TextureOffset;
 			uint m_Offset;
 		};

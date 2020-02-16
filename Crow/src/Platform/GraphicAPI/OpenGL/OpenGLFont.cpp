@@ -15,7 +15,7 @@ namespace Crow {
 			m_Shader->Bind();
 			m_Shader->SetUniformValue("u_Texture", 0);
 			m_Shader->SetUniformValue("u_Color", Math::Vec4(1.0f, 0.0f, 0.0f, 1.0f));
-			m_Shader->SetUniformValue("u_Projection", Math::Mat4::Orthographic(0.0f, Application::s_WindowProperties.m_Width, 0.0f, Application::s_WindowProperties.m_Height));
+			m_Shader->SetUniformValue("u_Projection", Math::Mat4::OrthographicRH(0.0f, (float)Application::s_WindowProperties.m_Width, 0.0f, (float)Application::s_WindowProperties.m_Height));
 
 			LoadCharacters(path);
 		}
@@ -76,7 +76,7 @@ namespace Crow {
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 				m_Characters[c].m_Offset = face->glyph->advance.x;
-				m_Characters[c].m_Size = Math::TVec2<int>(face->glyph->bitmap.width, face->glyph->bitmap.rows);
+				m_Characters[c].m_Size = Math::TVec2<uint>(face->glyph->bitmap.width, face->glyph->bitmap.rows);
 				m_Characters[c].m_TextureOffset = Math::TVec2<int>(face->glyph->bitmap_left, face->glyph->bitmap_top);
 			}
 			glBindTexture(GL_TEXTURE_2D, 0);
@@ -120,8 +120,8 @@ namespace Crow {
 				float x = pos.x + ch.m_TextureOffset.x * size;
 				float y = pos.y - (ch.m_Size.y - ch.m_TextureOffset.y) * size;
 
-				float w = ch.m_Size.x * size;
-				float h = ch.m_Size.y * size;
+				float w = (float) ch.m_Size.x * size;
+				float h = (float) ch.m_Size.y * size;
 				
 				float vertices[6][4] = {
 					{ x,     y + h,   0.0, 0.0 },
@@ -136,7 +136,6 @@ namespace Crow {
 				glBindTexture(GL_TEXTURE_2D, ch.m_Texture);
 				glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
 				glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-
 				glDrawArrays(GL_TRIANGLES, 0, 6);
 
 				pos.x += (ch.m_Offset >> 6) * size;

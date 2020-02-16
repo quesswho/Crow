@@ -73,32 +73,30 @@ namespace Crow {
 				m_Elements[GetIndex(3, 3)] = sixteenth;
 			}
 
-			inline void IdentityRH(float diagonal)
+			Mat4x4(const Mat3x3<T>& mat)
 			{
-				memset(m_Elements, 0, 16 * 4);
+				IdentityRH(1.0f);
+				m_Elements[GetIndex(0, 0)] = mat.m_Elements[0];
+				m_Elements[GetIndex(0, 1)] = mat.m_Elements[1];
+				m_Elements[GetIndex(0, 2)] = mat.m_Elements[2];
 
-				m_Elements[GetIndex(0, 0)] = (T)1;
-				m_Elements[GetIndex(1, 1)] = (T)1;
-				m_Elements[GetIndex(2, 2)] = (T)1;
-				m_Elements[GetIndex(3, 3)] = (T)1;
-			}
+				m_Elements[GetIndex(1, 0)] = mat.m_Elements[3];
+				m_Elements[GetIndex(1, 1)] = mat.m_Elements[4];
+				m_Elements[GetIndex(1, 2)] = mat.m_Elements[5];
 
-			inline void IdentityLH(float diagonal)
-			{
-				memset(m_Elements, 0, 16 * 4);
-
-				m_Elements[GetIndex(0, 0)] = -(T)diagonal;
-				m_Elements[GetIndex(1, 1)] = -(T)diagonal;
-				m_Elements[GetIndex(2, 2)] = (T)diagonal;
-				m_Elements[GetIndex(3, 3)] = (T)diagonal;
+				m_Elements[GetIndex(2, 0)] = mat.m_Elements[6];
+				m_Elements[GetIndex(2, 1)] = mat.m_Elements[7];
+				m_Elements[GetIndex(2, 2)] = mat.m_Elements[8];
 			}
 
 			inline void Identity(float diagonal = 1.0f)
 			{
-				if (MATH_COORDINATE::s_MathCoordinateType == MATH_COORDINATE::MATH_COORDINATE_RIGHTHAND)
-					IdentityRH(diagonal);
-				else // s_MathCoordinateType == MATH_COORDINATE_LEFTHAND
-					IdentityLH(diagonal);
+				memset(m_Elements, 0, 16 * 4);
+
+				m_Elements[GetIndex(0, 0)] = (T)diagonal;
+				m_Elements[GetIndex(1, 1)] = (T)diagonal;
+				m_Elements[GetIndex(2, 2)] = (T)diagonal;
+				m_Elements[GetIndex(3, 3)] = (T)diagonal;
 			}
 
 			inline T operator[](int i) const { this->m_Elements[i]; }
@@ -164,9 +162,9 @@ namespace Crow {
 			friend Mat4x4 operator*(Mat4x4 left, const float right) { return left *= right; }
 
 
-			inline Mat4x4& operator*=(const Mat4x4& other)
+			inline Mat4x4 operator*=(const Mat4x4& other)
 			{
-				/*Mat4x4 result;
+				Mat4x4 result;
 
 				const TVec4 row0 = TVec4(m_Elements[GetIndex(0, 0)], m_Elements[GetIndex(1, 0)], m_Elements[GetIndex(2, 0)], m_Elements[GetIndex(3, 0)]);
 				const TVec4 row1 = TVec4(m_Elements[GetIndex(0, 1)], m_Elements[GetIndex(1, 1)], m_Elements[GetIndex(2, 1)], m_Elements[GetIndex(3, 1)]);
@@ -178,44 +176,22 @@ namespace Crow {
 				result.m_Elements[2] = other.m_Columns[0].Dot(row2);
 				result.m_Elements[3] = other.m_Columns[0].Dot(row3);
 
-				result.m_Elements[4] = other.m_Columns[0].Dot(row0);
-				result.m_Elements[5] = other.m_Columns[0].Dot(row1);
-				result.m_Elements[6] = other.m_Columns[0].Dot(row2);
-				result.m_Elements[7] = other.m_Columns[0].Dot(row3);
+				result.m_Elements[4] = other.m_Columns[1].Dot(row0);
+				result.m_Elements[5] = other.m_Columns[1].Dot(row1);
+				result.m_Elements[6] = other.m_Columns[1].Dot(row2);
+				result.m_Elements[7] = other.m_Columns[1].Dot(row3);
 
-				result.m_Elements[8] = other.m_Columns[0].Dot(row0);
-				result.m_Elements[9] = other.m_Columns[0].Dot(row1);
-				result.m_Elements[10] = other.m_Columns[0].Dot(row2);
-				result.m_Elements[11] = other.m_Columns[0].Dot(row3);
+				result.m_Elements[8] = other.m_Columns[2].Dot(row0);
+				result.m_Elements[9] = other.m_Columns[2].Dot(row1);
+				result.m_Elements[10] = other.m_Columns[2].Dot(row2);
+				result.m_Elements[11] = other.m_Columns[2].Dot(row3);
 
-				result.m_Elements[12] = other.m_Columns[0].Dot(row0);
-				result.m_Elements[13] = other.m_Columns[0].Dot(row1);
-				result.m_Elements[14] = other.m_Columns[0].Dot(row2);
-				result.m_Elements[15] = other.m_Columns[0].Dot(row3);
+				result.m_Elements[12] = other.m_Columns[3].Dot(row0);
+				result.m_Elements[13] = other.m_Columns[3].Dot(row1);
+				result.m_Elements[14] = other.m_Columns[3].Dot(row2);
+				result.m_Elements[15] = other.m_Columns[3].Dot(row3);
 
-				return result;*/
-
-				return Mat4x4(
-					other.m_Columns[0].Dot(m_Elements[GetIndex(0, 0)], m_Elements[GetIndex(1, 0)], m_Elements[GetIndex(2, 0)], m_Elements[GetIndex(3, 0)]),
-					other.m_Columns[0].Dot(m_Elements[GetIndex(0, 1)], m_Elements[GetIndex(1, 1)], m_Elements[GetIndex(2, 1)], m_Elements[GetIndex(3, 1)]),
-					other.m_Columns[0].Dot(m_Elements[GetIndex(0, 2)], m_Elements[GetIndex(1, 2)], m_Elements[GetIndex(2, 2)], m_Elements[GetIndex(3, 2)]),
-					other.m_Columns[0].Dot(m_Elements[GetIndex(0, 3)], m_Elements[GetIndex(1, 3)], m_Elements[GetIndex(2, 3)], m_Elements[GetIndex(3, 3)]),
-					
-					other.m_Columns[1].Dot(m_Elements[GetIndex(0, 0)], m_Elements[GetIndex(1, 0)], m_Elements[GetIndex(2, 0)], m_Elements[GetIndex(3, 0)]),
-					other.m_Columns[1].Dot(m_Elements[GetIndex(0, 1)], m_Elements[GetIndex(1, 1)], m_Elements[GetIndex(2, 1)], m_Elements[GetIndex(3, 1)]),
-					other.m_Columns[1].Dot(m_Elements[GetIndex(0, 2)], m_Elements[GetIndex(1, 2)], m_Elements[GetIndex(2, 2)], m_Elements[GetIndex(3, 2)]),
-					other.m_Columns[1].Dot(m_Elements[GetIndex(0, 3)], m_Elements[GetIndex(1, 3)], m_Elements[GetIndex(2, 3)], m_Elements[GetIndex(3, 3)]),
-
-					other.m_Columns[2].Dot(m_Elements[GetIndex(0, 0)], m_Elements[GetIndex(1, 0)], m_Elements[GetIndex(2, 0)], m_Elements[GetIndex(3, 0)]),
-					other.m_Columns[2].Dot(m_Elements[GetIndex(0, 1)], m_Elements[GetIndex(1, 1)], m_Elements[GetIndex(2, 1)], m_Elements[GetIndex(3, 1)]),
-					other.m_Columns[2].Dot(m_Elements[GetIndex(0, 2)], m_Elements[GetIndex(1, 2)], m_Elements[GetIndex(2, 2)], m_Elements[GetIndex(3, 2)]),
-					other.m_Columns[2].Dot(m_Elements[GetIndex(0, 3)], m_Elements[GetIndex(1, 3)], m_Elements[GetIndex(2, 3)], m_Elements[GetIndex(3, 3)]),
-
-					other.m_Columns[3].Dot(m_Elements[GetIndex(0, 0)], m_Elements[GetIndex(1, 0)], m_Elements[GetIndex(2, 0)], m_Elements[GetIndex(3, 0)]),
-					other.m_Columns[3].Dot(m_Elements[GetIndex(0, 1)], m_Elements[GetIndex(1, 1)], m_Elements[GetIndex(2, 1)], m_Elements[GetIndex(3, 1)]),
-					other.m_Columns[3].Dot(m_Elements[GetIndex(0, 2)], m_Elements[GetIndex(1, 2)], m_Elements[GetIndex(2, 2)], m_Elements[GetIndex(3, 2)]),
-					other.m_Columns[3].Dot(m_Elements[GetIndex(0, 3)], m_Elements[GetIndex(1, 3)], m_Elements[GetIndex(2, 3)], m_Elements[GetIndex(3, 3)])
-					);
+				return result;
 			}
 
 			friend Mat4x4 operator*(Mat4x4 left, const Mat4x4& right) { return left *= right; }

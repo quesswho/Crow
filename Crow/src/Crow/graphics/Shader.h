@@ -7,8 +7,6 @@
 
 namespace Crow {
 
-
-
 	struct Shader {
 
 		enum class ShaderType { UNKNOWN = -1, VERTEX = 0, FRAGMENT = 1 };
@@ -33,7 +31,6 @@ namespace Crow {
 
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
-
 
 		virtual void ReloadFromPath(const char* path) = 0;
 		virtual void ReloadFromSource(std::string& source) = 0;

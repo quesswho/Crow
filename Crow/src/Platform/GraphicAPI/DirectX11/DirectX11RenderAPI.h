@@ -37,6 +37,9 @@ namespace Crow {
 
 			static inline ID3D11Device* GetDevice() { return s_Device; }
 			static inline ID3D11DeviceContext* GetDeviceContext() { return s_DeviceContext; }
+
+			static inline void SetRenderTarget(ID3D11RenderTargetView* const *renderTarget) { s_DeviceContext->OMSetRenderTargets(1, renderTarget == 0 ? &s_RenderTargetView : renderTarget, s_DepthStencilView); }
+			static inline void ClearRenderTarget(ID3D11RenderTargetView* renderTarget) { s_DeviceContext->ClearRenderTargetView(renderTarget, s_ClearColor); s_DeviceContext->ClearDepthStencilView(s_DepthStencilView, s_DepthMode | s_StencilMode, 1.0f, 0); }
 		private:
 			DirectX11ShaderFactory* m_ShaderFactory;
 

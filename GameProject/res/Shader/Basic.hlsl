@@ -1,8 +1,6 @@
-R"(
-
 #shader fragment
 
-Texture2D texture0;
+Texture2D texture0 : register(t0);
 SamplerState sampleState;
 
 struct VS_OUTPUT
@@ -11,14 +9,10 @@ struct VS_OUTPUT
 	float2 uv : TEXCOORD;
 };
 
-cbuffer u_Color : register(b1)
-{
-	float4 c_Color;
-}
-
 float4 PSmain(VS_OUTPUT input) : SV_TARGET
 {
-	return float4(c_Color.xyz, texture0.Sample(sampleState, input.uv).r);
+	float4 result = texture0.Sample(sampleState, input.uv);
+	return result;
 }
 
 #shader vertex
@@ -35,18 +29,29 @@ struct VS_OUTPUT
 	float2 uv : TEXCOORD;
 };
 
-cbuffer u_Projection : register(b0)
+cbuffer u_VP : register(b0)
 {
-    float4x4 projection;
+	float4x4 vp;
 }
 
+cbuffer u_Model : register(b1)
+{
+	float4x4 model;
+}
 
 VS_OUTPUT VSmain(VS_INPUT input)
 {
+	VS_OUTPUT output;
+	output.pos = mul(mul(float4(input.pos, 0.0f, 1.0f), model), vp);
+	output.uv = input.uv;
+
+	return output;
+}
+/*VS_OUTPUT VSmain(VS_INPUT input)
+{
     VS_OUTPUT output;
-    output.pos = mul(float4(input.pos.x, input.pos.y, 0.001f, 1.0f), projection);
+    output.pos = float4(input.pos, 1.0f);
     output.uv = input.uv;
 
     return output;
-}
-)"
+}*/

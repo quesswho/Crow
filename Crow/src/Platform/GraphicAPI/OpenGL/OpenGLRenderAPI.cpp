@@ -8,13 +8,15 @@ namespace Crow {
 			m_ShaderFactory = new OpenGLShaderFactory();
 		}
 
-		bool OpenGLRenderAPI::InitAPI(const WindowProperties&, void*) const
+		bool OpenGLRenderAPI::InitAPI(const WindowProperties& props, void*) const
 		{ 
 			bool result = gladLoadGL();
 
 			glEnable(GL_CULL_FACE);
 			glCullFace(GL_BACK);
 			glFrontFace(GL_CW);
+
+			glViewport(0, 0, props.m_Width, props.m_Height);
 
 			return result;
 		}

@@ -19,6 +19,8 @@ namespace Crow {
 	WindowProperties Application::s_WindowProperties;
 	FT_Library Application::s_FreeTypeLibrary;
 
+	PostEffect* Application::s_PostEffect;
+
 	Application::Application(WindowProperties winProp, Platform::GraphicAPI graphicApi, Platform::ApplicationAPI appApi)
 	{
 		Log::Init();
@@ -85,7 +87,7 @@ namespace Crow {
 			tick += m_Timer->GetElapsedTimeInSeconds();
 			if (tick > 0.1) // If it has been 1/10 second
 			{
-				m_FramesPerSecond = ((int)frames * tick * 100);
+				m_FramesPerSecond = (int)((double)frames * tick * 100.0);
 				frames = 0;
 				tick = 0;
 			}
@@ -102,11 +104,13 @@ namespace Crow {
 
 	void Application::OnUpdate(float elapsed)
 	{
-		s_RenderAPI->Begin();
 		for (auto it = s_LayerManager->begin(); it != s_LayerManager->end(); it++)
 		{
+			if (s_PostEffect) s_PostEffect->Bind();
+			s_RenderAPI->Begin();
 			(*it)->OnRender();
 			(*it)->OnUpdate(elapsed);
+			if (s_PostEffect) s_PostEffect->Draw();
 		}
 		s_RenderAPI->End();
 		s_Window->Update();

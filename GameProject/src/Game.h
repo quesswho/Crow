@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Crow.h"
-
+#include "Crow/Graphics/Renderer/Buffer.h"
 #include <memory>
 
 struct Light {
@@ -36,11 +36,14 @@ private:
 	
 	Crow::Font* m_OpenSansFont;
 
-	Crow::Math::Mat4 m_Projection;
+	Crow::PostEffect* m_PostFX;
+	Crow::Shader* m_PostFXShader;
 	Crow::Math::Mat4 m_Model;
-	Crow::Math::Mat4 m_View;
-	Crow::Math::Mat4 m_Look;
-	Crow::Math::Mat3 m_2DModel;
+
+	float m_Gamma;
 
 	Light* m_Light;
+
+	std::shared_ptr<Crow::IndexBuffer> m_IBuffer;
+	std::shared_ptr<Crow::VertexBuffer> m_VBuffer;
 };

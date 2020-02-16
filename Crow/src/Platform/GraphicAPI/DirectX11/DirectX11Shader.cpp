@@ -8,9 +8,22 @@ namespace Crow {
 	namespace Platform {
 
 		DirectX11Shader::DirectX11Shader(const char* name, const char* path, const BufferProperties& shaderInput)
-			: m_Name(name), m_ShaderInput(shaderInput)
+			: m_Name(name), m_ShaderInput(shaderInput) //TODO: Automatically decide the shader input
 		{
-			Init(FileUtils::ReadFile(path));
+			uint len = strlen(path);
+			if (path[len - 1] == 'x' && path[len - 2] == '.')
+			{
+				len += strlen("lsl");
+				char* newpath = new char[len];
+				*newpath = '\0';
+				strcat(newpath, path);
+				newpath[strlen(path) - 1] = 'h';
+				Init(FileUtils::ReadFile(strcat(newpath, "lsl")));
+			}
+			else
+			{
+				Init(FileUtils::ReadFile(path));
+			}
 		}
 
 		DirectX11Shader::DirectX11Shader(const char* name, std::string& source, const BufferProperties& shaderInput)
@@ -278,7 +291,7 @@ namespace Crow {
 					BufferElement element = m_ShaderInput.m_Elements[i];
 					inputLayout[i] = { element.GetName(), 0, ConvertToDXGIFormat(element.GetComponentCount()), 0, (uint)element.GetOffset() * 4, D3D11_INPUT_PER_VERTEX_DATA, 0 };
 				}
-				DirectX11RenderAPI::GetDevice()->CreateInputLayout(inputLayout, m_ShaderInput.m_Elements.size(), m_CompiledVertexShader->GetBufferPointer(), m_CompiledVertexShader->GetBufferSize(), &m_VertexInputLayout);
+				DirectX11RenderAPI::GetDevice()->CreateInputLayout(inputLayout, (uint) m_ShaderInput.m_Elements.size(), m_CompiledVertexShader->GetBufferPointer(), m_CompiledVertexShader->GetBufferSize(), &m_VertexInputLayout);
 			}
 
 			// Constant Buffers
@@ -317,7 +330,7 @@ namespace Crow {
 				return m_ConstantBufferLocations.at(location);
 			else
 			{
-				CR_CORE_WARNING("\"{}\" Uniform not found!", location);
+				CR_CORE_FATAL("\"{}\" Uniform not found!", location);
 				return 0;
 			}
 #endif

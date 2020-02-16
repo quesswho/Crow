@@ -12,7 +12,21 @@ namespace Crow {
 		OpenGLShader::OpenGLShader(const char* name, const char* path, const BufferProperties& shaderInput)
 			: m_Name(name)
 		{
-			Init(FileUtils::ReadFile(path));
+			uint len = strlen(path);
+			if (path[len-1] == 'x' && path[len - 2] == '.')
+			{
+				len += strlen("lsl");
+				char* newpath = new char[len + 1];
+				*newpath = '\0';
+				strcat(newpath, path);
+				newpath[strlen(path)-1] = 'g';
+				Init(FileUtils::ReadFile(strcat(newpath, "lsl")));
+				delete newpath;
+			}
+			else
+			{
+				Init(FileUtils::ReadFile(path));
+			}
 		}
 
 		OpenGLShader::OpenGLShader(const char* name, std::string& source, const BufferProperties& shaderInput)

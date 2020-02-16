@@ -15,6 +15,7 @@
 #include "GraphicAPI/OpenGL/OpenGLShader.h"
 #include "GraphicAPI/OpenGL/OpenGLTexture.h"
 #include "GraphicAPI/OpenGL/OpenGLFont.h"
+#include "GraphicAPI/OpenGL/OpenGLPostEffect.h"
 
 // DIRECTX 12
 #include "GraphicAPI/DirectX12/DirectX12RenderAPI.h"
@@ -29,6 +30,7 @@
 #include "GraphicAPI/DirectX11/DirectX11Shader.h"
 #include "GraphicAPI/DirectX11/DirectX11Texture.h"
 #include "GraphicAPI/DirectX11/DirectX11Font.h"
+#include "GraphicAPI/DirectX11/DirectX11PostEffect.h"
 
 namespace Crow {
 	namespace Platform {
@@ -67,6 +69,9 @@ namespace Crow {
 
 			static inline Font* (*CreateTTFont)(const char* path); // Create Truetype Font
 			static inline Font* (*CreateTTSFont)(const char* path, Shader* shader); // Create Truetype Font with custom Shader
+
+			static inline PostEffect* (*CreatePostEffectFromShader)(Shader* shader);
+			static inline PostEffect* (*CreatePostEffectFromPath)(const char* path);
 
 			static inline AbstractRenderAPI* (*CreateRenderAPI)();
 

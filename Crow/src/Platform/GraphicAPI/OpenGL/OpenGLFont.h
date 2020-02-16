@@ -5,8 +5,11 @@ namespace Crow {
 	namespace Platform {
 
 		struct OpenGLCharacter {
+			OpenGLCharacter()
+				: m_Texture(0), m_Offset(0)
+			{}
 			uint m_Texture;
-			Math::TVec2<int> m_Size;
+			Math::TVec2<uint> m_Size;
 			Math::TVec2<int> m_TextureOffset;
 			uint m_Offset;
 		};

@@ -15,7 +15,7 @@ namespace Crow {
 			Application::SetCursorPosition(m_LastMousePos);
 			Application::SetCursorVisibility(false);
 			CalculateProjectionViewMatrix();
-			m_MouseRect = TVec4<int>(Application::s_WindowProperties.m_Width / 4, Application::s_WindowProperties.m_Width * (3.0 / 4.0), Application::s_WindowProperties.m_Height / 4, Application::s_WindowProperties.m_Height * (int)(3.0 / 4.0));
+			m_MouseRect = TVec4<int>(Application::s_WindowProperties.m_Width / 4, (int) (Application::s_WindowProperties.m_Width * (3.0 / 4.0)), Application::s_WindowProperties.m_Height / 4, Application::s_WindowProperties.m_Height * (int)(3.0 / 4.0));
 		}
 
 		void FirstPersonCamera::Update(float elapsed)
@@ -65,8 +65,6 @@ namespace Crow {
 					m_Pitch = 89.9f;
 				if (m_Pitch < -89.0f)
 					m_Pitch = -89.0f;
-
-				CalculateProjectionViewMatrix();
 			}
 		}
 

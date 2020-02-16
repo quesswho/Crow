@@ -15,6 +15,7 @@ using namespace Math;
 			{ "TEXCOORD", 2 }  //uvs
 		};
 
+
 		float vertices[] = {
 			-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
 			 0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
@@ -58,7 +59,16 @@ using namespace Math;
 
 		m_ArrayBuffer = ArrayBuffer::Create(vertexBuffer, indexBuffer);
 		
+		m_PostFXShader = Shader::CreateFromPath("PostFX", "res/Shader/Postfx/GammaTest.x", { { "POSITION", 2 }, { "TEXCOORD", 2 } });
+		m_PostFX = PostEffect::CreateFromShader(m_PostFXShader);
+
 		m_Light = new Light(glm::vec2(0.0f, 0.0f), glm::vec4(0.5f, 0.1f, 0.5f, 1.0f));
+
+		Application::BindPostEffect(m_PostFX);
+
+		m_Gamma = 2.2f;
+		m_PostFXShader->Bind();
+		m_PostFXShader->SetUniformValue("u_Gamma", m_Gamma);
 	}
 
 	Layer2D::~Layer2D()
@@ -89,37 +99,29 @@ using namespace Math;
 	{
 
 		if (Input::IsKeyPressed(CROW_KEY_UP))
-			m_Light->m_Pos.y += elapsed * 1.0f;
+			m_Gamma += 1 * elapsed;
 		if (Input::IsKeyPressed(CROW_KEY_DOWN))
-			m_Light->m_Pos.y-= elapsed * 1.0f;
-
-		if (Input::IsKeyPressed(CROW_KEY_LEFT))
-			m_Light->m_Pos.x -= elapsed * 1.0f;
-		if (Input::IsKeyPressed(CROW_KEY_RIGHT))
-			m_Light->m_Pos.x += elapsed * 1.0f;
-
-		if (Input::IsKeyPressed(CROW_KEY_Q))
-			m_Model *= Mat4::Rotate(90.0f * elapsed, Vec3(1.0f, 1.0f, 0.0f));
-		if (Input::IsKeyPressed(CROW_KEY_E))
-			m_Model *= Mat4::Rotate(-90.0f * elapsed, Vec3(1.0f, 1.0f, 0.0f));
+			m_Gamma -= 1 * elapsed;
 		if (Input::IsKeyPressed(CROW_KEY_R))
-			m_Camera->SetViewDir(Vec3(0.0f, 0.0f, 1.0f));
+			m_Camera->SetRotation(Vec2(90.0f, 0.0f));
+
+		m_PostFXShader->Bind();
+		m_PostFXShader->SetUniformValue("u_Gamma", m_Gamma);
 
 		m_Camera->Update(elapsed);
 	}
 
 	void Layer2D::OnRender()
 	{
-
 		m_Shader->Bind();
 		m_Shader->SetUniformValue("u_VP",  m_Camera->GetCameraMatrix());
-		//m_Shader->SetUniformStruct("u_Light", m_Light);
-		//m_Shader->SetUniformValue("u_Texture", 0);
 		m_Shader->SetUniformValue("u_Model", m_Model * Mat4::Translate(Vec3(1.0f, 3.0f, 5.0f)));
 		
 		m_Texture->Bind();
 		m_ArrayBuffer->Bind();
 		Application::GetAPI()->DrawIndices(m_ArrayBuffer->GetCount());
+
+		m_PostFXShader->Bind();
 
 		m_OpenSansFont->DrawDynamic(std::string("FPS: ").append(std::to_string(Application::m_FramesPerSecond)).c_str(), Vec2(20.0f, 20.0f), 1);
 	}

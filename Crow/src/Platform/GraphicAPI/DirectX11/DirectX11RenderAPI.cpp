@@ -37,9 +37,14 @@ namespace Crow {
 			s_Device->Release();
 			s_DeviceContext->Release();
 			s_SwapChain->Release();
+			s_RenderTargetView->Release();
 
+			s_RasterState->Release();
+			s_BlendState->Release();
 			s_DepthStencilView->Release();
 			s_DepthStencilBuffer->Release();
+
+			delete m_ShaderFactory;
 		}
 
 		bool DirectX11RenderAPI::InitAPI(const WindowProperties& winprop, void* hWnd) const
@@ -101,7 +106,7 @@ namespace Crow {
 
 			bufferDesc.Width = winprop.m_Width;
 			bufferDesc.Height = winprop.m_Height;
-			bufferDesc.RefreshRate.Numerator = 0;	// TODO: Match refresh rate with every monitor
+			bufferDesc.RefreshRate.Numerator = 0;
 			bufferDesc.RefreshRate.Denominator = 1;
 			bufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 			bufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
@@ -142,7 +147,6 @@ namespace Crow {
 				CR_CORE_FATAL("Failed to create Render target view!");
 				return false;
 			}
-
 
 			s_DeviceContext->OMSetRenderTargets(1, &s_RenderTargetView, NULL);
 

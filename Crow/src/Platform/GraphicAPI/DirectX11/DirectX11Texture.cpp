@@ -120,7 +120,7 @@ namespace Crow {
 				else if (props.m_MinFilter == CROW_NEAREST_MIPMAP_LINEAR)
 					filter = D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR;
 				else
-					filter = D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
+					filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 			}
 			else if (props.m_MagFilter == CROW_NEAREST)
 			{
@@ -136,7 +136,7 @@ namespace Crow {
 					filter = D3D11_FILTER_MIN_LINEAR_MAG_MIP_POINT;
 			}
 			else
-				filter = D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
+				filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 
 
 			D3D11_SAMPLER_DESC sampDesc;

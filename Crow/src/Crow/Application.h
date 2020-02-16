@@ -48,6 +48,8 @@ namespace Crow {
 		static void SetCursorVisibility(bool visbility);
 
 		static FT_Library s_FreeTypeLibrary;
+
+		static void BindPostEffect(PostEffect* postfx) { s_PostEffect = postfx; }
 	private:
 		virtual void OnUpdate(float elapsed);
 	private:
@@ -55,7 +57,7 @@ namespace Crow {
 		static std::unique_ptr<LayerManager> s_LayerManager;
 		static std::unique_ptr<Timer> m_Timer;
 		static AbstractRenderAPI* s_RenderAPI;
-
+		static PostEffect* s_PostEffect;
 	};
 }
 

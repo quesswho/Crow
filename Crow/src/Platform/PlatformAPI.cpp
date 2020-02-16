@@ -67,8 +67,11 @@ namespace Crow {
 			CreateShaderFromSource = &OpenGLShader::CreateOpenGLShaderFromSource;
 
 			CreateTexture = &OpenGLTexture::CreateOpenGLTexture;
-
+			
 			CreateTTFont = &OpenGLFont::CreateOpenGLFont;
+
+			CreatePostEffectFromShader = &OpenGLPostEffect::CreateOpenGLPostEffectFromShader;
+			CreatePostEffectFromPath = &OpenGLPostEffect::CreateOpenGLPostEffectFromPath;
 
 			Math::MATH_COORDINATE::s_MathCoordinateType = Math::MATH_COORDINATE::MATH_COORDINATE_RIGHTHAND;
 		}
@@ -104,6 +107,9 @@ namespace Crow {
 			CreateTexture = &DirectX11Texture::CreateDirectX11Texture;
 
 			CreateTTFont = &DirectX11Font::CreateDirectX11Font;
+
+			CreatePostEffectFromShader = &DirectX11PostEffect::CreateDirectX11PostEffectFromShader;
+			CreatePostEffectFromPath = &DirectX11PostEffect::CreateDirectX11PostEffectFromPath;
 
 			Math::MATH_COORDINATE::s_MathCoordinateType = Math::MATH_COORDINATE::MATH_COORDINATE_LEFTHAND;
 		}
