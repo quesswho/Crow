@@ -176,7 +176,9 @@ namespace Crow {
 				DispatchMessage(&message);
 			}
 
-			if(PlatformAPI::s_GraphicAPI == GraphicAPI::OPENGL) SwapBuffers(m_Hdc);
+#ifdef CROW_OGL 
+			SwapBuffers(m_Hdc);
+#endif
 		}
 
 		void WindowsAPIWindow::SetTitle(const char* title)

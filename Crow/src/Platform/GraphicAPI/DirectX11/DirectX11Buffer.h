@@ -1,27 +1,26 @@
 #pragma once
+#include "dx11.h"
 
-#include "Crow/Graphics/Renderer/Buffer.h"
-
-#include "DirectX11RenderAPI.h"
+#include "Crow/Graphics/Renderer/BufferProp.h"
 
 namespace Crow {
 	namespace Platform {
 
-		class DirectX11VertexBuffer : public VertexBuffer {
+		class DirectX11VertexBuffer {
 		private:
 			ID3D11Buffer* m_VertexBuffer;
 		public:
 			DirectX11VertexBuffer(float* vertices, const uint size, const BufferProperties& prop);
-			virtual ~DirectX11VertexBuffer() override;
+			~DirectX11VertexBuffer();
 
-			static inline std::shared_ptr<VertexBuffer> CreateDirectX11VertexBuffer(float* vertices, const uint size, const BufferProperties& prop) { return  std::make_shared<DirectX11VertexBuffer>(vertices, size, prop); }
+			static inline std::shared_ptr<DirectX11VertexBuffer> Create(float* vertices, const uint size, const BufferProperties& prop) { return  std::make_shared<DirectX11VertexBuffer>(vertices, size, prop); }
 
-			const BufferProperties& GetBufferProperties() const override { return m_BufferProperties; }
+			const BufferProperties& GetBufferProperties() const { return m_BufferProperties; }
 
-			virtual void SetBuffer() override {}
+			void SetBuffer() {}
 
-			virtual void Bind() const override;
-			virtual void Unbind() const override;
+			void Bind() const;
+			void Unbind() const;
 		private:
 			const BufferProperties m_BufferProperties;
 			const uint m_Size;
@@ -29,21 +28,21 @@ namespace Crow {
 			const uint m_Offset;
 		};
 
-		class DirectX11IndexBuffer : public IndexBuffer {
+		class DirectX11IndexBuffer {
 		private:
 			ID3D11Buffer* m_IndexBuffer;
 		public:
 			DirectX11IndexBuffer(ulong* indices, const uint count);
-			~DirectX11IndexBuffer() override;
+			~DirectX11IndexBuffer();
 
-			static inline std::shared_ptr<IndexBuffer> CreateDirectX11IndexBuffer(ulong* indices, const uint count) { return std::make_shared<DirectX11IndexBuffer>(indices, count); }
+			static inline std::shared_ptr<DirectX11IndexBuffer> Create(ulong* indices, const uint count) { return std::make_shared<DirectX11IndexBuffer>(indices, count); }
 
-			virtual void SetBuffer() override {}
+			void SetBuffer() {}
 
-			virtual void Bind() const override;
-			virtual void Unbind() const override;
+			void Bind() const;
+			void Unbind() const;
 
-			virtual inline const uint GetCount() const override { return m_Count; }
+			inline const uint GetCount() const { return m_Count; }
 		private:
 			const uint m_Count;
 			const int m_Size;

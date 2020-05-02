@@ -11,7 +11,7 @@
 namespace Crow {
 	namespace Platform {
 
-		OpenGLPostEffect::OpenGLPostEffect(Shader* shader)
+		OpenGLPostEffect::OpenGLPostEffect(OpenGLShader* shader)
 			: m_Shader(static_cast<OpenGLShader*>(shader)->GetHandle())
 		{
 			Init();

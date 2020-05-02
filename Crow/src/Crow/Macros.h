@@ -42,10 +42,18 @@ typedef unsigned long ulong;
 #else
 	#define WIN32_LEAN_AND_MEAN		// Make sure Windows.h exludes unwanted includes
 	#define CR_WINDOWSERROR()	// Will print error if OS is not windows
-	
+
 	#pragma comment(lib, "d3d12.lib")
 	#pragma comment(lib, "d3d11.lib")
 	#pragma comment(lib, "dxgi.lib")
 	#pragma comment(lib, "d3dcompiler.lib")
 	#pragma comment(lib, "dxguid.lib")
+	
+	#ifdef CROW_DX11
+	#undef CROW_OGL 
+	#elif defined(CROW_OGL)
+	#undef CROW_DX11
+	#else 
+	#define CROW_OGL
+	#endif
 #endif

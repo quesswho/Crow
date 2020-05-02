@@ -1,18 +1,11 @@
 #pragma once
+#include "Crow/Common.h"
 
-#include "Buffer.h"
+#ifdef CROW_OGL
+	#include "Platform/GraphicAPI/OpenGL/OpenGLArrayBuffer.h"
+namespace Crow { typedef Crow::Platform::OpenGLArrayBuffer ArrayBuffer; }
+#elif defined(CROW_DX11)
+	#include "Platform/GraphicAPI/DirectX11/DirectX11ArrayBuffer.h"
+namespace Crow { typedef Crow::Platform::DirectX11ArrayBuffer ArrayBuffer; }
+#endif
 
-namespace Crow {
-
-	class ArrayBuffer {
-	public:
-		virtual ~ArrayBuffer() = default;
-
-		static ArrayBuffer* Create(const std::shared_ptr<VertexBuffer> vBuffer, const std::shared_ptr<IndexBuffer> iBuffer);
-
-		virtual void Bind() const = 0;
-		virtual void Unbind() const = 0;
-
-		virtual const inline uint GetCount() const = 0;
-	};
-}

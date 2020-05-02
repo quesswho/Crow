@@ -1,50 +1,50 @@
 #pragma once
 #include "Crow/Common.h"
-#include "Crow/Graphics/Renderer/Buffer.h"
 
-#include "DirectX12RenderAPI.h"
+#include "dx12.h"
 
+#include "Crow/Graphics/Renderer/BufferProp.h"
 
 namespace Crow {
 	namespace Platform {
 
-		class DirectX12VertexBuffer : public VertexBuffer {
+		class DirectX12VertexBuffer {
 		private:
 			ID3D12Resource* m_VertexBuffer;
 			D3D12_VERTEX_BUFFER_VIEW m_VertexBufferView;
 		public:
 			DirectX12VertexBuffer(float* vertices, const uint size, const BufferProperties& prop);
-			virtual ~DirectX12VertexBuffer() override;
+			~DirectX12VertexBuffer();
 
-			static inline std::shared_ptr<VertexBuffer> CreateDirectX12VertexBuffer(float* vertices, const uint size, const BufferProperties& prop) { return  std::make_shared<DirectX12VertexBuffer>(vertices, size, prop); }
+			static inline std::shared_ptr<DirectX12VertexBuffer> Create(float* vertices, const uint size, const BufferProperties& prop) { return  std::make_shared<DirectX12VertexBuffer>(vertices, size, prop); }
 			
-			virtual void SetBuffer() override;
+			void SetBuffer();
 
-			const BufferProperties& GetBufferProperties() const override { return m_BufferProperties; }
+			const BufferProperties& GetBufferProperties() const { return m_BufferProperties; }
 
-			virtual void Bind() const override;
-			virtual void Unbind() const override;
+			void Bind() const;
+			void Unbind() const;
 		private:
 			const BufferProperties m_BufferProperties;
 			const uint m_Size;
 		};
 
-		class DirectX12IndexBuffer : public IndexBuffer {
+		class DirectX12IndexBuffer {
 		private:
 			ID3D12Resource* m_IndexBuffer;
 			D3D12_INDEX_BUFFER_VIEW m_IndexBufferView;
 		public:
 			DirectX12IndexBuffer(ulong* indices, const uint count);
-			~DirectX12IndexBuffer() override;
+			~DirectX12IndexBuffer();
 
-			static inline std::shared_ptr<IndexBuffer> CreateDirectX12IndexBuffer(ulong* indices, const uint count) { return std::make_shared<DirectX12IndexBuffer>(indices, count); }
+			static inline std::shared_ptr<DirectX12IndexBuffer> Create(ulong* indices, const uint count) { return std::make_shared<DirectX12IndexBuffer>(indices, count); }
 
-			virtual void SetBuffer() override;
+			void SetBuffer();
 
-			virtual void Bind() const override;
-			virtual void Unbind() const override;
+			void Bind() const;
+			void Unbind() const;
 
-			virtual inline const uint GetCount() const override { return m_Count; }
+			inline const uint GetCount() const { return m_Count; }
 		private:
 			const uint m_Count;
 			const int m_Size;

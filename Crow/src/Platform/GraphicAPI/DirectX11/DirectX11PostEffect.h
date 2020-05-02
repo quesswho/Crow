@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Crow/Graphics/PostEffect.h"
+#include "Crow/Math/Maths.h"
 
 #include "DirectX11Shader.h"
-#include "DirectX11Texture.h"
+#include "dx11.h"
 
 namespace Crow {
 	namespace Platform {
 
-		class DirectX11PostEffect : public PostEffect {
+		class DirectX11PostEffect {
 
 			DirectX11Shader* m_Shader;
 
@@ -22,17 +22,17 @@ namespace Crow {
 			const uint m_StrideInBytes;
 			const uint m_Offset;
 		public:
-			DirectX11PostEffect(Shader* shader);
+			DirectX11PostEffect(DirectX11Shader* shader);
 			DirectX11PostEffect(const char* path);
 
-			~DirectX11PostEffect() override;
+			~DirectX11PostEffect();
 
-			static PostEffect* CreateDirectX11PostEffectFromShader(Shader* shader) { return new DirectX11PostEffect(shader); }
-			static PostEffect* CreateDirectX11PostEffectFromPath(const char* path) { return new DirectX11PostEffect(path); }
+			static DirectX11PostEffect* CreateFromShader(DirectX11Shader* shader) { return new DirectX11PostEffect(shader); }
+			static DirectX11PostEffect* CreateFromPath(const char* path) { return new DirectX11PostEffect(path); }
 
-			void Bind() const override;
+			void Bind() const;
 
-			void Draw() const override;
+			void Draw() const;
 		private:
 			void Init();
 		};

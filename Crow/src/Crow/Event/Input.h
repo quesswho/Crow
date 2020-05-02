@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Crow/Math/Vector/Vec2.h"
+#include "Crow/Math/Maths.h"
 
 #define MAX_KEYS 512
 

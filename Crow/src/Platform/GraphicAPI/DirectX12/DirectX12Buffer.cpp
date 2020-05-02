@@ -1,5 +1,6 @@
 #include "DirectX12Buffer.h"
 
+#include "DirectX12RenderAPI.h"
 namespace Crow {
 	namespace Platform {
 

@@ -1,13 +1,30 @@
 #pragma once
 
-#include "Crow/Graphics/Shader.h"
+#include "dx11.h"
 
-#include "DirectX11RenderAPI.h"
+#include "Crow/Graphics/Renderer/BufferProp.h"
+
+#include "Crow/Math/Maths.h"
 
 namespace Crow {
 	namespace Platform {
 
-		class DirectX11Shader : public Shader {
+		class DirectX11Shader {
+		public:
+			enum class ShaderType { UNKNOWN = -1, VERTEX = 0, FRAGMENT = 1 };
+
+			enum class UniformType
+			{
+				UNKNOWN = -1,
+				INT,
+				FLOAT,
+				FLOAT2,
+				FLOAT3,
+				FLOAT4,
+				MAT2,
+				MAT3,
+				MAT4
+			};
 		private:
 			struct DX11ConstantBuffer {
 				DX11ConstantBuffer(int size, int reg, ShaderType type)
@@ -41,31 +58,31 @@ namespace Crow {
 			explicit DirectX11Shader(const char* name, const char* path, const BufferProperties& shaderInput); // File path
 			explicit DirectX11Shader(const char* name, std::string& source, const BufferProperties& shaderInput); // Shader code
 
-			~DirectX11Shader() override;
+			~DirectX11Shader();
 
-			static Shader* CreateDirectX11ShaderFromPath(const char* name, const char* path, const BufferProperties& shaderInput) { return new DirectX11Shader(name, path, shaderInput); }
-			static Shader* CreateDirectX11ShaderFromSource(const char* name, std::string& source, const BufferProperties& shaderInput) { return new DirectX11Shader(name, source, shaderInput); }
+			static DirectX11Shader* CreateFromPath(const char* name, const char* path, const BufferProperties& shaderInput) { return new DirectX11Shader(name, path, shaderInput); }
+			static DirectX11Shader* CreateFromSource(const char* name, std::string& source, const BufferProperties& shaderInput) { return new DirectX11Shader(name, source, shaderInput); }
 
-			virtual void Bind() const;
-			virtual void Unbind() const;
+			void Bind() const;
+			void Unbind() const;
 
-			virtual void ReloadFromPath(const char* path) override;
-			virtual void ReloadFromSource(std::string& source) override;
+			void ReloadFromPath(const char* path);
+			void ReloadFromSource(std::string& source);
 
-			virtual void CreateConstantBuffers() override {}
+			void CreateConstantBuffers()  {}
 
-			virtual const char* GetName() const { return m_Name; }
+			const char* GetName() const { return m_Name; }
 
-			virtual void SetUniformValue(const char* location, const int value) override;
-			virtual void SetUniformValue(const char* location, const float value) override;
-			virtual void SetUniformValue(const char* location, const Math::TVec2<float>& value) override;
-			virtual void SetUniformValue(const char* location, const Math::TVec3<float>& value) override;
-			virtual void SetUniformValue(const char* location, const Math::TVec4<float>& value) override;
-			virtual void SetUniformValue(const char* location, const Math::Mat2& value) override;
-			virtual void SetUniformValue(const char* location, const Math::Mat3& value) override;
-			virtual void SetUniformValue(const char* location, const Math::Mat4& value) override;
+			void SetUniformValue(const char* location, const int value);
+			void SetUniformValue(const char* location, const float value);
+			void SetUniformValue(const char* location, const Math::TVec2<float>& value);
+			void SetUniformValue(const char* location, const Math::TVec3<float>& value);
+			void SetUniformValue(const char* location, const Math::TVec4<float>& value);
+			void SetUniformValue(const char* location, const Math::Mat2& value);
+			void SetUniformValue(const char* location, const Math::Mat3& value);
+			void SetUniformValue(const char* location, const Math::Mat4& value);
 
-			virtual void SetUniformStruct(const char* location, void* data) override;
+			void SetUniformStruct(const char* location, void* data);
 
 		private:
 			DXGI_FORMAT ConvertToDXGIFormat(int componentCount);

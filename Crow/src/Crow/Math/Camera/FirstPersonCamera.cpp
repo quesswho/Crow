@@ -74,16 +74,13 @@ namespace Crow {
 			m_ViewDir = Normalize(Vec3(cos(ToRadians(m_Yaw)) * cos(ToRadians(m_Pitch)), sin(ToRadians(m_Pitch)), sin(ToRadians(m_Yaw)) * cos(ToRadians(m_Pitch))));
 			m_Right = Normalize(Cross(m_Forward, m_WorldUp));
 			m_Up = Normalize(Cross(m_Right, m_Forward));
-			if (MATH_COORDINATE::s_MathCoordinateType == MATH_COORDINATE::MATH_COORDINATE_RIGHTHAND)
-			{ // Opengl
-				m_ViewMatrix = Mat4::LookDirRH(m_CameraPos, m_ViewDir, m_Up);
-				m_CameraMatrix = m_ProjectionMatrix * m_ViewMatrix;
-			}
-			else
-			{ // Directx
-				m_ViewMatrix = Mat4::LookDirLH(m_CameraPos, m_ViewDir, m_Up);
-				m_CameraMatrix = m_ViewMatrix * m_ProjectionMatrix;
-			}
+#ifdef CROW_DX11
+			m_ViewMatrix = Mat4::LookDirLH(m_CameraPos, m_ViewDir, m_Up);
+			m_CameraMatrix = m_ViewMatrix * m_ProjectionMatrix;
+#elif defined(CROW_OGL)
+			m_ViewMatrix = Mat4::LookDirRH(m_CameraPos, m_ViewDir, m_Up);
+			m_CameraMatrix = m_ProjectionMatrix * m_ViewMatrix;
+#endif
 		}
 	}
 }

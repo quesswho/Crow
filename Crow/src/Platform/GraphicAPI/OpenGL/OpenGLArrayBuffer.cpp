@@ -5,7 +5,7 @@
 namespace Crow {
 	namespace Platform {
 
-		OpenGLArrayBuffer::OpenGLArrayBuffer(const std::shared_ptr<VertexBuffer> vBuffer, const std::shared_ptr<IndexBuffer> iBuffer)
+		OpenGLArrayBuffer::OpenGLArrayBuffer(const std::shared_ptr<OpenGLVertexBuffer> vBuffer, const std::shared_ptr<OpenGLIndexBuffer> iBuffer)
 			: m_VertexBuffer(vBuffer), m_IndexBuffer(iBuffer)
 		{
 			glGenVertexArrays(1, &m_VertexArrayID);

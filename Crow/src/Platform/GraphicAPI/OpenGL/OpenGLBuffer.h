@@ -1,46 +1,45 @@
 #pragma once
 #include "Crow/Common.h"
-#include "Crow/Graphics/Renderer/Buffer.h"
-
+#include "Crow/Graphics/Renderer/BufferProp.h"
 
 namespace Crow {
 	namespace Platform {
 
-		class OpenGLVertexBuffer : public VertexBuffer {
+		class OpenGLVertexBuffer {
 		private:
 			uint m_BufferID;
 		public:
 			OpenGLVertexBuffer(float* vertices, const uint size, const BufferProperties& prop);
-			virtual ~OpenGLVertexBuffer() override;
+			~OpenGLVertexBuffer();
 
-			static inline std::shared_ptr<VertexBuffer> CreateOpenGLVertexBuffer(float* vertices, const uint size, const BufferProperties& prop) { return  std::make_shared<OpenGLVertexBuffer>(vertices, size, prop); }
+			static inline std::shared_ptr<OpenGLVertexBuffer> Create(float* vertices, const uint size, const BufferProperties& prop) { return std::make_shared<OpenGLVertexBuffer>(vertices, size, prop); }
 
-			virtual void SetBuffer() override {}
+			void SetBuffer() {}
 
-			const BufferProperties& GetBufferProperties() const override { return m_BufferProperties; }
+			const BufferProperties& GetBufferProperties() const { return m_BufferProperties; }
 
-			virtual void Bind() const override;
-			virtual void Unbind() const override;
+			void Bind() const;
+			void Unbind() const;
 		private:
 			const BufferProperties m_BufferProperties;
 		};
 
-		class OpenGLIndexBuffer : public IndexBuffer {
+		class OpenGLIndexBuffer {
 		private:
 			uint m_BufferID;
 
 		public:
 			OpenGLIndexBuffer(ulong* indices, const uint count);
-			virtual ~OpenGLIndexBuffer() override;
+			virtual ~OpenGLIndexBuffer();
 
-			static inline std::shared_ptr<IndexBuffer> CreateOpenGLIndexBuffer(ulong* indices, const uint count) { return std::make_shared<OpenGLIndexBuffer>(indices, count); }
+			static inline std::shared_ptr<OpenGLIndexBuffer> Create(ulong* indices, const uint count) { return std::make_shared<OpenGLIndexBuffer>(indices, count); }
 
-			virtual void SetBuffer() override {}
+			void SetBuffer() {}
 
-			virtual void Bind() const override;
-			virtual void Unbind() const override;
+			void Bind() const;
+			void Unbind() const;
 
-			virtual inline const uint GetCount() const override { return m_Count; }
+			inline const uint GetCount() const { return m_Count; }
 		private:
 			const uint m_Count;
 

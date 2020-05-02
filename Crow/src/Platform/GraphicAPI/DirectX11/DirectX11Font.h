@@ -1,7 +1,9 @@
 #pragma once
-#include "Crow/Graphics/Font/Font.h"
 
-#include "DirectX11RenderAPI.h"
+#include "Platform/GraphicAPI/DirectX11/DirectX11Shader.h"
+
+#include "dx11.h"
+#include "Crow/Math/Maths.h"
 
 namespace Crow {
 	namespace Platform {
@@ -16,9 +18,9 @@ namespace Crow {
 			uint m_Offset;
 		};
 
-		class DirectX11Font : public Font {
+		class DirectX11Font {
 		private:
-			Shader* m_Shader;
+			DirectX11Shader* m_Shader;
 			DirectX11Character m_Characters[255];
 			ID3D11SamplerState* m_TextureProperties;
 			ID3D11Buffer* m_VertexBuffer;
@@ -27,15 +29,15 @@ namespace Crow {
 			const uint m_Offset;
 		public:
 			DirectX11Font(const char* path);
-			DirectX11Font(const char* path, Shader* shader);
-			~DirectX11Font() override;
+			DirectX11Font(const char* path, DirectX11Shader* shader);
+			~DirectX11Font();
 
-			static Font* CreateDirectX11Font(const char* name) { return new DirectX11Font(name); }
-			static Font* CreateDirectX11Font(const char* name, Shader* shader) { return new DirectX11Font(name, shader); }
+			static DirectX11Font* Create(const char* name) { return new DirectX11Font(name); }
+			static DirectX11Font* Create(const char* name, DirectX11Shader* shader) { return new DirectX11Font(name, shader); }
 
-			void Reload(const char* path) override;
+			void Reload(const char* path);
 
-			void DrawDynamic(const char* text, Math::Vec2 pos, const uint size) const override;
+			void DrawDynamic(const char* text, Math::Vec2 pos, const uint size) const;
 		private:
 			void LoadCharacters(const char* path);
 		};

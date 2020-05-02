@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Buffer.h"
+#include "BufferProp.h"
+
 namespace Crow {
 
 	struct BufferPropertiesFactory {

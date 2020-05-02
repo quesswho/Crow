@@ -1,18 +1,9 @@
 #pragma once
 
-#include "Shader.h"
-
-namespace Crow {
-
-	struct ShaderFactory {
-
-		virtual std::string InterpolationShader() = 0;
-		virtual std::string BasicShader() = 0;
-		virtual std::string ColorShader() = 0;
-		virtual std::string UniformColorShader() = 0;
-		virtual std::string TextureShader() = 0;
-		virtual std::string BasicLightShader() = 0;
-
-		virtual std::string BasicFontShader() = 0;
-	};
-}
+#ifdef CROW_OGL
+#include "Platform/GraphicAPI/OpenGL/OpenGLShaderFactory.h"
+namespace Crow { typedef Crow::Platform::OpenGLShaderFactory ShaderFactory; }
+#elif defined(CROW_DX11)
+#include "Platform/GraphicAPI/DirectX11/DirectX11ShaderFactory.h"
+namespace Crow { typedef Crow::Platform::DirectX11ShaderFactory ShaderFactory; }
+#endif

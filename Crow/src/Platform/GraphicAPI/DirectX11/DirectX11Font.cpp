@@ -1,5 +1,5 @@
-#include "Platform/GraphicAPI/DirectX11/DirectX11Font.h"
-
+#include "DirectX11Font.h"
+#include "DirectX11RenderAPI.h"
 #include "Crow/Application.h"
 
 namespace Crow {
@@ -13,11 +13,11 @@ namespace Crow {
 				{ "TEXCOORD", 2 }
 			};
 
-			m_Shader = Shader::CreateFromSource("BasicFont", Application::GetAPI()->GetShaderFactory()->BasicFontShader(), bufferprop);
+			m_Shader = DirectX11Shader::CreateFromSource("BasicFont", Application::GetAPI()->GetShaderFactory()->BasicFontShader(), bufferprop);
 			LoadCharacters(path);
 		}
 
-		DirectX11Font::DirectX11Font(const char* path, Shader* shader)
+		DirectX11Font::DirectX11Font(const char* path, DirectX11Shader* shader)
 			: m_Shader(shader), m_StrideInBytes(4 * 4), m_Offset(0)
 		{
 			LoadCharacters(path);

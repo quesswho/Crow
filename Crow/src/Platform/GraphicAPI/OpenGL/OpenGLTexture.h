@@ -1,27 +1,28 @@
 #pragma once
+#include "Crow/Common.h"
 
-#include "Crow/Graphics/Texture.h"
+#include "Crow/Graphics/TextureProp.h"
 
 namespace Crow {
 	namespace Platform {
 
-		class OpenGLTexture : public Texture {
+		class OpenGLTexture {
 		private:
 			uint m_TextureID;
 		public:
 			OpenGLTexture(const char* path, const TextureProperties& props);
-			~OpenGLTexture() override;
+			~OpenGLTexture();
 
-			static Texture* CreateOpenGLTexture(const char* path, const TextureProperties& props) { return new OpenGLTexture(path, props); }
+			static OpenGLTexture* Create(const char* path, const TextureProperties& props) { return new OpenGLTexture(path, props); }
 
-			virtual void Bind() const override;
-			virtual void Unbind() const override;
+			void Bind() const;
+			void Unbind() const;
 
-			virtual const inline int GetWidth() const override { return m_Width; }
-			virtual const inline int GetHeight() const override { return m_Height; }
-			virtual const inline int GetIndex() const override { return m_Index; }
+			const inline int GetWidth() const { return m_Width; }
+			const inline int GetHeight() const { return m_Height; }
+			const inline int GetIndex() const { return m_Index; }
 
-			virtual inline void SetIndex(const int index) override { m_Index = index; }
+			inline void SetIndex(const int index) { m_Index = index; }
 
 		private:
 			void Init(const TextureProperties& props);

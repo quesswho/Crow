@@ -3,7 +3,7 @@
 namespace Crow {
 	namespace Platform {
 
-		DirectX12ArrayBuffer::DirectX12ArrayBuffer(const std::shared_ptr<VertexBuffer> vBuffer, const std::shared_ptr<IndexBuffer> iBuffer)
+		DirectX12ArrayBuffer::DirectX12ArrayBuffer(const std::shared_ptr<DirectX12VertexBuffer> vBuffer, const std::shared_ptr<DirectX12IndexBuffer> iBuffer)
 			: m_VertexBuffer(vBuffer), m_IndexBuffer(iBuffer)
 		{}
 

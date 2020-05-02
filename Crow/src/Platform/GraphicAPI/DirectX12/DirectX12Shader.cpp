@@ -1,6 +1,8 @@
 #include "DirectX12Shader.h"
 #include "Crow/FileUtils.h"
 
+#include "DirectX12RenderAPI.h"
+
 #include <glad/glad.h>
 #include <sstream>
 

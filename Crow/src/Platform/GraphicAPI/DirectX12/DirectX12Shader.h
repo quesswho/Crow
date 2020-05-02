@@ -1,13 +1,31 @@
 #pragma once
 
-#include "Crow/Graphics/Shader.h"
+#include "dx12.h"
 
-#include "DirectX12RenderAPI.h"
+#include "Crow/Graphics/Renderer/BufferProp.h"
+#include "Crow/Math/Maths.h"
+
+#include <unordered_map>
 
 namespace Crow {
 	namespace Platform {
 
-		class DirectX12Shader : public Shader {
+		class DirectX12Shader {
+		public:
+			enum class ShaderType { UNKNOWN = -1, VERTEX = 0, FRAGMENT = 1 };
+
+			enum class UniformType
+			{
+				UNKNOWN = -1,
+				INT,
+				FLOAT,
+				FLOAT2,
+				FLOAT3,
+				FLOAT4,
+				MAT2,
+				MAT3,
+				MAT4
+			};
 
 		private:
 			struct DX12ConstantBuffer {
@@ -49,31 +67,31 @@ namespace Crow {
 			explicit DirectX12Shader(const char* name, const char* path, const BufferProperties& shaderInput); // File path
 			explicit DirectX12Shader(const char* name, std::string& source, const BufferProperties& shaderInput); // Shader code
 
-			~DirectX12Shader() override;
+			~DirectX12Shader();
 
-			static Shader* CreateDirectX12ShaderFromPath(const char* name, const char* path, const BufferProperties& shaderInput) { return new DirectX12Shader(name, path, shaderInput); }
-			static Shader* CreateDirectX12ShaderFromSource(const char* name, std::string& source, const BufferProperties& shaderInput) { return new DirectX12Shader(name, source, shaderInput); }
+			static DirectX12Shader* CreateFromPath(const char* name, const char* path, const BufferProperties& shaderInput) { return new DirectX12Shader(name, path, shaderInput); }
+			static DirectX12Shader* CreateFromSource(const char* name, std::string& source, const BufferProperties& shaderInput) { return new DirectX12Shader(name, source, shaderInput); }
 
-			virtual void Bind() const;
-			virtual void Unbind() const;
+			void Bind() const;
+			void Unbind() const;
 
-			virtual void ReloadFromPath(const char* path) override;
-			virtual void ReloadFromSource(std::string& source) override;
+			void ReloadFromPath(const char* path);
+			void ReloadFromSource(std::string& source);
 			
-			virtual void CreateConstantBuffers() override;
+			void CreateConstantBuffers();
 
-			virtual const char* GetName() const { return m_Name; }
+			const char* GetName() const { return m_Name; }
 
-			virtual void SetUniformValue(const char* location, const int value) override;
-			virtual void SetUniformValue(const char* location, const float value) override;
-			virtual void SetUniformValue(const char* location, const Math::TVec2<float>&  value) override;
-			virtual void SetUniformValue(const char* location, const Math::TVec3<float>& value) override;
-			virtual void SetUniformValue(const char* location, const Math::TVec4<float>& value) override;
-			virtual void SetUniformValue(const char* location, const Math::Mat2& value) override;
-			virtual void SetUniformValue(const char* location, const Math::Mat3& value) override;
-			virtual void SetUniformValue(const char* location, const Math::Mat4& value) override;
+			void SetUniformValue(const char* location, const int value);
+			void SetUniformValue(const char* location, const float value);
+			void SetUniformValue(const char* location, const Math::TVec2<float>&  value);
+			void SetUniformValue(const char* location, const Math::TVec3<float>& value);
+			void SetUniformValue(const char* location, const Math::TVec4<float>& value);
+			void SetUniformValue(const char* location, const Math::Mat2& value);
+			void SetUniformValue(const char* location, const Math::Mat3& value);
+			void SetUniformValue(const char* location, const Math::Mat4& value);
 
-			virtual void SetUniformStruct(const char* location, void* data) override;
+			void SetUniformStruct(const char* location, void* data);
 
 			D3D12_SHADER_BYTECODE GetVertexShader() { return m_CompiledVertexShader; }
 			D3D12_SHADER_BYTECODE GetFragmentShader() { return m_CompiledFragmentShader; }

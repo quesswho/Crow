@@ -5,8 +5,9 @@
 #include "Event/Events.h"
 #include "graphics/LayerManager.h"
 #include "Timer.h"
+#include "Graphics/Renderer/RenderAPI.h"
+#include "Graphics/PostEffect.h"
 #include "Platform/PlatformAPI.h"
-
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
@@ -18,10 +19,10 @@ namespace Crow {
 	{
 	public:
 		Application()
-			: Application(WindowProperties("Crow Engine", 720, 720), Platform::GraphicAPI::OPENGL, Platform::ApplicationAPI::GLFW)
+			: Application(WindowProperties("Crow Engine", 720, 720), Platform::ApplicationAPI::GLFW)
 		{}
 
-		Application(WindowProperties winprop, Platform::GraphicAPI graphicApi, Platform::ApplicationAPI appApi);
+		Application(WindowProperties winprop, Platform::ApplicationAPI appApi);
 		
 		virtual ~Application();
 
@@ -32,7 +33,7 @@ namespace Crow {
 
 		static void Shutdown();
 
-		static AbstractRenderAPI* GetAPI();
+		static RenderAPI* GetAPI();
 
 		static inline void CreateDeviceContext() { s_Window->CreateDeviceContex(); }
 
@@ -56,7 +57,7 @@ namespace Crow {
 		static Window* s_Window;
 		static std::unique_ptr<LayerManager> s_LayerManager;
 		static std::unique_ptr<Timer> m_Timer;
-		static AbstractRenderAPI* s_RenderAPI;
+		static RenderAPI* s_RenderAPI;
 		static PostEffect* s_PostEffect;
 	};
 }

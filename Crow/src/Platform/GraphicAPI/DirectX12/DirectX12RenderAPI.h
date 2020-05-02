@@ -1,43 +1,37 @@
 #pragma once
-
-#include "Crow/Graphics/Renderer/RenderAPI.h"
-
-#include <dxgi1_4.h>
-#include <d3d12.h>
-#include <d3dcompiler.h>
-#include <d3dx12.h>
-
+#include "Crow/Graphics/Window.h"
 #include "DirectX12Shader.h"
 #include "DirectX12ShaderFactory.h"
 #include "DirectX12Buffer.h"
 
+#include "dx12.h"
+
 namespace Crow {
 	namespace Platform {
-
-		class DirectX12RenderAPI : public AbstractRenderAPI {
+		class DirectX12RenderAPI {
 		public:
 			DirectX12RenderAPI();
-			virtual ~DirectX12RenderAPI() override;
+			~DirectX12RenderAPI();
 
-			static AbstractRenderAPI* CreateDirectX12RenderAPI() { return new DirectX12RenderAPI(); }
+			static DirectX12RenderAPI* Create() { return new DirectX12RenderAPI(); }
 
-			virtual bool InitAPI(const WindowProperties& winprop, void* hWnd) const override;
-			virtual void EndInit() const override;
+			bool InitAPI(const WindowProperties& winprop, void* hWnd) const;
+			void EndInit() const;
 
-			virtual void Begin() const override;
-			virtual void End() const override;
+			void Begin() const;
+			void End() const;
 
-			virtual inline void ClearColor(float r, float g, float b) const override;
-			virtual inline void SetViewPort(uint width, uint height) const override;
-			virtual inline void DrawIndices(uint count) const override;
-			virtual inline void EnableBlending() const override;
-			virtual inline void EnableDepthTest() const override;
-			virtual inline void EnableStencilTest() const override;
+			inline void ClearColor(float r, float g, float b) const;
+			inline void SetViewPort(uint width, uint height) const;
+			inline void DrawIndices(uint count) const;
+			inline void EnableBlending() const;
+			inline void EnableDepthTest() const;
+			inline void EnableStencilTest() const;
 
-			virtual inline const char* GetAPIName() const override { return "DirectX 12"; }
-			virtual inline ShaderFactory* GetShaderFactory() const override { return m_ShaderFactory; }
+			inline const char* GetAPIName() const { return "DirectX 12"; }
+			inline DirectX12ShaderFactory* GetShaderFactory() const { return m_ShaderFactory; }
 
-			virtual std::string GetGraphicsInfo() const override;
+			std::string GetGraphicsInfo() const;
 
 			static inline ID3D12Device* GetDevice() { return s_Device; }
 			static inline ID3D12GraphicsCommandList* GetCommandList() { return s_CommandList; }
@@ -52,9 +46,9 @@ namespace Crow {
 
 			static void AddPipeline(ID3D12PipelineState* pipe) { s_PSOs.push_back(pipe); }
 
-			static void MapUniform(Shader* shader) { s_MappingShader.push_back(shader); }
-			static void Upload(VertexBuffer* vBuffer) { s_VertexBuffers.push_back(vBuffer); }
-			static void Upload(IndexBuffer* iBuffer) { s_IndexBuffers.push_back(iBuffer); }
+			static void MapUniform(DirectX12Shader* shader) { s_MappingShader.push_back(shader); }
+			static void Upload(DirectX12VertexBuffer* vBuffer) { s_VertexBuffers.push_back(vBuffer); }
+			static void Upload(DirectX12IndexBuffer* iBuffer) { s_IndexBuffers.push_back(iBuffer); }
 
 			static ID3D12DescriptorHeap* s_MainDescriptorHeap;
 		private:
@@ -96,9 +90,9 @@ namespace Crow {
 
 			static std::string s_CardName;
 
-			static std::vector<Shader*> s_MappingShader;
-			static std::vector<VertexBuffer*> s_VertexBuffers;
-			static std::vector<IndexBuffer*> s_IndexBuffers;
+			static std::vector<DirectX12Shader*> s_MappingShader;
+			static std::vector<DirectX12VertexBuffer*> s_VertexBuffers;
+			static std::vector<DirectX12IndexBuffer*> s_IndexBuffers;
 
 			static bool s_DepthTest;
 			static bool s_StencilTest;

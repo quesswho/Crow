@@ -32,9 +32,9 @@ namespace Crow {
 
 		std::string DirectX12RenderAPI::s_CardName;
 
-		std::vector<Shader*> DirectX12RenderAPI::s_MappingShader;
-		std::vector<VertexBuffer*> DirectX12RenderAPI::s_VertexBuffers;
-		std::vector<IndexBuffer*> DirectX12RenderAPI::s_IndexBuffers;
+		std::vector<DirectX12Shader*> DirectX12RenderAPI::s_MappingShader;
+		std::vector<DirectX12VertexBuffer*> DirectX12RenderAPI::s_VertexBuffers;
+		std::vector<DirectX12IndexBuffer*> DirectX12RenderAPI::s_IndexBuffers;
 
 		bool DirectX12RenderAPI::s_DepthTest;
 		bool DirectX12RenderAPI::s_StencilTest;
@@ -296,12 +296,12 @@ namespace Crow {
 
 
 			// Set buffer data
-			for (VertexBuffer* vBuffer : s_VertexBuffers)
+			for (DirectX12VertexBuffer* vBuffer : s_VertexBuffers)
 			{
 				vBuffer->SetBuffer();
 			}
 
-			for (IndexBuffer* iBuffer : s_IndexBuffers)
+			for (DirectX12IndexBuffer* iBuffer : s_IndexBuffers)
 			{
 				iBuffer->SetBuffer();
 			}
@@ -448,7 +448,7 @@ namespace Crow {
 					CR_CORE_ERROR("Failed to create Main Descriptor Heap");
 				}
 
-				for (Shader* shader : s_MappingShader) // Doing this at the end because thats when all shaders should be created
+				for (DirectX12Shader* shader : s_MappingShader) // Doing this at the end because thats when all shaders should be created
 					shader->CreateConstantBuffers();
 			}
 		}

@@ -1,13 +1,32 @@
 #pragma once
+#include "Crow/Common.h"
 
-#include "Crow/Graphics/Shader.h"
+#include "Crow/Graphics/Renderer/BufferProp.h"
+#include "Crow/Math/Maths.h"
+
+#include <string>
 #include <unordered_map>
+#include <vector>
 
 namespace Crow {
 	namespace Platform {
 
-		class OpenGLShader : public Shader {
+		class OpenGLShader {
 		public:
+			enum class ShaderType { UNKNOWN = -1, VERTEX = 0, FRAGMENT = 1 };
+
+			enum class UniformType
+			{
+				UNKNOWN = -1,
+				INT,
+				FLOAT,
+				FLOAT2,
+				FLOAT3,
+				FLOAT4,
+				MAT2,
+				MAT3,
+				MAT4
+			};
 
 			struct TempUniform {
 				TempUniform(const std::string& name, UniformType type)
@@ -59,31 +78,31 @@ namespace Crow {
 			explicit OpenGLShader(const char* name, const char* path, const BufferProperties& shaderInput); // File path
 			explicit OpenGLShader(const char* name, std::string& source, const BufferProperties& shaderInput); // Shader code
 
-			~OpenGLShader() override;
+			~OpenGLShader();
 
-			static Shader* CreateOpenGLShaderFromPath(const char* name, const char* path, const BufferProperties& shaderInput) { return new OpenGLShader(name, path, shaderInput); }
-			static Shader* CreateOpenGLShaderFromSource(const char* name, std::string& source, const BufferProperties& shaderInput) { return new OpenGLShader(name, source, shaderInput); }
+			static OpenGLShader* CreateFromPath(const char* name, const char* path, const BufferProperties& shaderInput) { return new OpenGLShader(name, path, shaderInput); }
+			static OpenGLShader* CreateFromSource(const char* name, std::string& source, const BufferProperties& shaderInput) { return new OpenGLShader(name, source, shaderInput); }
 
-			virtual void Bind() const;
-			virtual void Unbind() const;
+			void Bind() const;
+			void Unbind() const;
 
-			virtual void ReloadFromPath(const char* path) override;
-			virtual void ReloadFromSource(std::string& source) override;
+			void ReloadFromPath(const char* path);
+			void ReloadFromSource(std::string& source);
 
-			virtual void CreateConstantBuffers() override {}
+			void CreateConstantBuffers() {}
 
-			virtual const char* GetName() const { return m_Name; }
+			const char* GetName() const { return m_Name; }
 
-			virtual void SetUniformValue(const char* location, const int value) override;
-			virtual void SetUniformValue(const char* location, const float value) override;
-			virtual void SetUniformValue(const char* location, const Math::TVec2<float>& value) override;
-			virtual void SetUniformValue(const char* location, const Math::TVec3<float>& value) override;
-			virtual void SetUniformValue(const char* location, const Math::TVec4<float>& value) override;
-			virtual void SetUniformValue(const char* location, const Math::Mat2& value) override;
-			virtual void SetUniformValue(const char* location, const Math::Mat3& value) override;
-			virtual void SetUniformValue(const char* location, const Math::Mat4& value) override;
+			void SetUniformValue(const char* location, const int value);
+			void SetUniformValue(const char* location, const float value);
+			void SetUniformValue(const char* location, const Math::TVec2<float>& value);
+			void SetUniformValue(const char* location, const Math::TVec3<float>& value);
+			void SetUniformValue(const char* location, const Math::TVec4<float>& value);
+			void SetUniformValue(const char* location, const Math::Mat2& value);
+			void SetUniformValue(const char* location, const Math::Mat3& value);
+			void SetUniformValue(const char* location, const Math::Mat4& value);
 
-			virtual void SetUniformStruct(const char* location, void* data) override;
+			void SetUniformStruct(const char* location, void* data);
 
 			inline uint GetHandle() const { return m_ShaderID; }
 		private:

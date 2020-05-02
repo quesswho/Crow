@@ -1,18 +1,10 @@
 #pragma once
+#include "Crow/Common.h"
 
-#include "Crow/Graphics/Shader.h"
-
-namespace Crow {
-
-	class Font {
-	public:
-		virtual ~Font() = default;
-
-		static Font* Create(const char* path);
-		static Font* Create(const char* path, Shader* shader);
-
-		virtual void Reload(const char* path) = 0;
-
-		virtual void DrawDynamic(const char* text, Math::Vec2 pos, const uint size) const = 0;
-	};
-}
+#ifdef CROW_OGL
+#include "Platform/GraphicAPI/OpenGL/OpenGLFont.h"
+namespace Crow { typedef Crow::Platform::OpenGLFont Font; }
+#elif defined(CROW_DX11)
+#include "Platform/GraphicAPI/DirectX11/DirectX11Font.h"
+namespace Crow { typedef Crow::Platform::DirectX11Font Font; }
+#endif

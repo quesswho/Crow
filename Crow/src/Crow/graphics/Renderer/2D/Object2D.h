@@ -5,7 +5,7 @@
 #include "Crow/Graphics/Renderer/BufferPropertiesFactory.h"
 #include "Crow/Graphics/Shader.h"
 #include "Crow/Graphics/Texture.h"
-
+#include "Crow/Graphics/Renderer/Buffer.h"
 #include <initializer_list>
 #include <glm/gtc/matrix_transform.hpp>
 

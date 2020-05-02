@@ -1,44 +1,44 @@
 #pragma once
+#include "Crow/Common.h"
 
-#include "Crow/Graphics/Renderer/RenderAPI.h"
+#include "Crow/Graphics/Window.h"
+#include "OpenGLShaderFactory.h"
 
 #include <glad/glad.h>
-
-#include "OpenGLShaderFactory.h"
 
 namespace Crow {
 	namespace Platform {
 
-		class OpenGLRenderAPI : public AbstractRenderAPI {
+		class OpenGLRenderAPI {
 		public:
 			OpenGLRenderAPI();
-			virtual ~OpenGLRenderAPI() override 
+			~OpenGLRenderAPI() 
 			{
 				delete m_ShaderFactory;
 			}
 
-			static AbstractRenderAPI* CreateOpenGLRenderAPI() { return new OpenGLRenderAPI(); }
+			static OpenGLRenderAPI* Create() { return new OpenGLRenderAPI(); }
 
-			virtual bool InitAPI(const WindowProperties&, void*) const override;
-			virtual void EndInit() const override {}
+			bool InitAPI(const WindowProperties&, void*) const;
+			void EndInit() const {}
 
-			virtual void Begin() const override { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); }
-			virtual void End() const override {}
+			void Begin() const { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); }
+			void End() const {}
 
-			virtual inline void ClearColor(float r, float g, float b) const override { glClearColor(r, g, b, 0.0f); }
-			virtual inline void SetViewPort(uint width, uint height) const override { glViewport(0, 0, width, height); }
-			virtual inline void DrawIndices(uint count) const override { glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0); }
+			inline void ClearColor(float r, float g, float b) const { glClearColor(r, g, b, 0.0f); }
+			inline void SetViewPort(uint width, uint height) const { glViewport(0, 0, width, height); }
+			inline void DrawIndices(uint count) const { glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0); }
 
-			virtual inline void EnableBlending() const override { glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glEnable(GL_BLEND); }
-			virtual inline void EnableDepthTest() const override { glEnable(GL_DEPTH_TEST); }
-			virtual inline void EnableStencilTest() const override { glEnable(GL_STENCIL_TEST); }
+			inline void EnableBlending() const { glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glEnable(GL_BLEND); }
+			inline void EnableDepthTest() const { glEnable(GL_DEPTH_TEST); }
+			inline void EnableStencilTest() const { glEnable(GL_STENCIL_TEST); }
 
-			virtual inline const char* GetAPIName() const override { return "OpenGL"; }
-			virtual inline ShaderFactory* GetShaderFactory() const override { return m_ShaderFactory; }
+			inline const char* GetAPIName() const { return "OpenGL"; }
+			inline OpenGLShaderFactory* GetShaderFactory() const { return m_ShaderFactory; }
 
-			virtual std::string GetGraphicsInfo() const override;
+			std::string GetGraphicsInfo() const;
 		private:
-			ShaderFactory* m_ShaderFactory;
+			OpenGLShaderFactory* m_ShaderFactory;
 		};
 	}
 }

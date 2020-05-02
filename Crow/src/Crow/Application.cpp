@@ -14,23 +14,22 @@ namespace Crow {
 	std::unique_ptr<LayerManager> Application::s_LayerManager;
 	std::unique_ptr<Timer> Application::m_Timer;
 	int Application::m_FramesPerSecond;
-	AbstractRenderAPI* Application::s_RenderAPI;
+	RenderAPI* Application::s_RenderAPI;
 	Window* Application::s_Window;
 	WindowProperties Application::s_WindowProperties;
 	FT_Library Application::s_FreeTypeLibrary;
 
 	PostEffect* Application::s_PostEffect;
 
-	Application::Application(WindowProperties winProp, Platform::GraphicAPI graphicApi, Platform::ApplicationAPI appApi)
+	Application::Application(WindowProperties winProp,  Platform::ApplicationAPI appApi)
 	{
 		Log::Init();
 
 		Platform::PlatformAPI::ApplicationAPIInit(appApi);
-		Platform::PlatformAPI::GraphicAPIInit(graphicApi);
 
 		s_WindowProperties = winProp;
 		s_Window = Platform::PlatformAPI::CreateWindowAPI(s_WindowProperties);
-		s_RenderAPI = Platform::PlatformAPI::CreateRenderAPI();
+		s_RenderAPI = RenderAPI::Create();
 		s_Closed = false; // Application::s_Closed
 
 
@@ -144,7 +143,7 @@ namespace Crow {
 		s_Window->SetCursorVisibility(visbility);
 	}
 
-	AbstractRenderAPI* Application::GetAPI()
+	RenderAPI* Application::GetAPI()
 	{ 
 		return s_RenderAPI;
 	}

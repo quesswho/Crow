@@ -1,6 +1,7 @@
 #include "Platform/GraphicAPI/OpenGL/OpenGLFont.h"
-
 #include "Crow/Application.h"
+
+#include <glad/glad.h>
 
 namespace Crow {
 	namespace Platform {
@@ -11,7 +12,7 @@ namespace Crow {
 				{ "POSITION", 4 }
 			};
 
-			m_Shader = Shader::CreateFromSource("BasicFont", Application::GetAPI()->GetShaderFactory()->BasicFontShader(), bufferprop);
+			m_Shader = OpenGLShader::CreateFromSource("BasicFont", Application::GetAPI()->GetShaderFactory()->BasicFontShader(), bufferprop);
 			m_Shader->Bind();
 			m_Shader->SetUniformValue("u_Texture", 0);
 			m_Shader->SetUniformValue("u_Color", Math::Vec4(1.0f, 0.0f, 0.0f, 1.0f));
@@ -20,7 +21,7 @@ namespace Crow {
 			LoadCharacters(path);
 		}
 
-		OpenGLFont::OpenGLFont(const char* path, Shader* shader)
+		OpenGLFont::OpenGLFont(const char* path, OpenGLShader* shader)
 			: m_Shader(shader)
 		{
 			LoadCharacters(path);

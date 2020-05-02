@@ -1,5 +1,5 @@
 #include "DirectX11PostEffect.h"
-
+#include "DirectX11RenderAPI.h"
 #include "DirectX11Shader.h"
 #include "Crow/FileUtils.h"
 
@@ -12,7 +12,7 @@
 namespace Crow {
 	namespace Platform {
 
-		DirectX11PostEffect::DirectX11PostEffect(Shader* shader)
+		DirectX11PostEffect::DirectX11PostEffect(DirectX11Shader* shader)
 			: m_Shader(static_cast<DirectX11Shader*>(shader)), m_StrideInBytes(16), m_Offset(0)
 		{
 			Init();
@@ -21,7 +21,7 @@ namespace Crow {
 		DirectX11PostEffect::DirectX11PostEffect(const char* path)
 			: m_StrideInBytes(16), m_Offset(0)
 		{
-			m_Shader = static_cast<DirectX11Shader*>(DirectX11Shader::CreateDirectX11ShaderFromPath("Nameless PostFX", path, { { "POSITION", 2 }, { "TEXCOORD", 2 } }));
+			m_Shader = static_cast<DirectX11Shader*>(DirectX11Shader::CreateFromPath("Nameless PostFX", path, { { "POSITION", 2 }, { "TEXCOORD", 2 } }));
 			Init();
 		}
 

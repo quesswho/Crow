@@ -1,6 +1,8 @@
 #include "DirectX11Shader.h"
 #include "Crow/FileUtils.h"
 
+#include "DirectX11RenderAPI.h"
+
 #include <d3dcompiler.h>
 #include <sstream>
 

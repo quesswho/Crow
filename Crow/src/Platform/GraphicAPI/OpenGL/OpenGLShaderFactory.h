@@ -1,19 +1,18 @@
 #pragma once
-
-#include "Crow/Graphics/ShaderFactory.h"
+#include <string>
 
 namespace Crow {
 	namespace Platform {
-		class OpenGLShaderFactory : public ShaderFactory {
+		class OpenGLShaderFactory {
+		public:
+			std::string InterpolationShader();
+			std::string BasicShader();
+			std::string ColorShader();
+			std::string UniformColorShader();
+			std::string TextureShader();
+			std::string BasicLightShader();
 
-			virtual std::string InterpolationShader() override;
-			virtual std::string BasicShader() override;
-			virtual std::string ColorShader() override;
-			virtual std::string UniformColorShader() override;
-			virtual std::string TextureShader() override;
-			virtual std::string BasicLightShader() override;
-
-			virtual std::string BasicFontShader() override;
+			std::string BasicFontShader();
 		};
 	}
 }

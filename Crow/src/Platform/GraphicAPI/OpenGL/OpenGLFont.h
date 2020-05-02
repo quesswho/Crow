@@ -1,6 +1,6 @@
 #pragma once
-#include "Crow/Graphics/Font/Font.h"
-
+#include "Crow/Math/Maths.h"
+#include "OpenGLShader.h"
 namespace Crow {
 	namespace Platform {
 
@@ -14,24 +14,23 @@ namespace Crow {
 			uint m_Offset;
 		};
 
-		class OpenGLFont : public Font {
+		class OpenGLFont {
 		private:
-		private:
-			Shader* m_Shader;
+			OpenGLShader* m_Shader;
 			uint m_VertexBuffer;
 			uint m_ArrayBuffer;
 			OpenGLCharacter m_Characters[255];
 		public:
 			OpenGLFont(const char* path);
-			OpenGLFont(const char* path, Shader* shader);
-			~OpenGLFont() override;
+			OpenGLFont(const char* path, OpenGLShader* shader);
+			~OpenGLFont();
 
-			static Font* CreateOpenGLFont(const char* name) { return new OpenGLFont(name); }
-			static Font* CreateOpenGLFont(const char* name, Shader* shader) { return new OpenGLFont(name, shader); }
+			static OpenGLFont* Create(const char* name) { return new OpenGLFont(name); }
+			static OpenGLFont* Create(const char* name, OpenGLShader* shader) { return new OpenGLFont(name, shader); }
 
-			void Reload(const char* path) override;
+			void Reload(const char* path);
 
-			void DrawDynamic(const char* text, Math::Vec2 pos, const uint size) const override;
+			void DrawDynamic(const char* text, Math::Vec2 pos, const uint size) const;
 		private:
 			void LoadCharacters(const char* path);
 		};

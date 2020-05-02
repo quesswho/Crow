@@ -1,22 +1,22 @@
 #pragma once
-#include "Crow/Graphics/Renderer/ArrayBuffer.h"
+#include "Platform/GraphicAPI/DirectX11/DirectX11Buffer.h"
 
 namespace Crow {
 	namespace Platform {
-		class DirectX11ArrayBuffer : public ArrayBuffer {
+		class DirectX11ArrayBuffer {
 		public:
-			DirectX11ArrayBuffer(const std::shared_ptr<VertexBuffer> vBuffer, const std::shared_ptr<IndexBuffer> iBuffer);
-			~DirectX11ArrayBuffer() override;
+			DirectX11ArrayBuffer(const std::shared_ptr<DirectX11VertexBuffer> vBuffer, const std::shared_ptr<DirectX11IndexBuffer> iBuffer);
+			~DirectX11ArrayBuffer();
 
-			static inline ArrayBuffer* CreateDirectX11ArrayBuffer(const std::shared_ptr<VertexBuffer> vBuffer, const std::shared_ptr<IndexBuffer> iBuffer) { return new DirectX11ArrayBuffer(vBuffer, iBuffer); }
+			static inline DirectX11ArrayBuffer* Create(const std::shared_ptr<DirectX11VertexBuffer> vBuffer, const std::shared_ptr<DirectX11IndexBuffer> iBuffer) { return new DirectX11ArrayBuffer(vBuffer, iBuffer); }
 
-			void Bind() const override;
-			void Unbind() const override;
+			void Bind() const;
+			void Unbind() const;
 
-			const inline uint GetCount() const override { return m_IndexBuffer->GetCount(); }
+			const inline uint GetCount() const { return m_IndexBuffer->GetCount(); }
 		private:
-			std::shared_ptr<IndexBuffer> m_IndexBuffer;
-			std::shared_ptr<VertexBuffer> m_VertexBuffer;
+			std::shared_ptr<DirectX11IndexBuffer> m_IndexBuffer;
+			std::shared_ptr<DirectX11VertexBuffer> m_VertexBuffer;
 		};
 	}
 }

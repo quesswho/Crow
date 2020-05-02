@@ -4,7 +4,8 @@
 #include <spdlog/sinks/stdout_sinks.h>
 
 #include <memory>
-#include "Common.h"
+
+#include "Crow/Common.h" // Make log.cpp happy
 
 namespace Crow {
 

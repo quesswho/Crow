@@ -1,39 +1,36 @@
 #pragma once
 
-#include "Crow/Graphics/Renderer/RenderAPI.h"
 #include "DirectX11ShaderFactory.h"
-
-#include <d3d11.h>
-
-#include <dxgi1_4.h>
+#include "Crow/Graphics/Window.h"
+#include "dx11.h"
 
 namespace Crow {
 	namespace Platform {
 
-		class DirectX11RenderAPI : public AbstractRenderAPI {
+		class DirectX11RenderAPI {
 		public:
 			DirectX11RenderAPI();
-			virtual ~DirectX11RenderAPI() override;
+			~DirectX11RenderAPI();
 
-			static AbstractRenderAPI* CreateDirectX11RenderAPI() { return new DirectX11RenderAPI(); }
+			static DirectX11RenderAPI* Create() { return new DirectX11RenderAPI(); }
 
-			virtual bool InitAPI(const WindowProperties& winprop, void* hWnd) const override;
-			virtual void EndInit() const override;
+			bool InitAPI(const WindowProperties& winprop, void* hWnd) const;
+			void EndInit() const;
 
-			virtual void Begin() const override;
-			virtual void End() const override;
+			void Begin() const;
+			void End() const;
 
-			virtual inline void ClearColor(float r, float g, float b) const override;
-			virtual inline void SetViewPort(uint width, uint height) const override;
-			virtual inline void DrawIndices(uint count) const override;
-			virtual inline void EnableBlending() const override;
-			virtual inline void EnableDepthTest() const override;
-			virtual inline void EnableStencilTest() const override;
+			void ClearColor(float r, float g, float b) const;
+			void SetViewPort(uint width, uint height) const;
+			void DrawIndices(uint count) const;
+			void EnableBlending() const;
+			void EnableDepthTest() const;
+			void EnableStencilTest() const;
 
-			virtual inline const char* GetAPIName() const override { return "DirectX 11"; }
-			virtual inline ShaderFactory* GetShaderFactory() const override { return m_ShaderFactory; }
+			inline const char* GetAPIName() const { return "DirectX 11"; }
+			inline DirectX11ShaderFactory* GetShaderFactory() const { return m_ShaderFactory; }
 
-			virtual std::string GetGraphicsInfo() const override;
+			std::string GetGraphicsInfo() const;
 
 			static inline ID3D11Device* GetDevice() { return s_Device; }
 			static inline ID3D11DeviceContext* GetDeviceContext() { return s_DeviceContext; }

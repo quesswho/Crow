@@ -130,7 +130,7 @@ class Game : public Crow::Application {
 	
 public:
 	Game()
-		: Application(WindowProperties("The Crows 2D", 1080, 720), Crow::Platform::GraphicAPI::DIRECTX11, Platform::ApplicationAPI::WINDOWS)
+		: Application(WindowProperties("The Crows 2D", 1080, 720), Platform::ApplicationAPI::WINDOWS)
 	{
 		PushLayer(new Layer2D());
 	}

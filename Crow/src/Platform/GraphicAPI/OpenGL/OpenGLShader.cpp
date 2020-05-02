@@ -357,7 +357,7 @@ namespace Crow {
 			return -1;
 		}
 
-		Shader::UniformType OpenGLShader::StringToUniformType(std::string_view type)
+		OpenGLShader::UniformType OpenGLShader::StringToUniformType(std::string_view type)
 		{
 			if (type == "int")		return UniformType::INT;
 			if (type == "float")	return UniformType::FLOAT;
@@ -370,7 +370,7 @@ namespace Crow {
 			return OpenGLShader::UniformType::UNKNOWN;
 		}
 
-		int OpenGLShader::UniformTypeToUniformTypeSize(Shader::UniformType type)
+		int OpenGLShader::UniformTypeToUniformTypeSize(OpenGLShader::UniformType type)
 		{
 			switch (type)
 			{

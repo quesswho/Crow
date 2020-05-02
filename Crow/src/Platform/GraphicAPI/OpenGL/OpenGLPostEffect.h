@@ -1,28 +1,27 @@
 #pragma once
-
-#include "Crow/Graphics/PostEffect.h"
+#include "OpenGLShader.h"
 
 namespace Crow {
 	namespace Platform {
 
-		class OpenGLPostEffect : public PostEffect {
+		class OpenGLPostEffect {
 			uint m_Shader;
 			uint m_FrameBuffer;
 			uint m_RenderBuffer;
 			uint m_Texture;
 			uint m_VertexArray;
 		public:
-			OpenGLPostEffect(Shader* shader);
+			OpenGLPostEffect(OpenGLShader* shader);
 			OpenGLPostEffect(const char* path);
 
-			~OpenGLPostEffect() override;
+			~OpenGLPostEffect();
 
-			static PostEffect* CreateOpenGLPostEffectFromShader(Shader* shader) { return new OpenGLPostEffect(shader); }
-			static PostEffect* CreateOpenGLPostEffectFromPath(const char* path) { return new OpenGLPostEffect(path); }
+			static OpenGLPostEffect* CreateFromShader(OpenGLShader* shader) { return new OpenGLPostEffect(shader); }
+			static OpenGLPostEffect* CreateFromPath(const char* path) { return new OpenGLPostEffect(path); }
 
-			void Bind() const override;
+			void Bind() const;
 
-			void Draw() const override;
+			void Draw() const;
 		private:
 			void Init();
 			void CompileShader(const char* path);
