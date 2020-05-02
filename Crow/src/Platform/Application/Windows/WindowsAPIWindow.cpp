@@ -59,16 +59,6 @@ namespace Crow {
 			// Get the position for the window
 			int posX, posY;
 
-			RECT rect;
-			GetClientRect(m_Hwnd, &rect);
-
-			int x1 = GetSystemMetrics(SM_CXFRAME);
-			int x2 = GetSystemMetrics(SM_CXEDGE);
-			int x3 = GetSystemMetrics(SM_CXSMSIZE);
-			int y1 = GetSystemMetrics(SM_CYFRAME);
-			int y3 = GetSystemMetrics(SM_CYEDGE);
-			int y2 = GetSystemMetrics(SM_CYCAPTION);
-			int y4 = GetSystemMetrics(SM_CYSMSIZE);
 			posX = (GetSystemMetrics(SM_CXSCREEN) - m_Properties.m_Width) / 2 - (GetSystemMetrics(SM_CXSMSIZE) - GetSystemMetrics(SM_CXEDGE) - GetSystemMetrics(SM_CXFRAME)) / 2;
 			posY = (GetSystemMetrics(SM_CYSCREEN) - m_Properties.m_Height) / 2 - GetSystemMetrics(SM_CYCAPTION) - (GetSystemMetrics(SM_CYSMSIZE) + GetSystemMetrics(SM_CYEDGE)) / 2  + GetSystemMetrics(SM_CYFRAME);
 
