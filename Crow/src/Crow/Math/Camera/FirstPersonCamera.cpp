@@ -11,8 +11,8 @@ namespace Crow {
 			: m_CameraPos(pos), m_ViewDir(viewDir), m_Yaw(90.0f), m_Pitch(0.0f), m_Sensitivity(sensitivity), m_Speed(speed), m_Forward(0.0f, 0.0f, 0.0f), m_Right(1.0f, 0.0f, 0.0f), m_WorldUp(Vec3(0.0f, 1.0f, 0.0f))
 		{
 			m_ProjectionMatrix = Mat4::Perspective(45.0f, aspectRatio, 0.001f, 100.0f);
-			m_LastMousePos = TVec2<int>(Application::s_WindowProperties.m_Width / 2, Application::s_WindowProperties.m_Height / 2);
-			Application::SetCursorPosition(m_LastMousePos);
+			m_LastMousePos = TVec2<double>(Application::s_WindowProperties.m_Width / 2, Application::s_WindowProperties.m_Height / 2);
+			Application::SetCursorPosition(TVec2<int>(m_LastMousePos.x, m_LastMousePos.y));
 			Application::SetCursorVisibility(false);
 			CalculateProjectionViewMatrix();
 			m_MouseRect = TVec4<int>(Application::s_WindowProperties.m_Width / 4, (int) (Application::s_WindowProperties.m_Width * (3.0 / 4.0)), Application::s_WindowProperties.m_Height / 4, Application::s_WindowProperties.m_Height * (int)(3.0 / 4.0));
@@ -47,8 +47,8 @@ namespace Crow {
 
 				if (m_LastMousePos.x < m_MouseRect.x || m_LastMousePos.x > m_MouseRect.y || m_LastMousePos.y < m_MouseRect.z || m_LastMousePos.y > m_MouseRect.w)
 				{
-					m_LastMousePos = TVec2<int>(Application::s_WindowProperties.m_Width / 2, Application::s_WindowProperties.m_Height / 2);
-					Application::SetCursorPosition(m_LastMousePos);
+					m_LastMousePos = TVec2<double>(Application::s_WindowProperties.m_Width / 2, Application::s_WindowProperties.m_Height / 2);
+					Application::SetCursorPosition(TVec2<int>(m_LastMousePos.x, m_LastMousePos.y));
 				}
 				else
 					m_LastMousePos = Input::GetMousePosition();

@@ -29,11 +29,11 @@ namespace Crow {
 			virtual void CreateDeviceContex() override;
 
 			void Focus() const;
-
 			virtual void* GetHandle() const override { return m_Hwnd; }
 		private:
 
 			void Init();
+			void RawMouseInit() const;
 
 			WindowProperties m_Properties;
 #ifdef CR_PLATFORM_WINDOWS // Avoid compile errors if OS is not Windows
@@ -41,6 +41,7 @@ namespace Crow {
 			HWND m_Hwnd;
 			HDC m_Hdc;
 #endif
+			int m_mouseX, m_mouseY;
 		};
 
 		static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);

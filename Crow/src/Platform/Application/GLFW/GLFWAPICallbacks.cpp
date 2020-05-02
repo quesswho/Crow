@@ -34,7 +34,7 @@ namespace Crow {
 
 		void GLFWCallbacks::cursor_position_callback(GLFWwindow* window, double xpos, double ypos) // Calls when the user moves their mouse
 		{
-			Input::MousePosCallback(Math::TVec2<int>((int)xpos, (int)ypos));
+			Input::MousePosCallback(Math::TVec2<double>(xpos, ypos));
 		}
 
 		void GLFWCallbacks::window_focus_callback(GLFWwindow* window, int focused)

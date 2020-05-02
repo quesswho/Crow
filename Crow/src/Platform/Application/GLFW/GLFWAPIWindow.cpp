@@ -46,6 +46,9 @@ namespace Crow {
 			CreateDeviceContex();
 
 			SetCallbacks();
+
+			if (glfwRawMouseMotionSupported())
+				glfwSetInputMode(m_Window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 		}
 
 		void GLFWAPIWindow::Update() const
@@ -82,7 +85,7 @@ namespace Crow {
 
 		void GLFWAPIWindow::SetCursorVisibility(bool visibility)
 		{
-			glfwSetInputMode(m_Window, GLFW_CURSOR, visibility ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN);
+			glfwSetInputMode(m_Window, GLFW_CURSOR, visibility ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 		}
 	}
 }

@@ -12,24 +12,26 @@ namespace Crow {
 	{
 	public:
 
-		static void Init();
+		static void Init(double x, double y);
 
 		inline static short int GetKeyState(int key) { return s_Keys[key]; }
 		inline static short int GetKeyState(short int key) { return s_MouseKeys[key]; }
-		inline static Math::TVec2<int> GetMousePosition() { return s_MousePos; }
+		inline static Math::TVec2<double> GetMousePosition() { return s_MousePos; }
+		inline static void SetVMousePosition(Math::TVec2<double> mousepos) { s_MousePos = mousepos; }
 
 		static bool IsKeyPressed(short int key) { return s_Keys[key] > 0; } // if key action is more than KEY_RELEASE
 
 		static void KeyCallback(Math::TVec2<int> key);
 		static void MouseCallback(Math::TVec2<int> key);
-		static void MousePosCallback(Math::TVec2<int> key);
+		static void MousePosCallback(Math::TVec2<double> key);
+		static void MouseChange(int mx, int my);
 		static void WindowFocusCallback(bool focused);
 		
 		static bool s_Focused;
 	private:
 		static short int s_Keys[MAX_KEYS];
 		static short int s_MouseKeys[MAX_KEYS];
-		static Math::TVec2<int> s_MousePos;
+		static Math::TVec2<double> s_MousePos;
 	};
 
 }

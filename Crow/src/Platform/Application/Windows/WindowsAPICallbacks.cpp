@@ -113,10 +113,9 @@ namespace Crow {
 		}
 
 
-		void WindowsAPICallbacks::cursor_position_callback(int xpos, int ypos) // Calls when the user moves their mouse
+		void WindowsAPICallbacks::cursor_position_callback(double xpos, double ypos) // Calls when the user moves their mouse
 		{
-			Input::MousePosCallback(Math::TVec2<int>(xpos, ypos));
+			Input::MousePosCallback(Math::TVec2<double>(xpos, ypos));
 		}
-
 	}
 }

@@ -305,13 +305,6 @@ namespace Crow {
 				return result;
 			}
 
-			static inline constexpr Mat4x4<T> Translate(const TVec3<T>& translation)
-			{
-				if (MATH_COORDINATE::s_MathCoordinateType == MATH_COORDINATE::MATH_COORDINATE_RIGHTHAND)
-					return TranslateRH(translation);
-				else // s_MathCoordinateType == MATH_COORDINATE_LEFTHAND
-					return TranslateLH(translation);
-			}
 
 			static inline constexpr Mat4x4<T> ScaleRH(const TVec3<T>& scale)
 			{
@@ -333,13 +326,6 @@ namespace Crow {
 				return result;
 			}
 
-			static inline constexpr Mat4x4<T> Scale(const TVec3<T>& scale)
-			{
-				if (MATH_COORDINATE::s_MathCoordinateType == MATH_COORDINATE::MATH_COORDINATE_RIGHTHAND)
-					return ScaleRH(scale);
-				else // s_MathCoordinateType == MATH_COORDINATE_LEFTHAND
-					return ScaleLH(scale);
-			}
 
 			// Recommended to normalize axis
 			static inline constexpr Mat4x4<T> Rotate(const T& degrees, const TVec3<T>& axis)
@@ -368,13 +354,6 @@ namespace Crow {
 				return result;
 			}
 
-			static inline constexpr Mat4x4<T> Orthographic(float left, float right, float bottom, float top)
-			{
-				if (MATH_COORDINATE::s_MathCoordinateType == MATH_COORDINATE::MATH_COORDINATE_RIGHTHAND)
-					return OrthographicRH(left, right, bottom, top);
-				else // s_MathCoordinateType == MATH_COORDINATE_LEFTHAND
-					return OrthographicLH(left, right, bottom, top);
-			}
 
 			static inline constexpr Mat4x4<T> OrthographicRH(float left, float right, float bottom, float top)
 			{
@@ -430,14 +409,6 @@ namespace Crow {
 					0, 0, 0, 1);
 			}
 
-			static inline constexpr Mat4x4<T> Orthographic(float left, float right, float bottom, float top, float zNear, float zFar)
-			{
-				if (MATH_COORDINATE::s_MathCoordinateType == MATH_COORDINATE::MATH_COORDINATE_RIGHTHAND)
-					return OrthographicRH(left, right, bottom, top, zNear, zFar);
-				else // s_MathCoordinateType == MATH_COORDINATE_LEFTHAND
-					return OrthographicLH(left, right, bottom, top, zNear, zFar);
-			}
-			
 			// Use degrees
 			static inline constexpr Mat4x4<T> PerspectiveRH(float fov, float aspectratio, float zNear, float zFar)
 			{
@@ -472,14 +443,6 @@ namespace Crow {
 					0, h, 0, 0,
 					0, 0, zFar / (zFar - zNear), -(zFar * zNear) / (zFar - zNear),
 					0, 0, 1, 0);
-			}
-
-			static inline const Mat4x4 Perspective(float fov, float aspectratio, float zNear, float zFar)
-			{
-				if (MATH_COORDINATE::s_MathCoordinateType == MATH_COORDINATE::MATH_COORDINATE_RIGHTHAND)
-					return PerspectiveRH(fov, aspectratio, zNear, zFar);
-				else // s_MathCoordinateType == MATH_COORDINATE_LEFTHAND
-					return PerspectiveLH(fov, aspectratio, zNear, zFar);
 			}
 
 			static inline const Mat4x4 LookAtRH(const Vec3& eye, const Vec3& to, const Vec3& up)
@@ -530,14 +493,6 @@ namespace Crow {
 				return result;
 			}
 
-			static inline const Mat4x4 LookAt(const Vec3& eye, const Vec3& to, const Vec3& up)
-			{
-				if (MATH_COORDINATE::s_MathCoordinateType == MATH_COORDINATE::MATH_COORDINATE_RIGHTHAND)
-					return LookAtRH(eye, to, up);
-				else // s_MathCoordinateType == MATH_COORDINATE_LEFTHAND
-					return LookAtLH(eye, to, up);
-			}
-
 			static inline const Mat4x4 LookDirRH(const Vec3& pos, const Vec3& dir, const Vec3& up)
 			{
 				Mat4 result;
@@ -584,34 +539,78 @@ namespace Crow {
 				result.m_Elements[GetIndex(1, 3)] = -p.Dot(u);
 				result.m_Elements[GetIndex(2, 3)] = -p.Dot(f);
 				return result;
+			}
+#ifdef CROW_OGL
+			static inline constexpr Mat4x4<T> Translate(const TVec3<T>& translation)
+			{
+				return TranslateRH(translation);
+			}
 
-				/*Mat4 result;
-				
-				const Vec3 r = Normalize(Vec3(-dir.y * up.z - dir.z * up.y, dir.z * up.x - dir.x * up.z, dir.x * up.y + dir.y * up.x));
-				const Vec3 u = Vec3(-dir.y * r.z - dir.z * r.y, dir.z * r.x - dir.x * r.z, dir.x * r.y + dir.y * r.x);
-				
-				result.m_Elements[GetIndex(0, 0)] = r.x;
-				result.m_Elements[GetIndex(0, 1)] = r.y;
-				result.m_Elements[GetIndex(0, 2)] = r.z;
-				result.m_Elements[GetIndex(1, 0)] = u.x;
-				result.m_Elements[GetIndex(1, 1)] = u.y;
-				result.m_Elements[GetIndex(1, 2)] = u.z;
-				result.m_Elements[GetIndex(2, 0)] = dir.x;
-				result.m_Elements[GetIndex(2, 1)] = -dir.y;
-				result.m_Elements[GetIndex(2, 2)] = dir.z;
-				result.m_Elements[GetIndex(0, 3)] = -(pos.x * r.x + -pos.y * r.y + pos.z * r.z); // Modified dot product to flip Y
-				result.m_Elements[GetIndex(1, 3)] = -(pos.x * u.x + -pos.y * u.y + pos.z * u.z);
-				result.m_Elements[GetIndex(2, 3)] = -(pos.x * dir.x + pos.y * dir.y + pos.z * dir.z);
-				return result;*/
+			static inline constexpr Mat4x4<T> Scale(const TVec3<T>& scale)
+			{
+				return ScaleRH(scale);
+			}
+
+			static inline constexpr Mat4x4<T> Orthographic(float left, float right, float bottom, float top)
+			{
+				return OrthographicRH(left, right, bottom, top);
+			}
+
+			static inline constexpr Mat4x4<T> Orthographic(float left, float right, float bottom, float top, float zNear, float zFar)
+			{
+				return OrthographicRH(left, right, bottom, top, zNear, zFar);
+			}
+
+			static inline const Mat4x4 Perspective(float fov, float aspectratio, float zNear, float zFar)
+			{
+				return PerspectiveRH(fov, aspectratio, zNear, zFar);
+			}
+
+			static inline const Mat4x4 LookAt(const Vec3& eye, const Vec3& to, const Vec3& up)
+			{
+				return LookAtRH(eye, to, up);
 			}
 
 			static inline const Mat4x4 LookDir(const Vec3& eye, const Vec3& to, const Vec3& up)
 			{
-				if (MATH_COORDINATE::s_MathCoordinateType == MATH_COORDINATE::MATH_COORDINATE_RIGHTHAND)
-					return LookDirRH(eye, to, up);
-				else // s_MathCoordinateType == MATH_COORDINATE_LEFTHAND
-					return LookDirLH(eye, to, up);
+				return LookDirRH(eye, to, up);
 			}
+#elif defined(CROW_DX11)
+			static inline constexpr Mat4x4<T> Translate(const TVec3<T>& translation)
+			{
+				return TranslateLH(translation);
+			}
+
+			static inline constexpr Mat4x4<T> Scale(const TVec3<T>& scale)
+			{
+				return ScaleLH(scale);
+			}
+
+			static inline constexpr Mat4x4<T> Orthographic(float left, float right, float bottom, float top)
+			{
+				return OrthographicLH(left, right, bottom, top);
+			}
+
+			static inline constexpr Mat4x4<T> Orthographic(float left, float right, float bottom, float top, float zNear, float zFar)
+			{
+				return OrthographicLH(left, right, bottom, top, zNear, zFar);
+			}
+
+			static inline const Mat4x4 Perspective(float fov, float aspectratio, float zNear, float zFar)
+			{
+				return PerspectiveLH(fov, aspectratio, zNear, zFar);
+			}
+
+			static inline const Mat4x4 LookAt(const Vec3& eye, const Vec3& to, const Vec3& up)
+			{
+				return LookAtLH(eye, to, up);
+			}
+
+			static inline const Mat4x4 LookDir(const Vec3& eye, const Vec3& to, const Vec3& up)
+			{
+				return LookDirLH(eye, to, up);
+			}
+#endif
 
 		private:
 			static constexpr inline int GetIndex(int column, int row) { return (column * 4) + row; }

@@ -22,7 +22,7 @@ namespace Crow {
 			float m_Speed;
 			float m_Sensitivity;
 
-			TVec2<int> m_LastMousePos;
+			TVec2<double> m_LastMousePos;
 			TVec4<int> m_MouseRect;
 
 		public:

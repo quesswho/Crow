@@ -6,13 +6,14 @@ namespace Crow {
 	
 	short int Input::s_Keys[];
 	short int Input::s_MouseKeys[];
-	Math::TVec2<int> Input::s_MousePos;
+	Math::TVec2<double> Input::s_MousePos;
 	bool Input::s_Focused;
 
-	void Input::Init()
+	void Input::Init(double x, double y)
 	{
 		memset(s_Keys, 0, sizeof(s_Keys)); // Set all keys to CROW_RELEASE
 		memset(s_MouseKeys, 0, sizeof(s_MouseKeys));
+		s_MousePos = Math::TVec2<double>(x, y);
 	}
 	
 	void Input::KeyCallback(Math::TVec2<int> key)
@@ -27,10 +28,15 @@ namespace Crow {
 		Application::OnEvent(MouseEvent(key));
 	}
 
-	void Input::MousePosCallback(Math::TVec2<int> pos)
+	void Input::MousePosCallback(Math::TVec2<double> pos)
 	{
 		s_MousePos = pos;
-		Application::OnEvent(MousePosEvent(pos));
+		Application::OnEvent(MousePosEvent(Math::TVec2<int>(pos.x, pos.y)));
+	}
+
+	void Input::MouseChange(int mx, int my)
+	{
+		MousePosCallback(Math::TVec2<double>(s_MousePos.x + mx, s_MousePos.y + my));
 	}
 
 	void Input::WindowFocusCallback(bool focused)

@@ -41,7 +41,7 @@ namespace Crow {
 		CR_CORE_INFO(s_RenderAPI->GetGraphicsInfo());
 		CR_CORE_INFO("Using Graphics API: {}", s_RenderAPI->GetAPIName());
 
-		Input::Init();
+		Input::Init(s_WindowProperties.m_Width/2, s_WindowProperties.m_Height / 2);
 
 		s_LayerManager = std::make_unique<LayerManager>();
 		m_Timer = std::make_unique<Timer>();

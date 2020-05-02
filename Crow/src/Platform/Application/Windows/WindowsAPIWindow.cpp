@@ -70,8 +70,8 @@ namespace Crow {
 				return;
 			}
 
+			RawMouseInit();
 			SetTitle(m_Properties.m_Title);
-
 			CreateDeviceContex();
 
 			ShowWindow(m_Hwnd, SW_SHOW);
@@ -127,8 +127,29 @@ namespace Crow {
 				WindowsAPICallbacks::key_callback((uint)lParam, (uint)wParam, msg);
 				break;
 			case WM_MOUSEMOVE:
-				WindowsAPICallbacks::cursor_position_callback(LOWORD(lParam), HIWORD(lParam));
 				break;
+			case WM_INPUT:
+			{
+				UINT dwSize;
+				GetRawInputData((HRAWINPUT)lParam, RID_INPUT, NULL, &dwSize,
+					sizeof(RAWINPUTHEADER));
+				LPBYTE lpb = new BYTE[dwSize];
+				if (lpb == NULL)
+				{
+					return 0;
+				}
+
+				GetRawInputData((HRAWINPUT)lParam, RID_INPUT,
+					lpb, &dwSize, sizeof(RAWINPUTHEADER));
+
+				RAWINPUT* raw = (RAWINPUT*)lpb;
+
+				if (raw->header.dwType == RIM_TYPEMOUSE)
+				{
+					Input::MouseChange(raw->data.mouse.lLastX, raw->data.mouse.lLastY);
+				}
+				break;
+			}
 			case WM_LBUTTONDOWN:
 			case WM_LBUTTONUP:
 			case WM_RBUTTONDOWN:
@@ -194,6 +215,7 @@ namespace Crow {
 			pt.y = pos.y;
 			ClientToScreen(m_Hwnd, &pt);
 			SetCursorPos(pt.x, pt.y);
+			Input::SetVMousePosition(Math::TVec2<double>(pos.x, pos.y));
 		}
 
 		void WindowsAPIWindow::SetCursorVisibility(bool visibility)
@@ -232,6 +254,16 @@ namespace Crow {
 		void WindowsAPIWindow::Focus() const
 		{
 			SetCapture(m_Hwnd);
+		}
+
+		void WindowsAPIWindow::RawMouseInit() const
+		{
+			RAWINPUTDEVICE rid[1];
+			rid[0].usUsagePage = ((USHORT)0x01);
+			rid[0].usUsage = ((USHORT)0x02);
+			rid[0].dwFlags = RIDEV_INPUTSINK;
+			rid[0].hwndTarget = m_Hwnd;
+			RegisterRawInputDevices(rid, 1, sizeof(rid[0]));
 		}
 	}
 }

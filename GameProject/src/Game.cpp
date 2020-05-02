@@ -4,7 +4,7 @@ using namespace Crow;
 using namespace Math;
 
 	Layer2D::Layer2D()
-		: m_Camera(new FirstPersonCamera(Vec3(0.0f, 1.0f, -3.0f), 1080.0f / 720.0f, 0.05f, 3.0f))
+		: m_Camera(new FirstPersonCamera(Vec3(0.0f, 1.0f, -3.0f), 1080.0f / 720.0f, 0.02f, 3.0f))
 	{
 		Application::GetAPI()->ClearColor(0.5f, 0.7f, 0.5f);
 		Application::GetAPI()->EnableDepthTest();

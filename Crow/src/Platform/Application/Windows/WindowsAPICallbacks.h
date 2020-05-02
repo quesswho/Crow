@@ -16,7 +16,7 @@ namespace Crow {
 			static void window_size_callback(int width, int height);
 			static void key_callback(int flags, uint key, uint msg);
 			static void mouse_button_callback(HWND hWnd, uint button);
-			static void cursor_position_callback(int xpos, int ypos);
+			static void cursor_position_callback(double xpos, double ypos);
 		private:
 			static uint DecodeWindowsKey(uint key); // Turns windows key codes to crow key code (glfw key codes)
 		};
