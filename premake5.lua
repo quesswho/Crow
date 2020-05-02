@@ -1,19 +1,21 @@
 workspace "Crow"
 	architecture "x64"
 	startproject "GameProject"
-
+	
+	outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+	
 	configurations
 	{
-		"Debug",
-		"Release"
+		"OGL_Debug",
+		"OGL_Release",
+		"DX11_Debug",
+		"DX11_Release"
 	}
 
 	flags
 	{
 		"MultiProcessorCompile"
 	}
-
-	outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 	group "Dependencies"
 		include "Crow/lib/glfw"
@@ -28,9 +30,19 @@ workspace "Crow"
 		cppdialect "C++17"
 		staticruntime "on"
 
-		targetdir ("bin/" .. outputdir .. "/%{prj.name}/")
-		objdir ("bin/" .. outputdir .. "/%{prj.name}/intermediates/")
-
+		configuration "OGL_Debug"
+			targetdir ("bin/OGL/Debug-%{cfg.architecture}/%{prj.name}/")
+			objdir ("bin/OGL/Debug-%{cfg.architecture}/%{prj.name}/intermediates/")
+		configuration "OGL_Release"
+			targetdir ("bin/OGL/Release-%{cfg.architecture}/%{prj.name}/")
+			objdir ("bin/OGL/Release-%{cfg.architecture}/%{prj.name}/intermediates/")
+		configuration "DX11_Debug"
+			targetdir ("bin/DX11/Debug-%{cfg.architecture}/%{prj.name}/")
+			objdir ("bin/DX11/Debug-%{cfg.architecture}/%{prj.name}/intermediates/")
+		configuration "DX11_Release"
+			targetdir ("bin/DX11/Release-%{cfg.architecture}/%{prj.name}/")
+			objdir ("bin/DX11/Release-%{cfg.architecture}/%{prj.name}/intermediates/")
+		configuration "*"
 
 		files { 
 			"%{prj.name}/src/**.h", 
@@ -78,22 +90,53 @@ workspace "Crow"
 				"GLFW_INCLUDE_NONE"
 			}
 
-		filter "configurations:Debug"
-			defines "CR_DEBUG"
+		filter "configurations:OGL_Debug"
+			defines {
+				"CR_DEBUG",
+				"CROW_OGL"
+			}
 			symbols "On"
 	
-		filter "configurations:Release"
-			defines "CR_RELEASE"
+		filter "configurations:OGL_Release"
+			defines {
+				"CR_RELEASE",
+				"CROW_OGL"
+			}
+			optimize "On"
+			
+		filter "configurations:DX11_Debug"
+			defines {
+				"CR_DEBUG",
+				"CROW_DX11"
+			}
+			symbols "On"
+			
+		filter "configurations:DX11_Release"
+			defines {
+				"CR_RELEASE",
+				"CROW_DX11"
+			}
 			optimize "On"
 
 	project "GameProject"
 		kind "ConsoleApp"
 		location "GameProject"
 		language "C++"
-
-		targetdir ("bin/" .. outputdir .. "/%{prj.name}/")
-		objdir ("bin/" .. outputdir .. "/%{prj.name}/intermediates")
-
+		
+		configuration "OGL_Debug"
+			targetdir ("bin/OGL/Debug-%{cfg.architecture}/%{prj.name}/")
+			objdir ("bin/OGL/Debug-%{cfg.architecture}/%{prj.name}/intermediates/")
+		configuration "OGL_Release"
+			targetdir ("bin/OGL/Release-%{cfg.architecture}/%{prj.name}/")
+			objdir ("bin/OGL/Release-%{cfg.architecture}/%{prj.name}/intermediates/")
+		configuration "DX11_Debug"
+			targetdir ("bin/DX11/Debug-%{cfg.architecture}/%{prj.name}/")
+			objdir ("bin/DX11/Debug-%{cfg.architecture}/%{prj.name}/intermediates/")
+		configuration "DX11_Release"
+			targetdir ("bin/DX11/Release-%{cfg.architecture}/%{prj.name}/")
+			objdir ("bin/DX11/Release-%{cfg.architecture}/%{prj.name}/intermediates/")
+		configuration "*"
+		
 		files { 
 			"%{prj.name}/src/**.h",
 			"%{prj.name}/src/**.cpp" 
@@ -127,10 +170,30 @@ workspace "Crow"
 				"FT2_BUILD_LIBRARY"
 			}
 
-		filter "configurations:Debug"
-			defines "CR_DEBUG"
+		filter "configurations:OGL_Debug"
+			defines {
+				"CR_DEBUG",
+				"CROW_OGL"
+			}
 			symbols "On"
 	
-		filter "configurations:Release"
-			defines "CR_RELEASE"
+		filter "configurations:OGL_Release"
+			defines {
+				"CR_RELEASE",
+				"CROW_OGL"
+			}
+			optimize "On"
+			
+		filter "configurations:DX11_Debug"
+			defines {
+				"CR_DEBUG",
+				"CROW_DX11"
+			}
+			symbols "On"
+			
+		filter "configurations:DX11_Release"
+			defines {
+				"CR_RELEASE",
+				"CROW_DX11"
+			}
 			optimize "On"

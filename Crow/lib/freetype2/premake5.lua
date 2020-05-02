@@ -45,7 +45,7 @@ project "freetype2"
         "src/type1/type1.c",
         "src/type42/type42.c",
         "src/winfonts/winfnt.c",
-		"src/ftdebug.c"
+		"src/ftdebug.c",
 	}
 	
 	includedirs 
@@ -56,12 +56,21 @@ project "freetype2"
 	filter "system:windows"
 			staticruntime "On"
 	
-	filter "configurations:Debug"
+	filter "configurations:OGL_Debug"
 		runtime "Debug"
 		symbols "on"
 		defines { "WIN32", "_DEBUG", "_LIB", "_CRT_SECURE_NO_WARNINGS", "FT_DEBUG_LEVEL_ERROR", "FT_DEBUG_LEVEL_TRACE", "FT2_BUILD_LIBRARY" }
 
-	filter "configurations:Release"
+	filter "configurations:OGL_Release"
+		runtime "Release"
+		optimize "on"
+		defines { "WIN32", "_DEBUG", "_LIB", "_CRT_SECURE_NO_WARNINGS", "FT_DEBUG_LEVEL_ERROR", "FT_DEBUG_LEVEL_TRACE", "FT2_BUILD_LIBRARY" }
+	filter "configurations:DX11_Debug"
+		runtime "Debug"
+		symbols "on"
+		defines { "WIN32", "_DEBUG", "_LIB", "_CRT_SECURE_NO_WARNINGS", "FT_DEBUG_LEVEL_ERROR", "FT_DEBUG_LEVEL_TRACE", "FT2_BUILD_LIBRARY" }
+
+	filter "configurations:DX11_Release"
 		runtime "Release"
 		optimize "on"
 		defines { "WIN32", "_DEBUG", "_LIB", "_CRT_SECURE_NO_WARNINGS", "FT_DEBUG_LEVEL_ERROR", "FT_DEBUG_LEVEL_TRACE", "FT2_BUILD_LIBRARY" }
