@@ -19,7 +19,7 @@ namespace Crow {
 	{
 	public:
 		Application()
-			: Application(WindowProperties("Crow Engine", 720, 720), Platform::ApplicationAPI::GLFW)
+			: Application(WindowProperties("Crow Engine", 1080, 720), Platform::ApplicationAPI::GLFW)
 		{}
 
 		Application(WindowProperties winprop, Platform::ApplicationAPI appApi);

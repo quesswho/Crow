@@ -5,8 +5,8 @@
 #include "Matrix/Mat2.h"
 #include "Matrix/Mat3.h"
 #include "Matrix/Mat4.h"
+#include "Matrix/MatrixMath.h"
 #include "Vector/VectorMath.h"
-
 
 namespace Crow {
 	namespace Math {

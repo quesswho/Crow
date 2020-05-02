@@ -328,7 +328,7 @@ namespace Crow {
 
 
 			// Recommended to normalize axis
-			static inline constexpr Mat4x4<T> Rotate(const T& degrees, const TVec3<T>& axis)
+			static inline constexpr Mat4x4<T> RotateRH(const T& degrees, const TVec3<T>& axis)
 			{
 				Mat4x4 result;
 
@@ -349,6 +349,33 @@ namespace Crow {
 
 				result.m_Elements[GetIndex(2, 0)] = s * axis.y + temp.z * axis.x;
 				result.m_Elements[GetIndex(2, 1)] = -s * axis.x + temp.z * axis.y;
+				result.m_Elements[GetIndex(2, 2)] = c + axis.z * temp.z;
+
+				return result;
+			}
+
+			// Recommended to normalize axis
+			static inline constexpr Mat4x4<T> RotateLH(const T& degrees, const TVec3<T>& axis)
+			{
+				Mat4x4 result;
+
+				const float r = ToRadians(degrees);
+
+				const float c = cos(r);
+				const float s = sin(r);
+
+				const TVec3<T> temp((T(1) - c) * axis);
+
+				result.m_Elements[GetIndex(0, 0)] = c + axis.x * temp.x;
+				result.m_Elements[GetIndex(0, 1)] = s * axis.z + temp.x * -axis.y;
+				result.m_Elements[GetIndex(0, 2)] = -s * -axis.y + temp.x * axis.z;
+
+				result.m_Elements[GetIndex(1, 0)] = -s * axis.z + -temp.y * axis.x;
+				result.m_Elements[GetIndex(1, 1)] = c + -axis.y * -temp.y;
+				result.m_Elements[GetIndex(1, 2)] = s * axis.x + -temp.y * axis.z;
+
+				result.m_Elements[GetIndex(2, 0)] = s * -axis.y + temp.z * axis.x;
+				result.m_Elements[GetIndex(2, 1)] = -s * axis.x + temp.z * -axis.y;
 				result.m_Elements[GetIndex(2, 2)] = c + axis.z * temp.z;
 
 				return result;
@@ -551,6 +578,11 @@ namespace Crow {
 				return ScaleRH(scale);
 			}
 
+			static inline constexpr Mat4x4<T> Rotate(const T& degrees, const TVec3<T>& axis)
+			{
+				return RotateRH(degrees, axis);
+			}
+
 			static inline constexpr Mat4x4<T> Orthographic(float left, float right, float bottom, float top)
 			{
 				return OrthographicRH(left, right, bottom, top);
@@ -584,6 +616,11 @@ namespace Crow {
 			static inline constexpr Mat4x4<T> Scale(const TVec3<T>& scale)
 			{
 				return ScaleLH(scale);
+			}
+
+			static inline constexpr Mat4x4<T> Rotate(const T& degrees, const TVec3<T>& axis)
+			{
+				return RotateLH(degrees, axis);
 			}
 
 			static inline constexpr Mat4x4<T> Orthographic(float left, float right, float bottom, float top)

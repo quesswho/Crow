@@ -38,7 +38,7 @@ namespace Crow {
 		void DirectX11PostEffect::Bind() const
 		{
 			DirectX11RenderAPI::SetRenderTarget(&m_RenderTarget);
-			Application::GetAPI()->SetViewPort(1080,720);
+			Application::GetAPI()->SetViewPort(Application::s_WindowProperties.m_Width, Application::s_WindowProperties.m_Height);
 			DirectX11RenderAPI::ClearRenderTarget(m_RenderTarget);
 		}
 

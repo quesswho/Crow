@@ -3,8 +3,11 @@
 using namespace Crow;
 using namespace Math;
 
+#define SCREENX 1080.0f
+#define SCREENY 720.0f
+
 	Layer2D::Layer2D()
-		: m_Camera(new FirstPersonCamera(Vec3(0.0f, 1.0f, -3.0f), 1080.0f / 720.0f, 0.02f, 3.0f))
+		: m_Camera(new FirstPersonCamera(Vec3(0.0f, 1.0f, -3.0f), SCREENX / SCREENY, 0.02f, 3.0f))
 	{
 		Application::GetAPI()->ClearColor(0.5f, 0.7f, 0.5f);
 		Application::GetAPI()->EnableDepthTest();
@@ -69,6 +72,7 @@ using namespace Math;
 		m_Gamma = 2.2f;
 		m_PostFXShader->Bind();
 		m_PostFXShader->SetUniformValue("u_Gamma", m_Gamma);
+		m_Model = Mat4::Translate(Vec3(1.0f, 3.0f, 5.0f));
 	}
 
 	Layer2D::~Layer2D()
@@ -109,13 +113,15 @@ using namespace Math;
 		m_PostFXShader->SetUniformValue("u_Gamma", m_Gamma);
 
 		m_Camera->Update(elapsed);
+
+		//m_Model = Multiply<float>(m_Model, Mat4::Rotate(40.0f * elapsed, Vec3(0.5f, 1.0f, 0.2f)));
 	}
 
 	void Layer2D::OnRender()
 	{
 		m_Shader->Bind();
 		m_Shader->SetUniformValue("u_VP",  m_Camera->GetCameraMatrix());
-		m_Shader->SetUniformValue("u_Model", m_Model * Mat4::Translate(Vec3(1.0f, 3.0f, 5.0f)));
+		m_Shader->SetUniformValue("u_Model", m_Model);
 		
 		m_Texture->Bind();
 		m_ArrayBuffer->Bind();
@@ -130,7 +136,7 @@ class Game : public Crow::Application {
 	
 public:
 	Game()
-		: Application(WindowProperties("The Crows 2D", 1080, 720), Platform::ApplicationAPI::WINDOWS)
+		: Application(WindowProperties("The Crows 2D", SCREENX, SCREENY), Platform::ApplicationAPI::WINDOWS)
 	{
 		PushLayer(new Layer2D());
 	}
